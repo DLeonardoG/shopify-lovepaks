@@ -1,0 +1,90 @@
+{% comment %}
+  Upsell Page - Special Offers
+  Handle: upsell
+{% endcomment %}
+
+<!-- Progress Bar -->
+<div class="checkout-progress">
+    <div class="progress-bar">
+        <div class="progress-step completed">
+            <div class="step-circle">1</div>
+            <span>Package</span>
+        </div>
+        <div class="progress-line completed"></div>
+        <div class="progress-step active">
+            <div class="step-circle">2</div>
+            <span>Add-ons</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step">
+            <div class="step-circle">3</div>
+            <span>Checkout</span>
+        </div>
+    </div>
+</div>
+
+<!-- Upsell Container -->
+<div class="upsell-container">
+    <div class="upsell-wrapper">
+        <!-- Left Side: Information -->
+        <div class="upsell-left">
+            <div class="upsell-message-box">
+                <p class="upsell-message">
+                    Some of your members may want to buy this option. Having more selection means more variety, more sales, and more profit for your studio.
+                </p>
+                
+                <div class="upsell-product-info">
+                    <div class="product-identifier">New order total</div>
+                    <div class="product-price">$458</div>
+                    <div class="product-name">Add Dye &amp; Scent Free</div>
+                    <div class="product-tagline">Includes Dye &amp; Scent Free for only $229 extra (for sensitive skin).</div>
+                </div>
+
+                <div class="upsell-actions-simple">
+                    {% comment %} Buscar producto "Dye & Scent Free" o usar variant ID {% endcomment %}
+                    {% assign dye_scent_product = all_products['dye-scent-free'] %}
+                    {% if dye_scent_product %}
+                        <form action="/cart/add" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="id" value="{{ dye_scent_product.selected_or_first_available_variant.id }}">
+                            <button type="submit" class="btn-primary btn-large add-upsell-btn"
+                                    data-id="dye-scent-free"
+                                    data-name="Dye & Scent Free - Master Case"
+                                    data-price="229"
+                                    data-variant-id="{{ dye_scent_product.selected_or_first_available_variant.id }}">
+                                Add to Cart
+                            </button>
+                        </form>
+                    {% else %}
+                        <button class="btn-primary btn-large add-upsell-btn"
+                                data-id="dye-scent-free"
+                                data-name="Dye & Scent Free - Master Case"
+                                data-price="229"
+                                data-variant-id="REPLACE_WITH_VARIANT_ID">
+                            Add to Cart
+                        </button>
+                    {% endif %}
+                    <a href="/cart" class="btn-secondary btn-large" id="skip-upsell">
+                        No, thanks
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Product Image & Branding -->
+        <div class="upsell-right">
+            <div class="product-image-container">
+                <img src="{{ 'packaging-piel-sensibles.jpg' | file_img_url: '800x' }}" 
+                     alt="Dye & Scent Free Laundry Paks" 
+                     class="upsell-product-image"
+                     loading="lazy">
+            </div>
+            <div class="brand-accent">
+                <div class="brand-logo-placeholder">
+                    <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="{{ shop.name }}" class="brand-logo-small">
+                </div>
+                <div class="brand-tagline">Premium Wellness Products</div>
+            </div>
+        </div>
+    </div>
+</div>
+

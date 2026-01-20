@@ -1,0 +1,484 @@
+/* ============================================
+   PARTNER SIGNUP STYLES
+   ============================================ */
+
+/* Partner Signup Container */
+.partner-signup-container {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #FFF5F9 0%, #FFFFFF 100%);
+    padding: 40px 0 80px;
+}
+
+/* Progress Bar */
+.progress-container {
+    max-width: 1000px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+}
+
+.progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-gray);
+    transition: all var(--transition-base);
+}
+
+.progress-step.active .step-number {
+    background: var(--primary-pink);
+    border-color: var(--primary-pink);
+    color: white;
+    transform: scale(1.1);
+}
+
+.progress-step.completed .step-number {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: white;
+}
+
+.step-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-gray);
+    text-align: center;
+}
+
+.progress-step.active .step-label {
+    color: var(--primary-pink);
+}
+
+.progress-line {
+    flex: 1;
+    height: 3px;
+    background: var(--light-gray);
+    position: relative;
+    top: -20px;
+}
+
+/* Signup Steps */
+.signup-step {
+    display: none;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.signup-step.active {
+    display: block;
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 60px;
+    box-shadow: var(--shadow-lg);
+}
+
+.step-content h1 {
+    font-size: 36px;
+    margin-bottom: 16px;
+    color: var(--text-dark);
+}
+
+.step-description {
+    font-size: 18px;
+    color: var(--text-gray);
+    margin-bottom: 40px;
+}
+
+/* Partner Form */
+.partner-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.form-row.single {
+    grid-template-columns: 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 14px 16px;
+    border: 2px solid var(--light-gray);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--text-dark);
+    transition: border-color var(--transition-fast);
+    background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-pink);
+}
+
+.form-group input:invalid:not(:placeholder-shown),
+.form-group select:invalid:not(:placeholder-shown) {
+    border-color: #D32F2F;
+}
+
+.form-group small {
+    font-size: 13px;
+    color: var(--text-gray);
+}
+
+/* Agreements Container */
+.agreements-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.agreement-box {
+    border: 2px solid var(--light-gray);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--transition-base);
+}
+
+.agreement-box.scrolled {
+    border-color: var(--accent-green);
+}
+
+.agreement-box h3 {
+    background: var(--light-gray);
+    padding: 20px 24px;
+    margin: 0;
+    font-size: 18px;
+}
+
+.agreement-content {
+    padding: 24px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-dark);
+}
+
+.agreement-content h4 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: var(--primary-pink);
+}
+
+.agreement-content h5 {
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.agreement-content p {
+    margin-bottom: 12px;
+}
+
+.agreement-content ul {
+    margin-left: 20px;
+    margin-bottom: 12px;
+}
+
+.scroll-indicator {
+    background: var(--primary-pink);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.agreement-box.scrolled .scroll-indicator {
+    background: var(--accent-green);
+}
+
+/* Summary Box */
+.summary-box {
+    background: var(--off-white);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-bottom: 40px;
+}
+
+.summary-box h3 {
+    font-size: 22px;
+    margin-bottom: 24px;
+}
+
+.summary-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.summary-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Signature Section */
+.signature-section {
+    background: var(--off-white);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-bottom: 40px;
+}
+
+.signature-section h3 {
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.signature-section p {
+    color: var(--text-gray);
+    margin-bottom: 16px;
+}
+
+.agreement-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px 0;
+}
+
+.agreement-list li {
+    padding: 8px 0 8px 32px;
+    position: relative;
+    font-weight: 600;
+}
+
+.agreement-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent-green);
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.signature-input {
+    font-family: 'Brush Script MT', cursive, sans-serif;
+    font-size: 24px !important;
+    letter-spacing: 1px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--primary-pink);
+}
+
+.checkbox-group label {
+    font-size: 14px;
+    line-height: 1.6;
+    cursor: pointer;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+    margin-top: 40px;
+}
+
+.btn-large {
+    padding: 18px 48px;
+    font-size: 16px;
+}
+
+/* Success Step */
+.success-icon {
+    width: 120px;
+    height: 120px;
+    background: var(--accent-green);
+    color: white;
+    font-size: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.success-message {
+    font-size: 20px;
+    color: var(--text-gray);
+    margin-bottom: 60px;
+}
+
+.partner-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    margin-bottom: 60px;
+}
+
+.benefit-item {
+    text-align: center;
+}
+
+.benefit-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.benefit-item h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.benefit-item p {
+    font-size: 14px;
+    color: var(--text-gray);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .step-content {
+        padding: 40px 24px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-content {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-steps {
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .step-label {
+        font-size: 12px;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+
+    .partner-benefits {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .step-content h1 {
+        font-size: 28px;
+    }
+
+    .step-description {
+        font-size: 16px;
+    }
+
+    .agreement-content {
+        max-height: 250px;
+    }
+}

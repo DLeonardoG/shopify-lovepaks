@@ -1,0 +1,572 @@
+/* ============================================
+   PAYMENT CONFIRMATION PAGE STYLES
+   ============================================ */
+
+body {
+    background: linear-gradient(135deg, #FFF5F9 0%, #FFFFFF 100%);
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+/* Container */
+.confirmation-container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 60px clamp(20px, 4vw, 60px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Title Row */
+.header-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.checkmark-circle {
+    width: clamp(50px, 5vw, 60px);
+    height: clamp(50px, 5vw, 60px);
+    background: var(--accent-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(28, 171, 100, 0.2);
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.checkmark {
+    width: clamp(30px, 3.5vw, 36px);
+    height: clamp(30px, 3.5vw, 36px);
+    position: relative;
+}
+
+.checkmark::before {
+    content: '✓';
+    position: absolute;
+    font-size: clamp(32px, 4vw, 40px);
+    font-weight: 700;
+    color: white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Content */
+.confirmation-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: clamp(30px, 4vw, 50px) clamp(30px, 4vw, 60px);
+    box-shadow: 0 1px 3px rgba(236, 0, 140, 0.08);
+    animation: fadeInUp 0.6s ease 0.2s both;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.confirmation-header {
+    text-align: center;
+    margin-bottom: clamp(24px, 3vw, 40px);
+}
+
+.confirmation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(30px, 4vw, 50px);
+    align-items: start;
+}
+
+.confirmation-left,
+.confirmation-right {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vw, 30px);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.confirmation-title {
+    font-size: clamp(32px, 4vw, 42px);
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.confirmation-subtitle {
+    font-size: clamp(16px, 2vw, 18px);
+    color: var(--text-gray);
+}
+
+/* Order Details Card */
+.order-details-card {
+    background: var(--off-white);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 2.5vw, 28px);
+}
+
+.order-header {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: clamp(20px, 3vw, 40px);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid white;
+}
+
+.order-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.order-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.order-number {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary-pink);
+    font-family: 'Courier New', monospace;
+}
+
+.order-total {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-dark);
+}
+
+/* Order Items */
+.order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: var(--radius-sm);
+}
+
+.item-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.item-type {
+    font-size: 12px;
+    color: var(--text-gray);
+    margin-top: 4px;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* Almost There Section */
+.almost-there-section {
+    text-align: center;
+    padding: clamp(24px, 3vw, 36px);
+    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--burgundy) 100%);
+    border-radius: var(--radius-lg);
+    color: white;
+}
+
+.almost-icon {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto 12px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.almost-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.almost-there-section h2 {
+    font-size: clamp(24px, 3vw, 28px);
+    margin-bottom: 12px;
+    color: white;
+}
+
+.almost-message {
+    font-size: clamp(14px, 1.8vw, 16px);
+    line-height: 1.6;
+    opacity: 0.95;
+}
+
+/* Next Steps */
+.next-steps-container {
+    background: var(--off-white);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 2.5vw, 28px);
+}
+
+.next-steps-container h3 {
+    font-size: clamp(18px, 2.2vw, 20px);
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--text-dark);
+}
+
+.steps-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.timeline-step {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 16px;
+    align-items: start;
+    position: relative;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--light-gray);
+    border: 3px solid var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-gray);
+    z-index: 2;
+    position: relative;
+}
+
+.timeline-step.completed .step-icon {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: white;
+}
+
+.timeline-step.current .step-icon {
+    background: var(--primary-pink);
+    border-color: var(--primary-pink);
+    color: white;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.step-content {
+    padding: 8px 0;
+}
+
+.step-title {
+    font-size: clamp(15px, 1.8vw, 17px);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+}
+
+.step-desc {
+    font-size: clamp(12px, 1.4vw, 13px);
+    color: var(--text-gray);
+    line-height: 1.5;
+}
+
+.timeline-connector {
+    width: 3px;
+    height: 30px;
+    background: var(--light-gray);
+    margin-left: 23.5px;
+    position: relative;
+}
+
+/* Benefits Reminder */
+.benefits-reminder {
+    background: var(--off-white);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 2.5vw, 28px);
+}
+
+.benefits-reminder h3 {
+    font-size: clamp(18px, 2.2vw, 20px);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+    color: var(--text-dark);
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: white;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.benefit-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+}
+
+.benefit-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.benefit-text {
+    font-size: clamp(12px, 1.4vw, 13px);
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* CTA Button */
+#become-partner-btn {
+    width: 100%;
+    padding: 18px 32px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--primary-pink);
+    background: var(--primary-pink);
+    color: white;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 2px 8px rgba(236, 0, 140, 0.15);
+    text-transform: none;
+}
+
+#become-partner-btn:hover {
+    background: var(--burgundy);
+    border-color: var(--burgundy);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(144, 24, 53, 0.25);
+}
+
+#become-partner-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(236, 0, 140, 0.15);
+}
+
+#become-partner-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(236, 0, 140, 0.2);
+}
+
+.cta-note {
+    margin-top: 12px;
+    font-size: clamp(12px, 1.4vw, 13px);
+    color: var(--text-gray);
+}
+
+/* Email Notice */
+.email-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px;
+    background: #E3F2FD;
+    border-radius: var(--radius-md);
+    border-left: 4px solid #2196F3;
+}
+
+.notice-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.notice-text {
+    font-size: clamp(12px, 1.4vw, 13px);
+    color: var(--text-dark);
+}
+
+.notice-text strong {
+    color: var(--primary-pink);
+}
+
+/* Footer Note */
+.footer-note {
+    text-align: center;
+    margin-top: clamp(30px, 4vw, 50px);
+    padding: clamp(20px, 3vw, 30px) 0;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.footer-note p {
+    font-size: 14px;
+    color: var(--text-gray);
+}
+
+.footer-note a {
+    color: var(--primary-pink);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .confirmation-grid {
+        grid-template-columns: 1fr;
+        gap: clamp(24px, 3vw, 32px);
+    }
+}
+
+@media (max-width: 768px) {
+    .confirmation-container {
+        padding: 30px 20px;
+    }
+    
+    .confirmation-content {
+        padding: 30px 20px;
+    }
+
+    .order-header {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .almost-there-section {
+        padding: 32px 24px;
+    }
+
+    .almost-icon {
+        font-size: 48px;
+    }
+
+    .almost-there-section h2 {
+        font-size: 28px;
+    }
+
+    .almost-message {
+        font-size: 16px;
+    }
+
+    .timeline-step {
+        grid-template-columns: 50px 1fr;
+        gap: 16px;
+    }
+
+    .step-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+
+    .timeline-connector {
+        margin-left: 23.5px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-mega {
+        font-size: 18px;
+        padding: 20px 40px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-title-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .checkmark-circle {
+        width: 50px;
+        height: 50px;
+    }
+
+    .checkmark::before {
+        font-size: 32px;
+    }
+
+    .confirmation-title {
+        font-size: 28px;
+    }
+
+    .confirmation-content {
+        padding: 32px 20px;
+    }
+
+    .order-details-card {
+        padding: 20px;
+    }
+
+    .email-notice {
+        flex-direction: column;
+        text-align: center;
+    }
+}

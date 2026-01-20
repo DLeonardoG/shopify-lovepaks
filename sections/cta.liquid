@@ -1,0 +1,21 @@
+{% comment %}
+  CTA Section
+{% endcomment %}
+
+<section class="cta-section">
+    <div class="container">
+        <div class="fade-in">
+            <h2>Ready to Transform Your Laundry?</h2>
+            <p>Join thousands who've discovered wellness in every load.</p>
+            <div class="cta-buttons">
+                <a href="{{ routes.collections_url }}" class="btn-white">Shop</a>
+                {% if customer.tags contains 'wholesale-partner' %}
+                    <a href="/pages/partner-dashboard" class="btn-secondary" style="border-color: white; color: white;">Partner Dashboard</a>
+                {% else %}
+                    <a href="/pages/partner-signup" class="btn-secondary" style="border-color: white; color: white;">Become a Partner</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+

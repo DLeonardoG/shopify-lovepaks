@@ -1,0 +1,36 @@
+{% comment %}
+  Mini Cart Drawer
+  Compatible with Shopify Cart API
+{% endcomment %}
+
+<div class="mini-cart" id="mini-cart">
+    <div class="mini-cart-header">
+        <h4>Cart (<span id="cart-count">{{ cart.item_count }}</span>)</h4>
+        <button class="mini-cart-close" id="mini-cart-close">×</button>
+    </div>
+    <div class="mini-cart-items" id="mini-cart-items">
+        {% if cart.item_count > 0 %}
+            {% for item in cart.items %}
+                <div class="mini-cart-item" data-key="{{ item.key }}">
+                    <div class="mini-cart-item-details">
+                        <div class="mini-cart-item-name">{{ item.product.title }}</div>
+                        <div class="mini-cart-item-price">{{ item.price | money }} × {{ item.quantity }}</div>
+                    </div>
+                    <button class="mini-cart-item-remove" onclick="removeCartItem('{{ item.key }}')" aria-label="Remove item">
+                        ×
+                    </button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align: center; color: #999; padding: 40px 0;">Your cart is empty</p>
+        {% endif %}
+    </div>
+    <div class="mini-cart-footer">
+        <div class="mini-cart-total">
+            <span>Total:</span>
+            <span id="cart-total">{{ cart.total_price | money }}</span>
+        </div>
+        <a href="{{ routes.cart_url }}" class="mini-cart-checkout">Checkout</a>
+    </div>
+</div>
+

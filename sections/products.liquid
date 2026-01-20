@@ -1,0 +1,66 @@
+{% comment %}
+  Products Section - Dynamic products from Shopify
+{% endcomment %}
+
+<section class="products-section" id="products">
+    <div class="container">
+        <div class="section-header fade-in">
+            <span class="section-eyebrow">Our Products</span>
+            <h2 class="section-title">Choose Your Experience</h2>
+        </div>
+        <div class="products-grid">
+            {% comment %} 
+              If you have a featured collection, use it:
+              {% for product in collections.featured.products limit: 2 %}
+            {% endcomment %}
+            
+            {% comment %} For now, using static products like original {% endcomment %}
+            <div class="product-card fade-in" data-product-id="citrus-boost">
+                <img src="{{ 'packaging-normal.jpg' | file_img_url: '800x' }}" 
+                     alt="Citrus Flower Blossom" 
+                     class="product-image"
+                     loading="lazy">
+                <div class="product-content">
+                    <span class="product-badge">Most Popular</span>
+                    <h3 class="product-name">Citrus Flower Blossom</h3>
+                    <p class="product-description">
+                        Our most powerful formula with invigorating citrus scent. Perfect for active wear and tough stains.
+                    </p>
+                    <div class="product-price-wrapper">
+                        <div class="product-price">$39.00</div>
+                    </div>
+                    <a href="/pages/shop-landing" class="product-cta">
+                        Shop Now
+                    </a>
+                </div>
+            </div>
+            <div class="product-card fade-in" data-product-id="dye-scent-free">
+                <img src="{{ 'packaging-piel-sensibles.jpg' | file_img_url: '800x' }}" 
+                     alt="Dye & Scent Free" 
+                     class="product-image"
+                     loading="lazy">
+                <div class="product-content">
+                    <span class="product-badge">Sensitive Skin</span>
+                    <h3 class="product-name">Dye & Scent Free</h3>
+                    <p class="product-description">
+                        Gentle, fragrance-free formula for sensitive skin. All the power without irritation.
+                    </p>
+                    <div class="product-price-wrapper">
+                        <div class="product-price">$39.00</div>
+                    </div>
+                    <a href="/pages/shop-landing" class="product-cta">
+                        Shop Now
+                    </a>
+                </div>
+            </div>
+            
+            {% comment %} 
+              Future: Dynamic products from Shopify
+              {% for product in collections.featured.products limit: 2 %}
+                {% render 'product-card', product: product %}
+              {% endfor %}
+            {% endcomment %}
+        </div>
+    </div>
+</section>
+

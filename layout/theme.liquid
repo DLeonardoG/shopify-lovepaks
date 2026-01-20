@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ page_description | default: shop.description | escape }}">
+    
+    <title>
+        {{ page_title }}{% if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+    </title>
+    
+    <!-- Favicon -->
+    {% if settings.favicon != blank %}
+        <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
+    {% endif %}
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    
+    <!-- Shopify required scripts -->
+    {{ content_for_header }}
+</head>
+<body class="template-{{ template.name | handle }}">
+    
+    <!-- Navigation -->
+    {% section 'header' %}
+    
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        {{ content_for_layout }}
+    </main>
+    
+    <!-- Footer -->
+    {% section 'footer' %}
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- JavaScript -->
+    {{ 'shopify-cart.js' | asset_url | script_tag }}
+    {{ 'theme.js' | asset_url | script_tag }}
+    
+    <!-- Page-specific scripts -->
+    {% if template.name == 'index' %}
+        {{ 'script.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and page.handle == 'shop-landing' %}
+        {{ 'shop-landing.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and page.handle == 'partner-signup' %}
+        {{ 'partner-signup.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and page.handle == 'partner-dashboard' %}
+        {{ 'partner-dashboard.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and page.handle == 'checkout' %}
+        {{ 'checkout.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and page.handle == 'upsell' %}
+        {{ 'shopify-cart.js' | asset_url | script_tag }}
+        {{ 'upsell.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and page.handle == 'payment-confirmation' %}
+        {{ 'payment-confirmation.js' | asset_url | script_tag }}
+    {% endif %}
+    
+    <!-- Cart drawer (if needed) -->
+    {% render 'cart-drawer' %}
+</body>
+</html>
+

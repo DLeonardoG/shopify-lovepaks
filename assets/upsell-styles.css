@@ -1,0 +1,812 @@
+/* ============================================
+   UPSELL PAGE STYLES
+   ============================================ */
+
+body {
+    background: var(--off-white);
+}
+
+/* Checkout Progress Bar */
+.checkout-progress {
+    background: white;
+    box-shadow: var(--shadow-sm);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.progress-bar {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--light-gray);
+    border: 3px solid var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--text-gray);
+    transition: all var(--transition-base);
+}
+
+.progress-step.completed .step-circle {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: white;
+}
+
+.progress-step.active .step-circle {
+    background: var(--primary-pink);
+    border-color: var(--primary-pink);
+    color: white;
+    transform: scale(1.1);
+}
+
+.progress-step span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-gray);
+}
+
+.progress-step.active span {
+    color: var(--primary-pink);
+}
+
+.progress-line {
+    flex: 1;
+    height: 3px;
+    background: var(--light-gray);
+    position: relative;
+    top: -15px;
+}
+
+.progress-line.completed {
+    background: var(--accent-green);
+}
+
+/* Upsell Container */
+.upsell-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.upsell-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+}
+
+/* Left Side: Information */
+.upsell-left {
+    display: flex;
+    align-items: center;
+}
+
+/* Right Side: Image & Branding */
+.upsell-right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #FFF5F9 0%, #ffffff 100%);
+    border-radius: var(--radius-xl);
+    padding: 60px 40px;
+    min-height: 600px;
+}
+
+/* Upsell Content */
+.upsell-content {
+    max-width: 900px;
+}
+
+.upsell-content-simple {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.upsell-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.upsell-header h1 {
+    font-size: clamp(32px, 4vw, 42px);
+    margin-bottom: 16px;
+    color: var(--text-dark);
+}
+
+.upsell-subtitle {
+    font-size: 18px;
+    color: var(--text-gray);
+}
+
+.upsell-description {
+    font-size: 18px;
+    color: var(--text-gray);
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Offers Grid */
+.offers-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+/* Simplified Upsell Offer */
+.upsell-offer-container {
+    max-width: 900px;
+    margin: 0 auto 48px;
+}
+
+.offer-card-simple {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    transition: all var(--transition-base);
+}
+
+.offer-card-simple:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.offer-image-section {
+    flex: 0 0 40%;
+    background: #FFF5F9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.offer-product-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.offer-content-section {
+    flex: 1;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.offer-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: var(--text-dark);
+}
+
+.offer-description-text {
+    margin-bottom: 32px;
+    flex: 1;
+}
+
+.offer-description-text p {
+    font-size: 16px;
+    color: var(--text-gray);
+    line-height: 1.7;
+}
+
+.offer-pricing-simple {
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.total-price {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--primary-pink);
+    line-height: 1;
+}
+
+.price-label {
+    font-size: 14px;
+    color: var(--text-gray);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.offer-actions-simple {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Simplified Upsell Message Box */
+.upsell-message-box {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 60px 48px;
+    text-align: left;
+    width: 100%;
+}
+
+.upsell-message {
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--text-dark);
+    margin-bottom: 48px;
+}
+
+.upsell-product-info {
+    margin-bottom: 40px;
+    padding: 32px 0;
+    border-top: 2px solid var(--light-gray);
+    border-bottom: 2px solid var(--light-gray);
+}
+
+.product-identifier {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-gray);
+    margin-bottom: 16px;
+    opacity: 0.7;
+}
+
+.product-price {
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--primary-pink);
+    margin-bottom: 12px;
+    line-height: 1;
+}
+
+.product-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.product-tagline {
+    font-size: 16px;
+    color: var(--text-gray);
+    margin-top: 4px;
+}
+
+.upsell-actions-simple {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.upsell-actions-simple .btn-primary,
+.upsell-actions-simple .btn-secondary {
+    min-width: 120px;
+    padding: 18px 32px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Product Image Container */
+.product-image-container {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.upsell-product-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 24px rgba(236, 0, 140, 0.15);
+    transform: rotate(-5deg);
+    transition: transform var(--transition-base);
+}
+
+.upsell-product-image:hover {
+    transform: rotate(0deg) scale(1.05);
+}
+
+/* Brand Accent */
+.brand-accent {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.brand-logo-placeholder {
+    margin-bottom: 16px;
+}
+
+.brand-logo-small {
+    max-width: 120px;
+    height: auto;
+    opacity: 0.8;
+}
+
+.brand-tagline {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-pink);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* Offer Card */
+.offer-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    padding: 32px;
+    position: relative;
+    transition: all var(--transition-base);
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.offer-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.offer-card.added {
+    border: 2px solid var(--accent-green);
+}
+
+/* Offer Badge */
+.offer-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--accent-gold);
+    color: white;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Offer Image Placeholder */
+.offer-image-placeholder {
+    width: 120px;
+    height: 120px;
+    background: var(--off-white);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-icon {
+    font-size: 56px;
+}
+
+/* Offer Content */
+.offer-content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-dark);
+}
+
+.offer-content > p {
+    font-size: 15px;
+    color: var(--text-gray);
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.offer-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.offer-features li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.offer-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+/* Offer Pricing */
+.offer-pricing {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.original-price {
+    font-size: 18px;
+    color: var(--text-gray);
+    text-decoration: line-through;
+}
+
+.offer-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary-pink);
+}
+
+.savings-badge {
+    background: var(--accent-green);
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Offer Actions */
+.offer-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.offer-actions .btn-primary {
+    flex: 1;
+    padding: 14px;
+}
+
+.offer-actions .btn-text {
+    flex-shrink: 0;
+}
+
+.no-thanks-btn {
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+.no-thanks-btn:hover {
+    color: var(--text-dark);
+}
+
+/* Continue Section */
+.continue-section {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.continue-section .btn-large {
+    padding: 18px 60px;
+    font-size: 18px;
+}
+
+.skip-text {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--text-gray);
+}
+
+.skip-text a {
+    color: var(--primary-pink);
+    font-weight: 600;
+}
+
+/* Order Summary Sidebar */
+.order-summary-sidebar {
+    position: sticky;
+    top: 120px;
+    height: fit-content;
+}
+
+.summary-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    padding: 32px;
+}
+
+.summary-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text-dark);
+}
+
+/* Summary Items */
+.summary-items {
+    margin-bottom: 24px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+}
+
+.item-label {
+    font-size: 12px;
+    color: var(--text-gray);
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* Summary Totals */
+.summary-totals {
+    padding-top: 20px;
+    border-top: 2px solid var(--light-gray);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 15px;
+}
+
+.summary-row.savings-row {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+.summary-row.total-row {
+    padding-top: 16px;
+    margin-top: 8px;
+    border-top: 2px solid var(--light-gray);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-dark);
+}
+
+.savings-amount {
+    color: var(--accent-green);
+}
+
+/* Trust Badges */
+.trust-badges {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-gray);
+}
+
+.trust-item span:first-child {
+    font-size: 18px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .upsell-container {
+        grid-template-columns: 1fr;
+    }
+
+    .order-summary-sidebar {
+        position: static;
+        order: -1;
+    }
+
+    .offer-card {
+        grid-template-columns: 100px 1fr;
+        gap: 20px;
+        padding: 24px;
+    }
+
+    .offer-image-placeholder {
+        width: 100px;
+        height: 100px;
+    }
+
+    .placeholder-icon {
+        font-size: 48px;
+    }
+}
+
+@media (max-width: 768px) {
+    .progress-bar {
+        max-width: 100%;
+    }
+
+    .progress-step span {
+        font-size: 11px;
+    }
+
+    .step-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .upsell-container {
+        padding: 40px 20px;
+    }
+
+    .upsell-wrapper {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .upsell-right {
+        min-height: 400px;
+        padding: 40px 24px;
+    }
+
+    .upsell-message-box {
+        padding: 40px 32px;
+        text-align: center;
+    }
+
+    .upsell-message {
+        font-size: 18px;
+        margin-bottom: 32px;
+    }
+
+    .product-identifier {
+        font-size: 24px;
+    }
+
+    .product-price {
+        font-size: 48px;
+    }
+
+    .product-name {
+        font-size: 20px;
+    }
+
+    .upsell-actions-simple {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .upsell-actions-simple .btn-primary,
+    .upsell-actions-simple .btn-secondary {
+        width: 100%;
+    }
+
+    .upsell-product-image {
+        max-width: 280px;
+    }
+
+    .offer-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .offer-image-placeholder {
+        width: 100%;
+        height: 140px;
+        margin: 0 auto;
+    }
+
+    .offer-actions {
+        flex-direction: column;
+    }
+
+    .offer-card-simple {
+        flex-direction: column;
+    }
+
+    .offer-image-section {
+        flex: 0 0 auto;
+        padding: 32px;
+    }
+
+    .offer-content-section {
+        padding: 32px 24px;
+    }
+
+    .offer-title {
+        font-size: 26px;
+    }
+
+    .total-price {
+        font-size: 40px;
+    }
+
+    .offer-actions .btn-primary {
+        width: 100%;
+    }
+
+    .offer-pricing {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .upsell-header h1 {
+        font-size: 28px;
+    }
+
+    .offer-card {
+        padding: 20px;
+    }
+
+    .offer-content h3 {
+        font-size: 20px;
+    }
+
+    .offer-price {
+        font-size: 28px;
+    }
+
+    .summary-card {
+        padding: 24px;
+    }
+}

@@ -1,0 +1,216 @@
+{% comment %}
+  Partner Signup Page
+  Handle: partner-signup
+  Nota: Este formulario puede integrarse con Shopify Forms o una app de formularios
+{% endcomment %}
+
+<!-- Partner Signup Container -->
+<div class="partner-signup-container">
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="progress-step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Company Details</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Legal Disclosures</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Authorization</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Complete</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 1: Company Details -->
+    <div class="signup-step active" id="step-1">
+        <div class="step-content">
+            <h1>Welcome to Love Brands Partnership</h1>
+            <p class="step-description">We're one step closer to accessing your partner account. Let's start by collecting your company information.</p>
+
+            <form class="partner-form" id="company-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="company-name">Legal Name (Company) *</label>
+                        <input type="text" id="company-name" name="companyName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="address">Address *</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ein">EIN (Employer Identification Number) *</label>
+                        <input type="text" id="ein" name="ein" placeholder="XX-XXXXXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cell-phone">Cell Phone *</label>
+                        <input type="tel" id="cell-phone" name="cellPhone" placeholder="(XXX) XXX-XXXX" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="main-contact">Main Contact Name *</label>
+                        <input type="text" id="main-contact" name="mainContact" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">Contact Email *</label>
+                        <input type="email" id="contact-email" name="contactEmail" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary btn-large">Continue to Legal Disclosures</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Step 2: Legal Disclosures -->
+    <div class="signup-step" id="step-2">
+        <div class="step-content">
+            <h1>Legal Disclosures</h1>
+            <p class="step-description">Please review and scroll through each agreement below.</p>
+
+            <div class="agreements-container">
+                <div class="agreement-box" id="supply-agreement-box">
+                    <h3>Supply Agreement</h3>
+                    <div class="agreement-content" id="supply-agreement">
+                        <h4>SUPPLY AGREEMENT</h4>
+                        <p>The undersigned Partner hereby confirms its agreement that the following conditions apply to its purchase of any Products from Love Brands, a wholly owned brand, trademark, and subsidiary of Saje Holdings, LLC ("Love Brands"):</p>
+                        <p><strong>Note:</strong> This is a simplified version. The full agreement should be loaded from a separate page or file.</p>
+                        <p>For the complete Supply Agreement, please contact us at partners@lovebrands.com</p>
+                    </div>
+                    <div class="scroll-indicator">Scroll to bottom to continue</div>
+                </div>
+
+                <div class="agreement-box" id="ecommerce-agreement-box">
+                    <h3>E-commerce Agreement</h3>
+                    <div class="agreement-content" id="ecommerce-agreement">
+                        <h4>E-COMMERCE AGREEMENT</h4>
+                        <p>This Ecommerce Authorization Agreement is made as of today's date of consent (the "Effective Date"), by and between You, Your Company, and its Affiliates (the "Company") and Love Brands.</p>
+                        <p><strong>Note:</strong> This is a simplified version. The full agreement should be loaded from a separate page or file.</p>
+                        <p>For the complete E-commerce Agreement, please contact us at partners@lovebrands.com</p>
+                    </div>
+                    <div class="scroll-indicator">Scroll to bottom to continue</div>
+                </div>
+
+                <div class="agreement-box" id="licensing-agreement-box">
+                    <h3>Image Licensing Policy</h3>
+                    <div class="agreement-content" id="licensing-agreement">
+                        <h4>IMAGE LICENSING POLICY</h4>
+                        <p>Love Brands develops, manufactures, and sells innovative wellness cleaning products and supplies.</p>
+                        <p><strong>Note:</strong> This is a simplified version. The full policy should be loaded from a separate page or file.</p>
+                        <p>For the complete Image Licensing Policy, please contact us at partners@lovebrands.com</p>
+                    </div>
+                    <div class="scroll-indicator">Scroll to bottom to continue</div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" id="back-to-step-1">Back</button>
+                <button type="button" class="btn-primary btn-large" id="continue-to-authorization" disabled>
+                    Continue to Authorization
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 3: Authorization and Digital Signature -->
+    <div class="signup-step" id="step-3">
+        <div class="step-content">
+            <h1>Authorization and Digital Signature</h1>
+            <p class="step-description">Please review the summary and provide your digital signature to complete the partnership agreement.</p>
+
+            <div class="summary-box">
+                <h3>Agreement Summary</h3>
+                <div class="summary-content" id="agreement-summary">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
+            <div class="signature-section">
+                <h3>Digital Signature</h3>
+                <p>By signing below, you confirm that you have read, understand, and agree to all terms and conditions outlined in:</p>
+                <ul class="agreement-list">
+                    <li>Supply Agreement</li>
+                    <li>E-commerce Agreement</li>
+                    <li>Image Licensing Policy</li>
+                </ul>
+
+                {% form 'create_customer' %}
+                    <div class="form-group">
+                        <label for="signature-name">Full Name (Type to sign) *</label>
+                        <input type="text" id="signature-name" name="customer[first_name]" class="signature-input" required>
+                        <small>Your typed name serves as your digital signature</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signature-title">Title/Position *</label>
+                        <input type="text" id="signature-title" name="customer[note][title]" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signature-date">Date</label>
+                        <input type="text" id="signature-date" name="customer[note][signature_date]" readonly value="{{ 'now' | date: '%B %d, %Y' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer-email">Email *</label>
+                        <input type="email" id="customer-email" name="customer[email]" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer-password">Password *</label>
+                        <input type="password" id="customer-password" name="customer[password]" required>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="authorize-checkbox" name="customer[note][authorized]" required>
+                        <label for="authorize-checkbox">
+                            I am authorized to sign this agreement on behalf of my company and accept all terms and conditions
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="back-to-step-2">Back</button>
+                        <button type="submit" class="btn-primary btn-large" id="submit-application">
+                            Submit Application
+                        </button>
+                    </div>
+                {% endform %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 4: Success / Dashboard Redirect -->
+    <div class="signup-step" id="step-4">
+        <div class="step-content text-center">
+            <div class="success-icon">✓</div>
+            <h1>Welcome to Love Brands Partnership!</h1>
+            <p class="success-message">Your application has been submitted successfully. You now have access to all partner benefits.</p>
+
+            <div class="form-actions">
+                <a href="/pages/partner-dashboard" class="btn-primary btn-large" id="go-to-dashboard">
+                    Go to Partner Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

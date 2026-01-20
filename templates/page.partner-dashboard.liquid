@@ -1,0 +1,163 @@
+{% comment %}
+  Partner Dashboard Page
+  Handle: partner-dashboard
+  Requiere: Customer con tag 'wholesale-partner'
+{% endcomment %}
+
+{% unless customer.tags contains 'wholesale-partner' %}
+    <script>
+        window.location.href = '/pages/partner-signup';
+    </script>
+{% endunless %}
+
+<!-- Dashboard Container -->
+<div class="dashboard-container">
+    <!-- Welcome Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <h1>Welcome back, <span id="partner-name">{{ customer.first_name | default: 'Partner' }}</span>!</h1>
+            <p class="dashboard-subtitle">Buy more product, manage your subscription, and access partner resources.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <section class="dashboard-content">
+        <div class="container">
+            <div class="dashboard-grid">
+                <!-- Left Column -->
+                <div class="dashboard-main">
+                    <!-- Quick Actions: Buy product / Manage subscription -->
+                    <div class="quick-actions-grid">
+                        <a href="/pages/shop-landing" class="action-card" id="buy-more-btn">
+                            <div class="action-icon-wrapper">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17M9 19.5C9.82843 19.5 10.5 20.1716 10.5 21C10.5 21.8284 9.82843 22.5 9 22.5C8.17157 22.5 7.5 21.8284 7.5 21C7.5 20.1716 8.17157 19.5 9 19.5ZM20 19.5C20.8284 19.5 21.5 20.1716 21.5 21C21.5 21.8284 20.8284 22.5 20 22.5C19.1716 22.5 18.5 21.8284 18.5 21C18.5 20.1716 19.1716 19.5 20 19.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="action-content">
+                                <h3 class="action-title">Buy More Product</h3>
+                                <p class="action-description">Browse and order additional products for your business</p>
+                            </div>
+                            <div class="action-arrow">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </a>
+                        <a href="{{ routes.account_url }}" class="action-card" id="manage-subscription-btn">
+                            <div class="action-icon-wrapper">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 15C15.866 15 19 11.866 19 8C19 4.13401 15.866 1 12 1C8.13401 1 5 4.13401 5 8C5 11.866 8.13401 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8.21 13.89L7 23L12 20L17 23L15.79 13.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="action-content">
+                                <h3 class="action-title">Manage Subscription</h3>
+                                <p class="action-description">Update your subscription plan and billing preferences</p>
+                            </div>
+                            <div class="action-arrow">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Top Row: Recent Orders and Company Information -->
+                    <div class="dashboard-top-row">
+                        <!-- Order History -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h2>Recent Orders</h2>
+                                <a href="{{ routes.account_url }}" class="btn-text">View All</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="orders-table">
+                                    <div class="order-row order-header">
+                                        <div class="order-cell">Order #</div>
+                                        <div class="order-cell">Date</div>
+                                        <div class="order-cell">Total</div>
+                                        <div class="order-cell">Status</div>
+                                    </div>
+                                    {% if customer.orders.size > 0 %}
+                                        {% for order in customer.orders limit: 3 %}
+                                            <div class="order-row">
+                                                <div class="order-cell">#{{ order.name }}</div>
+                                                <div class="order-cell">{{ order.created_at | date: "%b %d, %Y" }}</div>
+                                                <div class="order-cell">{{ order.total_price | money }}</div>
+                                                <div class="order-cell">
+                                                    <span class="status-badge {{ order.fulfillment_status | default: 'pending' | handle }}">
+                                                        {{ order.fulfillment_status | default: 'Pending' | capitalize }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="order-row">
+                                            <div class="order-cell" colspan="4" style="text-align: center; padding: 20px;">
+                                                No orders yet
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Company Information -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h2>Company Information</h2>
+                                <a href="/pages/contact" class="btn-text" id="edit-info-btn">Edit</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-grid" id="company-info">
+                                    <div class="info-item">
+                                        <div class="info-label">Company Name</div>
+                                        <div class="info-value">{{ customer.metafields.custom.partner_company_name | default: customer.company | default: 'N/A' }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Contact Name</div>
+                                        <div class="info-value">{{ customer.first_name }} {{ customer.last_name }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Email</div>
+                                        <div class="info-value">{{ customer.email }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Phone</div>
+                                        <div class="info-value">{{ customer.phone | default: 'N/A' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing & Subscription -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Billing & Subscription</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="payment-info">
+                                <div class="payment-item">
+                                    <span class="payment-label">Billing method:</span>
+                                    <span class="payment-value">Pay by card at checkout</span>
+                                </div>
+                                <div class="payment-item">
+                                    <span class="payment-label">Subscription status:</span>
+                                    <span class="payment-value">Active</span>
+                                </div>
+                                <p class="payment-note">
+                                    You can update or pause your subscription at any time from the
+                                    <a href="{{ routes.account_url }}" class="btn-text" id="manage-subscription-inline">Manage subscription</a>
+                                    controls.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

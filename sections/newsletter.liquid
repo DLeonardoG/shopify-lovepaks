@@ -1,0 +1,25 @@
+{% comment %}
+  Newsletter Section
+{% endcomment %}
+
+<section class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-content fade-in">
+            <h3>Join Our Wellness Community</h3>
+            <p>Get exclusive offers, wellness tips, and be the first to know about new products.</p>
+            {% form 'customer' %}
+                <div class="newsletter-form" id="newsletter-form">
+                    <input type="email" 
+                           name="contact[email]"
+                           class="newsletter-input" 
+                           placeholder="Enter your email to join our mailing list" 
+                           required
+                           id="newsletter-email">
+                    <button type="submit" class="newsletter-button">Subscribe</button>
+                </div>
+            {% endform %}
+            <p class="newsletter-privacy">We respect your privacy. Unsubscribe anytime.</p>
+        </div>
+    </div>
+</section>
+

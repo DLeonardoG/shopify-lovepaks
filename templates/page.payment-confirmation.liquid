@@ -1,0 +1,154 @@
+{% comment %}
+  Payment Confirmation Page
+  Handle: payment-confirmation
+  Muestra confirmación de orden y redirige a partner signup
+{% endcomment %}
+
+<div class="confirmation-container">
+    <!-- Main Content -->
+    <div class="confirmation-content">
+        <div class="confirmation-header">
+            <div class="header-title-row">
+                <div class="checkmark-circle">
+                    <div class="checkmark"></div>
+                </div>
+                <h1 class="confirmation-title">Payment Confirmed!</h1>
+            </div>
+            <p class="confirmation-subtitle">Thank you for your order</p>
+        </div>
+
+        <div class="confirmation-grid">
+            <!-- Left Column -->
+            <div class="confirmation-left">
+                <!-- Order Details -->
+                <div class="order-details-card">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <span class="order-label">Order Number</span>
+                            <span class="order-number" id="order-number">
+                                {% if checkout.order_number %}
+                                    {{ checkout.order_number }}
+                                {% elsif order.name %}
+                                    {{ order.name }}
+                                {% else %}
+                                    LB-XXXXXX
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="order-info">
+                            <span class="order-label">Order Total</span>
+                            <span class="order-total" id="order-total">
+                                {% if checkout.total_price %}
+                                    {{ checkout.total_price | money }}
+                                {% elsif order.total_price %}
+                                    {{ order.total_price | money }}
+                                {% else %}
+                                    $0.00
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="order-items" id="order-items">
+                        {% if checkout.line_items.size > 0 %}
+                            {% for item in checkout.line_items %}
+                                <div class="order-item">
+                                    <div>
+                                        <div class="item-name">{{ item.title }}</div>
+                                        <div class="item-type">Wholesale Package</div>
+                                    </div>
+                                    <div class="item-price">{{ item.price | money }}</div>
+                                </div>
+                            {% endfor %}
+                        {% elsif order.line_items.size > 0 %}
+                            {% for item in order.line_items %}
+                                <div class="order-item">
+                                    <div>
+                                        <div class="item-name">{{ item.title }}</div>
+                                        <div class="item-type">Wholesale Package</div>
+                                    </div>
+                                    <div class="item-price">{{ item.price | money }}</div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No items found</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Almost There Message -->
+                <div class="almost-there-section">
+                    <div class="almost-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h2>We're Almost Done!</h2>
+                    <p class="almost-message">
+                        To complete your order and receive your wholesale products, you need to become a registered partner.
+                        This quick process ensures we can deliver your order and set up your wholesale account.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="confirmation-right">
+                <!-- Next Steps -->
+                <div class="next-steps-container">
+                    <h3>What Happens Next:</h3>
+                    <div class="steps-timeline">
+                        <div class="timeline-step">
+                            <div class="step-icon completed">✓</div>
+                            <div class="step-content">
+                                <div class="step-title">Order Placed</div>
+                                <div class="step-desc">Your payment has been confirmed</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-connector"></div>
+
+                        <div class="timeline-step current">
+                            <div class="step-icon">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Partnership Registration</div>
+                                <div class="step-desc">Complete your partner profile (2 minutes)</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-connector"></div>
+
+                        <div class="timeline-step">
+                            <div class="step-icon">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Order Fulfillment</div>
+                                <div class="step-desc">We'll ship your products within 24-48 hours</div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-connector"></div>
+
+                        <div class="timeline-step">
+                            <div class="step-icon">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Start Selling</div>
+                                <div class="step-desc">Access your partner dashboard and benefits</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Button -->
+                <a href="/pages/partner-signup" class="btn-primary btn-large" id="become-partner-btn">
+                    Complete Partnership Registration
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="footer-note">
+        <p>Need help? Contact us at <a href="mailto:support@lovebrands.com">support@lovebrands.com</a></p>
+    </div>
+</div>
+

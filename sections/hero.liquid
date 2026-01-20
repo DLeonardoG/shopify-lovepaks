@@ -1,0 +1,31 @@
+{% comment %}
+  Hero Section with Video Background
+{% endcomment %}
+
+<section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" webkit-playsinline>
+        <source src="{{ 'video_start.mp4' | file_url }}" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-watermark">
+        <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="{{ shop.name }}" class="watermark-logo">
+    </div>
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text fade-in">
+                <span class="hero-eyebrow">Clean, powerful, sustainable</span>
+                <h1 class="hero-title">
+                    The aura of <span class="hero-title-pink">clean</span>
+                </h1>
+                <p class="hero-description">
+                    Wellness laundry detergent infused with rose quartz microcrystals. Laundry care that's good for you and the planet.
+                </p>
+                <div class="hero-ctas">
+                    <a href="#products" class="btn-primary" onclick="scrollToSection('products'); return false;">Shop</a>
+                    <a href="#about" class="btn-secondary" onclick="scrollToSection('about'); return false;">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

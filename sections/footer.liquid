@@ -1,0 +1,51 @@
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+            {% if settings.logo != blank %}
+                <img src="{{ settings.logo | image_url: width: 200 }}" alt="{{ shop.name }}">
+            {% else %}
+                <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="{{ shop.name }}">
+            {% endif %}
+                <p class="footer-description">
+                    The world's first wellness laundry detergent, infused with rose quartz. Laundry care that's good for you and the planet.
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-section-title">Products</h4>
+                <div class="footer-links">
+                    {% for collection in collections limit: 4 %}
+                        <a href="{{ collection.url }}" class="footer-link">{{ collection.title }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-section-title">Company</h4>
+                <div class="footer-links">
+                    <a href="/pages/about" class="footer-link">About Us</a>
+                    <a href="/pages/how-it-works" class="footer-link">How It Works</a>
+                    <a href="/blogs/news" class="footer-link">Blog</a>
+                    <a href="/pages/contact" class="footer-link">Contact</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-section-title">Support</h4>
+                <div class="footer-links">
+                    <a href="/pages/faq" class="footer-link">FAQ</a>
+                    <a href="/pages/shipping" class="footer-link">Shipping</a>
+                    <a href="/pages/returns" class="footer-link">Returns</a>
+                    <a href="/policies/privacy-policy" class="footer-link">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    ↑
+</button>
+
