@@ -14,12 +14,12 @@
           Replace with actual lifestyle product image filename
           This image should be uploaded to Shopify Files
         {% endcomment %}
-        <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="" class="hero-bg-img" aria-hidden="true">
+        <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="" class="hero-bg-img" aria-hidden="true" width="1920" height="1080">
     </div>
     
     <div class="hero-overlay"></div>
     <div class="hero-watermark">
-        <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="{{ shop.name }}" class="watermark-logo">
+        <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="{{ shop.name }}" class="watermark-logo" width="200" height="200">
     </div>
     <div class="container">
         <div class="hero-content">
@@ -31,7 +31,7 @@
                     Wellness laundry detergent infused with rose quartz microcrystals.
                 </p>
                 <div class="hero-ctas">
-                    <a href="#products" class="btn-primary" onclick="scrollToSection('products'); return false;">Shop</a>
+                    <a href="/pages/products" class="btn-primary">Shop</a>
                     <a href="#about" class="btn-secondary" onclick="scrollToSection('about'); return false;">Learn More</a>
                 </div>
             </div>

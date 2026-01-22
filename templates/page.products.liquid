@@ -1,0 +1,394 @@
+{% comment %}
+  Products Page - Individual product purchase page
+  Handle: products
+  This page shows individual products (not wholesale/master case)
+{% endcomment %}
+
+<!-- Hero Section -->
+<section class="products-page-hero">
+    <div class="container">
+        <div class="products-page-header fade-in">
+            <span class="section-eyebrow">Shop Love Paks</span>
+            <h1 class="products-page-title">Choose Your Experience</h1>
+            <p class="products-page-subtitle">Wellness laundry detergent infused with rose quartz microcrystals</p>
+        </div>
+    </div>
+</section>
+
+<!-- Products Grid -->
+<section class="products-page-section">
+    <div class="container">
+        <div class="products-page-grid">
+            {% comment %} Citrus Flower Blossom Product {% endcomment %}
+            <div class="product-page-card fade-in" data-product-id="citrus-boost">
+                <div class="product-page-image-wrapper">
+                    <img src="{{ 'packaging-normal.jpg' | file_img_url: '1200x' }}" 
+                         alt="Citrus Flower Blossom" 
+                         class="product-page-image"
+                         loading="lazy">
+                    <span class="product-page-badge">Most Popular</span>
+                </div>
+                <div class="product-page-content">
+                    <h2 class="product-page-name">Citrus Flower Blossom</h2>
+                    <p class="product-page-description">
+                        Our most powerful formula with invigorating citrus scent. Perfect for active wear and tough stains.
+                    </p>
+                    
+                    {% comment %} Product Features {% endcomment %}
+                    <ul class="product-page-features">
+                        <li>Infused with rose quartz microcrystals</li>
+                        <li>Plant-based formula</li>
+                        <li>Works in cold water</li>
+                        <li>Microplastic-free</li>
+                        <li>Eco-friendly packaging</li>
+                    </ul>
+                    
+                    <div class="product-page-price-wrapper">
+                        <div class="product-page-price">$39.00</div>
+                    </div>
+                    
+                    {% comment %} 
+                      Buscar producto "Citrus Flower Blossom" por handle
+                      Reemplazar con el handle real del producto en Shopify
+                    {% endcomment %}
+                    {% assign citrus_product = all_products['citrus-flower-blossom'] %}
+                    {% if citrus_product %}
+                        <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-page-form">
+                            <input type="hidden" name="id" value="{{ citrus_product.selected_or_first_available_variant.id }}">
+                            <button type="submit" class="btn-primary btn-large product-page-cta">
+                                Add to Cart
+                            </button>
+                        </form>
+                    {% else %}
+                        {% comment %} Fallback si el producto no existe aún {% endcomment %}
+                        <button class="btn-primary btn-large product-page-cta" 
+                                data-product-handle="citrus-flower-blossom"
+                                onclick="addProductToCart('citrus-flower-blossom')">
+                            Add to Cart
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% comment %} Dye & Scent Free Product {% endcomment %}
+            <div class="product-page-card fade-in" data-product-id="dye-scent-free">
+                <div class="product-page-image-wrapper">
+                    <img src="{{ 'packaging-piel-sensibles.jpg' | file_img_url: '1200x' }}" 
+                         alt="Dye & Scent Free" 
+                         class="product-page-image"
+                         loading="lazy">
+                    <span class="product-page-badge">Sensitive Skin</span>
+                </div>
+                <div class="product-page-content">
+                    <h2 class="product-page-name">Dye & Scent Free</h2>
+                    <p class="product-page-description">
+                        Gentle, fragrance-free formula for sensitive skin. All the power without irritation.
+                    </p>
+                    
+                    {% comment %} Product Features {% endcomment %}
+                    <ul class="product-page-features">
+                        <li>Infused with rose quartz microcrystals</li>
+                        <li>Fragrance-free & dye-free</li>
+                        <li>Hypoallergenic formula</li>
+                        <li>Works in cold water</li>
+                        <li>Microplastic-free</li>
+                        <li>Eco-friendly packaging</li>
+                    </ul>
+                    
+                    <div class="product-page-price-wrapper">
+                        <div class="product-page-price">$39.00</div>
+                    </div>
+                    
+                    {% comment %} 
+                      Buscar producto "Dye & Scent Free" por handle
+                      Reemplazar con el handle real del producto en Shopify
+                    {% endcomment %}
+                    {% assign dye_free_product = all_products['dye-scent-free'] %}
+                    {% if dye_free_product %}
+                        <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-page-form">
+                            <input type="hidden" name="id" value="{{ dye_free_product.selected_or_first_available_variant.id }}">
+                            <button type="submit" class="btn-primary btn-large product-page-cta">
+                                Add to Cart
+                            </button>
+                        </form>
+                    {% else %}
+                        {% comment %} Fallback si el producto no existe aún {% endcomment %}
+                        <button class="btn-primary btn-large product-page-cta"
+                                data-product-handle="dye-scent-free"
+                                onclick="addProductToCart('dye-scent-free')">
+                            Add to Cart
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="products-page-benefits">
+    <div class="container">
+        <div class="benefits-grid">
+            <div class="benefit-item fade-in">
+                <img src="{{ 'icono-6.png' | file_img_url: '128x' }}" 
+                     alt="Eco Friendly" 
+                     class="benefit-icon"
+                     loading="lazy">
+                <h3 class="benefit-title">Eco-Friendly Packaging</h3>
+                <p class="benefit-description">Biodegradable packaging that's kind to our planet.</p>
+            </div>
+            <div class="benefit-item fade-in">
+                <img src="{{ 'icono-5.png' | file_img_url: '128x' }}" 
+                     alt="Stain Removal" 
+                     class="benefit-icon"
+                     loading="lazy">
+                <h3 class="benefit-title">Cleans Stubborn Stains</h3>
+                <p class="benefit-description">Powerful patented formula proven to remove the toughest stains.</p>
+            </div>
+            <div class="benefit-item fade-in">
+                <img src="{{ 'icono-4.png' | file_img_url: '128x' }}" 
+                     alt="Rose Quartz" 
+                     class="benefit-icon"
+                     loading="lazy">
+                <h3 class="benefit-title">Contains Rose Quartz</h3>
+                <p class="benefit-description">Microcrystals align your heart chakra and enhance your aura.</p>
+            </div>
+            <div class="benefit-item fade-in">
+                <img src="{{ 'icono-3.png' | file_img_url: '128x' }}" 
+                     alt="Cold Water" 
+                     class="benefit-icon"
+                     loading="lazy">
+                <h3 class="benefit-title">Works in Cold Water</h3>
+                <p class="benefit-description">Effective in cold water, saving energy and protecting fabrics.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Products Page Styles */
+.products-page-hero {
+    padding: var(--spacing-xl) 0 var(--spacing-lg);
+    text-align: center;
+    background: linear-gradient(180deg, var(--off-white) 0%, var(--white) 100%);
+}
+
+.products-page-header {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.products-page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: var(--spacing-sm) 0;
+    line-height: 1.2;
+}
+
+.products-page-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-gray);
+    margin-top: var(--spacing-sm);
+}
+
+.products-page-section {
+    padding: var(--spacing-xl) 0;
+}
+
+.products-page-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-page-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.product-page-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.product-page-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* Square aspect ratio */
+    overflow: hidden;
+    background: var(--light-gray);
+}
+
+.product-page-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-page-badge {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: var(--primary-pink);
+    color: var(--white);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-page-content {
+    padding: var(--spacing-lg);
+}
+
+.product-page-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.product-page-description {
+    font-size: 1rem;
+    color: var(--text-gray);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+}
+
+.product-page-features {
+    list-style: none;
+    margin: var(--spacing-md) 0;
+    padding: 0;
+}
+
+.product-page-features li {
+    padding: var(--spacing-xs) 0;
+    padding-left: var(--spacing-md);
+    position: relative;
+    font-size: 0.9375rem;
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+.product-page-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--primary-pink);
+    font-weight: 700;
+}
+
+.product-page-price-wrapper {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md) 0;
+    border-top: 1px solid var(--light-gray);
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.product-page-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.product-page-form {
+    margin-top: var(--spacing-md);
+}
+
+.product-page-cta {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.products-page-benefits {
+    padding: var(--spacing-xl) 0;
+    background: var(--off-white);
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.benefit-item {
+    text-align: center;
+    padding: var(--spacing-md);
+}
+
+.benefit-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-md);
+    object-fit: contain;
+}
+
+.benefit-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.benefit-description {
+    font-size: 0.9375rem;
+    color: var(--text-gray);
+    line-height: 1.6;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .products-page-hero {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+    
+    .products-page-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+        padding: 0 var(--spacing-md);
+    }
+    
+    .product-page-content {
+        padding: var(--spacing-md);
+    }
+    
+    .benefits-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+        padding: 0 var(--spacing-md);
+    }
+    
+    .benefit-icon {
+        width: 64px;
+        height: 64px;
+    }
+}
+
+@media (max-width: 480px) {
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+

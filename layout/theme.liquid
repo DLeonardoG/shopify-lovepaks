@@ -25,6 +25,8 @@
     <!-- Page-specific styles -->
     {% if template.name == 'page' and page.handle == 'shop-landing' %}
         {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
+    {% elsif template.name == 'page' and page.handle == 'products' %}
+        {% comment %} Styles are included in the template itself {% endcomment %}
     {% elsif template.name == 'page' and page.handle == 'partner-signup' %}
         {{ 'partner-styles.css' | asset_url | stylesheet_tag }}
     {% elsif template.name == 'page' and page.handle == 'partner-dashboard' %}

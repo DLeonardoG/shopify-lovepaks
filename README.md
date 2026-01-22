@@ -77,11 +77,12 @@ En Shopify Admin, ve a **Content > Files** y sube:
 
 Crear las siguientes páginas en **Online Store > Pages**:
 
-- **Shop Landing**: Handle `shop-landing`
-- **Partner Signup**: Handle `partner-signup`
-- **Partner Dashboard**: Handle `partner-dashboard`
-- **Checkout**: Handle `checkout` (o usar Shopify Checkout)
-- **Upsell**: Handle `upsell`
+- **Products**: Handle `products` - Template: `page.products`
+- **Shop Landing**: Handle `shop-landing` - Template: `page.shop-landing`
+- **Partner Signup**: Handle `partner-signup` - Template: `page.partner-signup`
+- **Partner Dashboard**: Handle `partner-dashboard` - Template: `page.partner-dashboard`
+- **Checkout**: Handle `checkout` - Template: `page.checkout` (o usar Shopify Checkout)
+- **Upsell**: Handle `upsell` - Template: `page.upsell`
 
 ### 4. Configurar Collections
 
