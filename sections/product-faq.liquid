@@ -1,0 +1,105 @@
+{% comment %}
+  Product FAQ Section
+  Shows product-specific FAQs
+{% endcomment %}
+
+{% if product.metafields.custom.faqs or product.metafields.custom.faq_questions %}
+  <section class="product-faq" id="faq">
+    <div class="container">
+      <div class="faq-header">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <a href="/pages/faq" class="see-all-link">See All FAQs</a>
+      </div>
+      
+      <div class="faq-list">
+        {% if product.metafields.custom.faqs %}
+          {% for faq in product.metafields.custom.faqs limit: 8 %}
+            <details class="faq-item">
+              <summary class="faq-question">
+                {{ faq.question | default: faq.title }}
+              </summary>
+              <div class="faq-answer">
+                {{ faq.answer | default: faq.content }}
+              </div>
+            </details>
+          {% endfor %}
+        {% elsif product.metafields.custom.faq_questions %}
+          {% comment %} Alternative format if FAQs are stored differently {% endcomment %}
+          {% assign questions = product.metafields.custom.faq_questions | split: '|||' %}
+          {% assign answers = product.metafields.custom.faq_answers | split: '|||' %}
+          {% for question in questions limit: 8 %}
+            <details class="faq-item">
+              <summary class="faq-question">{{ question }}</summary>
+              <div class="faq-answer">{{ answers[forloop.index0] }}</div>
+            </details>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+.product-faq {
+  padding: 60px 0;
+}
+
+.faq-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.see-all-link {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.see-all-link:hover {
+  text-decoration: underline;
+}
+
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid #eee;
+  padding: 20px 0;
+}
+
+.faq-question {
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question::after {
+  content: '+';
+  font-size: 24px;
+  color: #999;
+  transition: transform 0.3s ease;
+}
+
+.faq-item[open] .faq-question::after {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  padding: 15px 0;
+  color: #666;
+  line-height: 1.6;
+}
+</style>
+

@@ -1,36 +1,196 @@
 {% comment %}
-  Mini Cart Drawer
-  Compatible with Shopify Cart API
+  Cart Drawer - Enhanced version similar to trycreate.co
+  Features: Quantity controls, shipping threshold, subscription info
 {% endcomment %}
 
-<div class="mini-cart" id="mini-cart">
-    <div class="mini-cart-header">
-        <h4>Cart (<span id="cart-count">{{ cart.item_count }}</span>)</h4>
-        <button class="mini-cart-close" id="mini-cart-close">×</button>
+<div class="cart-drawer" id="cart-drawer" drawer-type="cart-drawer">
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+  
+  <div class="cart-drawer-content">
+    <div class="cart-drawer-header">
+      <h2>Cart</h2>
+      <button class="cart-drawer-close" id="cart-drawer-close" aria-label="Close cart">×</button>
     </div>
-    <div class="mini-cart-items" id="mini-cart-items">
-        {% if cart.item_count > 0 %}
-            {% for item in cart.items %}
-                <div class="mini-cart-item" data-key="{{ item.key }}">
-                    <div class="mini-cart-item-details">
-                        <div class="mini-cart-item-name">{{ item.product.title }}</div>
-                        <div class="mini-cart-item-price">{{ item.price | money }} × {{ item.quantity }}</div>
-                    </div>
-                    <button class="mini-cart-item-remove" onclick="removeCartItem('{{ item.key }}')" aria-label="Remove item">
-                        ×
-                    </button>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p style="text-align: center; color: #999; padding: 40px 0;">Your cart is empty</p>
-        {% endif %}
-    </div>
-    <div class="mini-cart-footer">
-        <div class="mini-cart-total">
-            <span>Total:</span>
-            <span id="cart-total">{{ cart.total_price | money }}</span>
+    
+    <div class="cart-drawer-body" id="cart-drawer-body">
+      {% if cart.item_count == 0 %}
+        <!-- Empty Cart State -->
+        <div class="empty-cart">
+          <h3>Your cart is empty</h3>
+          <p>But it doesn't have to be</p>
+          <a href="/collections/all" class="cta-btn">START SHOPPING</a>
         </div>
-        <a href="{{ routes.cart_url }}" class="mini-cart-checkout">Checkout</a>
+      {% else %}
+        <!-- Cart Items -->
+        <div class="cart-items" id="cart-items">
+          {% for item in cart.items %}
+            <div class="cart-item" data-key="{{ item.key }}" data-line="{{ forloop.index }}">
+              <div class="cart-item-image">
+                <img src="{{ item.image | image_url: width: 200 }}" 
+                     alt="{{ item.product.title | escape }}"
+                     loading="lazy">
+              </div>
+              
+              <div class="cart-item-details">
+                <h4 class="cart-item-title">{{ item.product.title }}</h4>
+                <p class="cart-item-variant">{{ item.variant.title }}</p>
+                
+                {% if item.selling_plan_allocation %}
+                  <p class="cart-item-subscription">
+                    <span class="subscription-badge">Subscription</span>
+                    {{ item.selling_plan_allocation.selling_plan.name }}
+                  </p>
+                {% endif %}
+                
+                <div class="cart-item-price">
+                  {{ item.final_line_price | money }}
+                </div>
+                
+                <!-- Quantity Selector -->
+                <div class="cart-item-quantity">
+                  <button type="button" 
+                          class="qty-btn qty-minus" 
+                          data-line="{{ forloop.index }}"
+                          aria-label="Decrease quantity">−</button>
+                  <input type="number" 
+                         class="qty-input" 
+                         value="{{ item.quantity }}" 
+                         min="1"
+                         data-line="{{ forloop.index }}"
+                         readonly>
+                  <button type="button" 
+                          class="qty-btn qty-plus" 
+                          data-line="{{ forloop.index }}"
+                          aria-label="Increase quantity">+</button>
+                </div>
+                
+                <button class="cart-item-remove" 
+                        data-line="{{ forloop.index }}"
+                        aria-label="Remove item">
+                  Remove
+                </button>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
+    
+    {% if cart.item_count > 0 %}
+      <!-- Cart Footer -->
+      <div class="cart-drawer-footer">
+        <!-- Shipping Threshold -->
+        {% assign threshold = 10000 %}
+        {% assign remaining = threshold | minus: cart.total_price %}
+        
+        {% if cart.total_price < threshold %}
+          <div class="shipping-bar">
+            <p class="shipping-message">
+              Add {{ remaining | money }} for FREE shipping!
+            </p>
+            <div class="shipping-progress">
+              {% assign progress = cart.total_price | times: 100 | divided_by: threshold %}
+              <div class="shipping-progress-bar" style="width: {{ progress }}%"></div>
+            </div>
+          </div>
+        {% else %}
+          <div class="free-shipping">
+            <p>🎉 You qualify for FREE shipping!</p>
+          </div>
+        {% endif %}
+        
+        <!-- Cart Totals -->
+        <div class="cart-totals">
+          <div class="cart-subtotal">
+            <span>Subtotal:</span>
+            <span class="cart-total-price" id="cart-total">{{ cart.total_price | money }}</span>
+          </div>
+          <p class="cart-tax-note">Taxes and shipping calculated at checkout</p>
+        </div>
+        
+        <!-- Checkout Button -->
+        <form action="/checkout" method="post">
+          <button type="submit" class="cart-checkout-btn">Checkout</button>
+        </form>
+        
+        <!-- Continue Shopping -->
+        <a href="/collections/all" class="continue-shopping">Continue Shopping</a>
+      </div>
+    {% endif %}
+  </div>
 </div>
+
+<script>
+// Cart Drawer Functions
+function openCartDrawer() {
+  const drawer = document.getElementById('cart-drawer');
+  if (drawer) {
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Update cart UI when opening
+    if (window.updateCartUI) {
+      window.updateCartUI();
+    }
+  }
+}
+
+function closeCartDrawer() {
+  const drawer = document.getElementById('cart-drawer');
+  if (drawer) {
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+// Make functions globally available
+window.openCartDrawer = openCartDrawer;
+window.closeCartDrawer = closeCartDrawer;
+
+// Initialize cart drawer
+document.addEventListener('DOMContentLoaded', function() {
+  const closeBtn = document.getElementById('cart-drawer-close');
+  const overlay = document.getElementById('cart-drawer-overlay');
+  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeCartDrawer);
+  }
+  
+  if (overlay) {
+    overlay.addEventListener('click', closeCartDrawer);
+  }
+  
+  // Handle quantity changes in cart drawer
+  document.querySelectorAll('.cart-item .qty-btn').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const line = parseInt(this.dataset.line);
+      const isPlus = this.classList.contains('qty-plus');
+      const qtyInput = this.parentElement.querySelector('.qty-input');
+      const currentQty = parseInt(qtyInput.value) || 1;
+      const newQty = isPlus ? currentQty + 1 : Math.max(1, currentQty - 1);
+      
+      if (window.updateCartQuantity) {
+        // Get item key from cart item
+        const cartItem = this.closest('.cart-item');
+        const itemKey = cartItem.dataset.key;
+        
+        await window.updateCartQuantity(itemKey, newQty);
+        await window.updateCartUI();
+      }
+    });
+  });
+  
+  // Handle remove item
+  document.querySelectorAll('.cart-item-remove').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const cartItem = this.closest('.cart-item');
+      const itemKey = cartItem.dataset.key;
+      
+      if (window.removeCartItem) {
+        await window.removeCartItem(itemKey);
+        await window.updateCartUI();
+      }
+    });
+  });
+});
+</script>
 

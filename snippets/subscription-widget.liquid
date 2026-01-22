@@ -1,0 +1,43 @@
+{% comment %}
+  Subscription Widget
+  Toggle between one-time purchase and subscription
+{% endcomment %}
+
+<div class="subscription-widget">
+  <div class="subscription-toggle">
+    <label class="subscription-label">
+      <input 
+        type="checkbox" 
+        id="subscription-toggle"
+        name="selling_plan"
+        class="subscription-checkbox">
+      <span class="subscription-text">
+        Subscribe & Save 
+        {% if product.selling_plan_groups.first.selling_plans.first.price_adjustments.first.value %}
+          {{ product.selling_plan_groups.first.selling_plans.first.price_adjustments.first.value }}%
+        {% else %}
+          20%
+        {% endif %}
+      </span>
+    </label>
+    
+    <div class="subscription-details" id="subscription-details" style="display: none;">
+      <select name="selling_plan_id" id="selling-plan-select" class="selling-plan-select">
+        <option value="">One-time purchase</option>
+        {% for group in product.selling_plan_groups %}
+          {% for plan in group.selling_plans %}
+            <option value="{{ plan.id }}" data-price-adjustment="{{ plan.price_adjustments.first.value }}">
+              {{ plan.name }} - Save {{ plan.price_adjustments.first.value }}%
+            </option>
+          {% endfor %}
+        {% endfor %}
+      </select>
+      
+      <p class="subscription-note">
+        <span class="subscription-icon">✓</span>
+        Free shipping on subscriptions
+      </p>
+    </div>
+  </div>
+</div>
+

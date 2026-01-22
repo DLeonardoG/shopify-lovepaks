@@ -1,0 +1,50 @@
+{% comment %}
+  Lifestyle Gallery Section
+  Product in use / lifestyle images
+{% endcomment %}
+
+{% if product.metafields.custom.lifestyle_images %}
+  <section class="product-lifestyle">
+    <div class="container">
+      <div class="lifestyle-gallery">
+        {% for image in product.metafields.custom.lifestyle_images %}
+          <div class="lifestyle-image-wrapper">
+            <img src="{{ image | image_url: width: 1200 }}" 
+                 alt="Product lifestyle {{ forloop.index }}"
+                 loading="lazy"
+                 class="lifestyle-image">
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+.product-lifestyle {
+  padding: 60px 0;
+}
+
+.lifestyle-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.lifestyle-image-wrapper {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.lifestyle-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.lifestyle-image-wrapper:hover .lifestyle-image {
+  transform: scale(1.05);
+}
+</style>
+

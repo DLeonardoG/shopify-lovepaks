@@ -1,0 +1,32 @@
+{% comment %}
+  Product Price Display
+  Shows price, compare price, and price per day
+{% endcomment %}
+
+<div class="product-price-section">
+  <div class="product-price-wrapper">
+    <span class="product-price" id="product-price">
+      {{ product.selected_or_first_available_variant.price | money }}
+    </span>
+    {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+      <span class="product-compare-price" id="product-compare-price">
+        {{ product.selected_or_first_available_variant.compare_at_price | money }}
+      </span>
+    {% endif %}
+  </div>
+  
+  {% comment %} Price per day calculation {% endcomment %}
+  {% assign variant_title = product.selected_or_first_available_variant.title | downcase %}
+  {% if variant_title contains 'month' or variant_title contains 'day' %}
+    <p class="price-per-day" id="price-per-day">
+      {% if variant_title contains '3 month' or variant_title contains '90' %}
+        As low as {{ product.selected_or_first_available_variant.price | divided_by: 90 | money }}/day
+      {% elsif variant_title contains '2 month' or variant_title contains '60' %}
+        As low as {{ product.selected_or_first_available_variant.price | divided_by: 60 | money }}/day
+      {% elsif variant_title contains '1 month' or variant_title contains '30' %}
+        As low as {{ product.selected_or_first_available_variant.price | divided_by: 30 | money }}/day
+      {% endif %}
+    </p>
+  {% endif %}
+</div>
+

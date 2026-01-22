@@ -1,0 +1,75 @@
+{% comment %}
+  Experts Section - Scientific Advisory Board
+{% endcomment %}
+
+{% if product.metafields.custom.experts %}
+  <section class="product-experts">
+    <div class="container">
+      <h2 class="section-title">Backed by Experts</h2>
+      <p class="section-subtitle">Meet the Scientific Advisory Board.</p>
+      
+      <div class="experts-grid">
+        {% for expert in product.metafields.custom.experts %}
+          <div class="expert-card">
+            {% if expert.photo %}
+              <img src="{{ expert.photo | image_url: width: 300 }}" 
+                   alt="{{ expert.name | escape }}"
+                   class="expert-photo">
+            {% endif %}
+            <h3 class="expert-name">{{ expert.name }}</h3>
+            <p class="expert-university">{{ expert.university }}</p>
+            <p class="expert-bio">{{ expert.bio }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+.product-experts {
+  padding: 60px 0;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.experts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.expert-card {
+  text-align: center;
+}
+
+.expert-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 20px;
+}
+
+.expert-name {
+  font-size: 24px;
+  margin: 0 0 10px;
+}
+
+.expert-university {
+  font-weight: 600;
+  color: #666;
+  margin: 0 0 15px;
+}
+
+.expert-bio {
+  color: #666;
+  line-height: 1.6;
+}
+</style>
+

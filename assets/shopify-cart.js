@@ -16,7 +16,9 @@ async function addToCartShopify(variantId, quantity = 1) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
+            credentials: 'same-origin', // Important for Shopify
             body: JSON.stringify({
                 items: [{
                     id: variantId,
@@ -45,7 +47,13 @@ async function addToCartShopify(variantId, quantity = 1) {
  */
 async function updateCartUI() {
     try {
-        const response = await fetch('/cart.js');
+        const response = await fetch('/cart.js', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            credentials: 'same-origin'
+        });
         if (!response.ok) {
             throw new Error('Failed to fetch cart');
         }
@@ -53,17 +61,26 @@ async function updateCartUI() {
         const cart = await response.json();
         
         const cartCount = document.getElementById('cart-count');
+        const headerCartCount = document.getElementById('header-cart-count');
         const cartTotal = document.getElementById('cart-total');
         const cartItems = document.getElementById('mini-cart-items');
+        const cartDrawerBody = document.getElementById('cart-drawer-body');
         
+        // Update cart count in header and drawer
         if (cartCount) {
             cartCount.textContent = cart.item_count;
         }
+        if (headerCartCount) {
+            headerCartCount.textContent = cart.item_count;
+            headerCartCount.style.display = cart.item_count > 0 ? 'flex' : 'none';
+        }
         
+        // Update cart total
         if (cartTotal) {
             cartTotal.textContent = formatMoney(cart.total_price);
         }
         
+        // Update cart items in drawer
         if (cartItems) {
             if (cart.items.length === 0) {
                 cartItems.innerHTML = '<p style="text-align: center; color: #999; padding: 40px 0;">Your cart is empty</p>';
@@ -82,6 +99,43 @@ async function updateCartUI() {
             }
         }
         
+        // Update cart drawer body (new enhanced drawer)
+        if (cartDrawerBody) {
+            if (cart.items.length === 0) {
+                cartDrawerBody.innerHTML = `
+                    <div class="empty-cart">
+                        <h3>Your cart is empty</h3>
+                        <p>But it doesn't have to be</p>
+                        <a href="/collections/all" class="cta-btn">START SHOPPING</a>
+                    </div>
+                `;
+            } else {
+                const cartItemsHTML = cart.items.map((item, index) => `
+                    <div class="cart-item" data-key="${item.key}" data-line="${index + 1}">
+                        <div class="cart-item-image">
+                            <img src="${item.image}" alt="${escapeHtml(item.product_title)}" loading="lazy">
+                        </div>
+                        <div class="cart-item-details">
+                            <h4 class="cart-item-title">${escapeHtml(item.product_title)}</h4>
+                            <p class="cart-item-variant">${escapeHtml(item.variant_title)}</p>
+                            <div class="cart-item-price">${formatMoney(item.final_line_price)}</div>
+                            <div class="cart-item-quantity">
+                                <button type="button" class="qty-btn qty-minus" data-line="${index + 1}">−</button>
+                                <input type="number" class="qty-input" value="${item.quantity}" min="1" data-line="${index + 1}" readonly>
+                                <button type="button" class="qty-btn qty-plus" data-line="${index + 1}">+</button>
+                            </div>
+                            <button class="cart-item-remove" data-line="${index + 1}">Remove</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                cartDrawerBody.innerHTML = `<div class="cart-items" id="cart-items">${cartItemsHTML}</div>`;
+                
+                // Re-attach event listeners
+                attachCartDrawerListeners();
+            }
+        }
+        
         return cart;
     } catch (error) {
         console.error('Error updating cart UI:', error);
@@ -97,7 +151,9 @@ async function removeCartItem(itemKey) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 id: itemKey,
                 quantity: 0
@@ -125,7 +181,9 @@ async function updateCartQuantity(itemKey, quantity) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 id: itemKey,
                 quantity: quantity
@@ -162,6 +220,43 @@ function escapeHtml(text) {
 }
 
 /**
+ * Attach event listeners to cart drawer
+ */
+function attachCartDrawerListeners() {
+    // Quantity controls
+    document.querySelectorAll('.cart-item .qty-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const line = parseInt(this.dataset.line);
+            const isPlus = this.classList.contains('qty-plus');
+            const qtyInput = this.parentElement.querySelector('.qty-input');
+            const currentQty = parseInt(qtyInput.value) || 1;
+            const newQty = isPlus ? currentQty + 1 : Math.max(1, currentQty - 1);
+            
+            const cartItem = this.closest('.cart-item');
+            const itemKey = cartItem.dataset.key;
+            
+            if (window.updateCartQuantity) {
+                await window.updateCartQuantity(itemKey, newQty);
+                await updateCartUI();
+            }
+        });
+    });
+    
+    // Remove item buttons
+    document.querySelectorAll('.cart-item-remove').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const cartItem = this.closest('.cart-item');
+            const itemKey = cartItem.dataset.key;
+            
+            if (window.removeCartItem) {
+                await window.removeCartItem(itemKey);
+                await updateCartUI();
+            }
+        });
+    });
+}
+
+/**
  * Initialize cart on page load
  */
 document.addEventListener('DOMContentLoaded', async () => {
@@ -173,6 +268,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             await updateCartUI();
         }
     });
+    
+    // Attach listeners to initial cart items
+    attachCartDrawerListeners();
 });
 
 // Make functions globally available
@@ -180,4 +278,5 @@ window.addToCartShopify = addToCartShopify;
 window.removeCartItem = removeCartItem;
 window.updateCartQuantity = updateCartQuantity;
 window.updateCartUI = updateCartUI;
+window.attachCartDrawerListeners = attachCartDrawerListeners;
 

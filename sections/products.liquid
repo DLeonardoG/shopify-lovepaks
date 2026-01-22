@@ -1,5 +1,7 @@
 {% comment %}
-  Products Section - Dynamic products from Shopify
+  Products Section - Using Shopify Collections
+  Reads ALL products from Shopify collections
+  Each product links to its individual product page using templates/product.liquid
 {% endcomment %}
 
 <section class="products-section" id="products">
@@ -8,59 +10,605 @@
             <span class="section-eyebrow">Our Products</span>
             <h2 class="section-title">Choose Your Experience</h2>
         </div>
-        <div class="products-grid">
-            {% comment %} 
-              If you have a featured collection, use it:
-              {% for product in collections.featured.products limit: 2 %}
-            {% endcomment %}
-            
-            {% comment %} For now, using static products like original {% endcomment %}
-            <div class="product-card fade-in" data-product-id="citrus-boost">
-                <img src="{{ 'packaging-normal.jpg' | file_img_url: '800x' }}" 
-                     alt="Citrus Flower Blossom" 
-                     class="product-image"
-                     loading="lazy">
-                <div class="product-content">
-                    <span class="product-badge">Most Popular</span>
-                    <h3 class="product-name">Citrus Flower Blossom</h3>
-                    <p class="product-description">
-                        Our most powerful formula with invigorating citrus scent. Perfect for active wear and tough stains.
-                    </p>
-                    <div class="product-price-wrapper">
-                        <div class="product-price">$39.00</div>
+        
+        {% comment %}
+          Priority order for collections:
+          1. 'featured' collection (if exists)
+          2. 'all' collection (default - contains all products)
+        {% endcomment %}
+        {% assign products_collection = collections.all %}
+        {% if collections.featured and collections.featured.products.size > 0 %}
+            {% assign products_collection = collections.featured %}
+        {% endif %}
+        
+        {% comment %} Count products excluding wholesale/master-case {% endcomment %}
+        {% assign visible_products_count = 0 %}
+        {% for product in products_collection.products %}
+            {% unless product.handle == 'master-case' or product.tags contains 'wholesale' or product.tags contains 'master-case' %}
+                {% assign visible_products_count = visible_products_count | plus: 1 %}
+            {% endunless %}
+        {% endfor %}
+        
+        {% if visible_products_count > 0 %}
+            <div class="products-carousel-wrapper">
+                <div class="products-carousel" id="products-carousel">
+                    <div class="products-carousel-track" id="products-carousel-track">
+                        {% for product in products_collection.products %}
+                            {% comment %} Skip Master Case and wholesale products {% endcomment %}
+                            {% unless product.handle == 'master-case' or product.tags contains 'wholesale' or product.tags contains 'master-case' %}
+                                <div class="product-card fade-in carousel-slide" data-product-id="{{ product.id }}">
+                                    <a href="{{ product.url }}" class="product-card-link">
+                                        <div class="product-image-wrapper">
+                                            {% if product.featured_image %}
+                                                <img src="{{ product.featured_image | image_url: width: 800 }}" 
+                                                     alt="{{ product.featured_image.alt | default: product.title | escape }}" 
+                                                     class="product-image"
+                                                     loading="lazy"
+                                                     width="400"
+                                                     height="400">
+                                            {% else %}
+                                                <div class="product-image-placeholder">
+                                                    <span>No Image</span>
+                                                </div>
+                                            {% endif %}
+                                            
+                                            {% comment %} Sale badge if product is on sale {% endcomment %}
+                                            {% if product.compare_at_price > product.price %}
+                                                <span class="product-sale-badge">Sale</span>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <div class="product-content">
+                                            {% comment %} Product badges based on tags {% endcomment %}
+                                            {% if product.tags contains 'most-popular' or product.tags contains 'popular' %}
+                                                <span class="product-badge">Most Popular</span>
+                                            {% elsif product.tags contains 'sensitive' or product.tags contains 'sensitive-skin' %}
+                                                <span class="product-badge">Sensitive Skin</span>
+                                            {% elsif product.tags contains 'new' %}
+                                                <span class="product-badge">New</span>
+                                            {% endif %}
+                                            
+                                            <h3 class="product-name">{{ product.title }}</h3>
+                                            
+                                            <p class="product-description">
+                                                {% if product.description != blank %}
+                                                    {{ product.description | strip_html | truncatewords: 20 }}
+                                                {% else %}
+                                                    Premium quality product designed for your wellness.
+                                                {% endif %}
+                                            </p>
+                                            
+                                            <div class="product-price-wrapper">
+                                                <span class="product-price">{{ product.price | money }}</span>
+                                                {% if product.compare_at_price > product.price %}
+                                                    <span class="product-compare-price">{{ product.compare_at_price | money }}</span>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            {% comment %} Show variant count if multiple variants {% endcomment %}
+                                            {% if product.variants.size > 1 %}
+                                                <p class="product-variants-count">{{ product.variants.size }} options available</p>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="{{ product.url }}" class="product-cta">
+                                        Shop Now
+                                    </a>
+                                </div>
+                            {% endunless %}
+                        {% endfor %}
                     </div>
-                    <a href="/pages/products" class="product-cta">
-                        Shop Now
-                    </a>
                 </div>
+                
+                {% comment %} Navigation Controls {% endcomment %}
+                <button class="carousel-btn carousel-prev" id="products-carousel-prev" aria-label="Previous products">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="carousel-btn carousel-next" id="products-carousel-next" aria-label="Next products">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                
+                {% comment %} Dots Indicator {% endcomment %}
+                <div class="carousel-dots" id="products-carousel-dots"></div>
             </div>
-            <div class="product-card fade-in" data-product-id="dye-scent-free">
-                <img src="{{ 'packaging-piel-sensibles.jpg' | file_img_url: '800x' }}" 
-                     alt="Dye & Scent Free" 
-                     class="product-image"
-                     loading="lazy">
-                <div class="product-content">
-                    <span class="product-badge">Sensitive Skin</span>
-                    <h3 class="product-name">Dye & Scent Free</h3>
-                    <p class="product-description">
-                        Gentle, fragrance-free formula for sensitive skin. All the power without irritation.
-                    </p>
-                    <div class="product-price-wrapper">
-                        <div class="product-price">$39.00</div>
-                    </div>
-                    <a href="/pages/products" class="product-cta">
-                        Shop Now
-                    </a>
-                </div>
+        {% else %}
+            {% comment %} No products message {% endcomment %}
+            <div class="no-products-message">
+                <p>No products available at the moment. Please check back soon!</p>
             </div>
-            
-            {% comment %} 
-              Future: Dynamic products from Shopify
-              {% for product in collections.featured.products limit: 2 %}
-                {% render 'product-card', product: product %}
-              {% endfor %}
-            {% endcomment %}
-        </div>
+        {% endif %}
     </div>
 </section>
 
+<style>
+.products-section {
+    padding: clamp(50px, 8vw, 80px) 0;
+    background: white;
+}
+
+/* Products Carousel */
+.products-carousel-wrapper {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 60px;
+}
+
+.products-carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.products-carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    gap: 32px;
+}
+
+.carousel-slide {
+    flex: 0 0 calc(33.333% - 22px);
+    min-width: 0;
+}
+
+@media (max-width: 968px) {
+    .carousel-slide {
+        flex: 0 0 calc(50% - 16px);
+    }
+    
+    .products-carousel-wrapper {
+        padding: 0 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-slide {
+        flex: 0 0 100%;
+    }
+    
+    .products-carousel-wrapper {
+        padding: 0 50px;
+    }
+}
+
+/* Carousel Navigation Buttons */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--primary-pink);
+    color: var(--primary-pink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all var(--transition-fast);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-btn:hover {
+    background: var(--primary-pink);
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(236, 0, 140, 0.3);
+}
+
+.carousel-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.carousel-prev {
+    left: 0;
+}
+
+.carousel-next {
+    right: 0;
+}
+
+/* Carousel Dots */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--light-gray);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    padding: 0;
+}
+
+.carousel-dot:hover {
+    background: var(--primary-pink);
+    transform: scale(1.2);
+}
+
+.carousel-dot.active {
+    background: var(--primary-pink);
+    width: 24px;
+    border-radius: 6px;
+}
+
+.product-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-base);
+    border: 2px solid rgba(236, 0, 140, 0.1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(236, 0, 140, 0.2);
+    border-color: var(--primary-pink);
+}
+
+.product-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.product-card-link:hover {
+    text-decoration: none;
+}
+
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    background: var(--light-gray);
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--light-gray);
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+.product-sale-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--accent-red);
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-content {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.product-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--darker-pink) 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    align-self: flex-start;
+    box-shadow: 0 2px 8px rgba(236, 0, 140, 0.3);
+}
+
+.product-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-dark);
+    line-height: 1.2;
+}
+
+.product-description {
+    color: var(--text-gray);
+    margin: 0 0 20px;
+    line-height: 1.6;
+    font-size: 14px;
+    flex: 1;
+}
+
+.product-price-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.product-price {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.product-compare-price {
+    font-size: 18px;
+    color: var(--text-gray);
+    text-decoration: line-through;
+}
+
+.product-variants-count {
+    font-size: 12px;
+    color: var(--text-gray);
+    margin: 0;
+    font-style: italic;
+}
+
+.product-cta {
+    display: block;
+    text-align: center;
+    padding: 16px 24px;
+    background: var(--primary-pink);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 0;
+    transition: all var(--transition-fast);
+    margin-top: auto;
+}
+
+.product-cta:hover {
+    background: var(--burgundy);
+    transform: translateY(-2px);
+}
+
+.no-products-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-gray);
+}
+
+.no-products-message p {
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    .product-image-wrapper {
+        height: 300px;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .carousel-prev {
+        left: 10px;
+    }
+    
+    .carousel-next {
+        right: 10px;
+    }
+}
+</style>
+
+<script>
+(function() {
+    'use strict';
+    
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initProductsCarousel);
+    } else {
+        initProductsCarousel();
+    }
+    
+    function initProductsCarousel() {
+        const carousel = document.getElementById('products-carousel');
+        const track = document.getElementById('products-carousel-track');
+        const prevBtn = document.getElementById('products-carousel-prev');
+        const nextBtn = document.getElementById('products-carousel-next');
+        const dotsContainer = document.getElementById('products-carousel-dots');
+        
+        if (!carousel || !track) return;
+        
+        const slides = track.querySelectorAll('.carousel-slide');
+        if (slides.length === 0) return;
+        
+        let currentIndex = 0;
+        let slidesPerView = getSlidesPerView();
+        let totalSlides = slides.length;
+        let maxIndex = Math.max(0, totalSlides - slidesPerView);
+        
+        // Calculate slides per view based on screen size
+        function getSlidesPerView() {
+            if (window.innerWidth <= 768) return 1;
+            if (window.innerWidth <= 968) return 2;
+            return 3;
+        }
+        
+        // Update carousel position
+        function updateCarousel() {
+            const slideWidth = slides[0].offsetWidth + 32; // 32px is gap
+            const translateX = -currentIndex * slideWidth;
+            track.style.transform = `translateX(${translateX}px)`;
+            
+            // Update buttons
+            if (prevBtn) {
+                prevBtn.disabled = currentIndex === 0;
+            }
+            if (nextBtn) {
+                nextBtn.disabled = currentIndex >= maxIndex;
+            }
+            
+            // Update dots
+            updateDots();
+        }
+        
+        // Create dots
+        function createDots() {
+            if (!dotsContainer) return;
+            
+            const totalPages = Math.ceil(totalSlides / slidesPerView);
+            dotsContainer.innerHTML = '';
+            
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot';
+                if (i === 0) dot.classList.add('active');
+                dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    currentIndex = i * slidesPerView;
+                    updateCarousel();
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+        
+        // Update dots active state
+        function updateDots() {
+            if (!dotsContainer) return;
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            const currentPage = Math.floor(currentIndex / slidesPerView);
+            
+            dots.forEach((dot, index) => {
+                if (index === currentPage) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        // Navigation functions
+        function goToPrev() {
+            if (currentIndex > 0) {
+                currentIndex = Math.max(0, currentIndex - slidesPerView);
+                updateCarousel();
+            }
+        }
+        
+        function goToNext() {
+            if (currentIndex < maxIndex) {
+                currentIndex = Math.min(maxIndex, currentIndex + slidesPerView);
+                updateCarousel();
+            }
+        }
+        
+        // Event listeners
+        if (prevBtn) {
+            prevBtn.addEventListener('click', goToPrev);
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', goToNext);
+        }
+        
+        // Handle window resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                slidesPerView = getSlidesPerView();
+                maxIndex = Math.max(0, totalSlides - slidesPerView);
+                currentIndex = Math.min(currentIndex, maxIndex);
+                createDots();
+                updateCarousel();
+            }, 250);
+        });
+        
+        // Touch/swipe support
+        let startX = 0;
+        let isDragging = false;
+        
+        track.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+        
+        track.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+        });
+        
+        track.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
+            
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    goToNext();
+                } else {
+                    goToPrev();
+                }
+            }
+        });
+        
+        // Keyboard navigation
+        carousel.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                goToPrev();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                goToNext();
+            }
+        });
+        
+        // Initialize
+        createDots();
+        updateCarousel();
+    }
+})();
+</script>

@@ -65,6 +65,9 @@
     <!-- Page-specific scripts -->
     {% if template.name == 'index' %}
         {{ 'script.js' | asset_url | script_tag }}
+    {% elsif template.name == 'product' %}
+        {{ 'shopify-cart.js' | asset_url | script_tag }}
+        {{ 'product-page.js' | asset_url | script_tag }}
     {% elsif template.name == 'page' and page.handle == 'shop-landing' %}
         {{ 'shop-landing.js' | asset_url | script_tag }}
     {% elsif template.name == 'page' and page.handle == 'partner-signup' %}

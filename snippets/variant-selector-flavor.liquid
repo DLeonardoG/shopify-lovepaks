@@ -1,0 +1,44 @@
+{% comment %}
+  Flavor Variant Selector with Images
+  Similar to trycreate.co flavor swatches
+{% endcomment %}
+
+<div class="variant-selector flavor-selector">
+  <label class="variant-label">
+    SELECT {{ option.name | upcase }}:
+  </label>
+  
+  <div class="flavor-swatches">
+    {% for value in option.values %}
+      {% assign is_selected = false %}
+      {% if product.selected_or_first_available_variant.option1 == value %}
+        {% assign is_selected = true %}
+      {% endif %}
+      
+      <button 
+        type="button"
+        class="flavor-swatch {% if is_selected %}selected{% endif %}"
+        data-option-name="{{ option.name }}"
+        data-option-value="{{ value }}"
+        aria-label="Select {{ value }}">
+        
+        {% comment %} Try to get flavor icon from metafields or use default {% endcomment %}
+        {% assign flavor_handle = value | handle %}
+        {% assign flavor_image = product.metafields.custom.flavor_images[forloop.index0] %}
+        
+        {% if flavor_image %}
+          <img src="{{ flavor_image | image_url: width: 100 }}" alt="{{ value }}" class="flavor-icon">
+        {% else %}
+          <div class="flavor-icon-placeholder">{{ value | slice: 0, 1 }}</div>
+        {% endif %}
+        
+        <span class="flavor-name">{{ value }}</span>
+        
+        {% if value == 'Sour Cherry' or value == 'Sour Peach' %}
+          <span class="badge new-badge">New</span>
+        {% endif %}
+      </button>
+    {% endfor %}
+  </div>
+</div>
+

@@ -1,0 +1,111 @@
+{% comment %}
+  Product Recommendations - Frequently Bought Together
+  Similar to trycreate.co recommendations
+  Uses Shopify's recommendations API or related products
+{% endcomment %}
+
+{% comment %} Try to get recommendations from Shopify {% endcomment %}
+{% if recommendations.products_count > 0 %}
+  {% assign recommended_products = recommendations.products %}
+{% elsif product.collections.size > 0 %}
+  {% comment %} Fallback: Get products from same collection {% endcomment %}
+  {% assign recommended_products = product.collections.first.products | where: 'id', product.id | reverse %}
+  {% assign recommended_products = product.collections.first.products | where_exp: 'item', 'item.id != product.id' %}
+{% elsif collections.all.products.size > 0 %}
+  {% comment %} Fallback: Get other products from all collection {% endcomment %}
+  {% assign recommended_products = collections.all.products | where_exp: 'item', 'item.id != product.id' %}
+{% endif %}
+
+{% if recommended_products.size > 0 %}
+  <section class="product-recommendations">
+    <div class="container">
+      <h2 class="section-title">Frequently Bought Together</h2>
+      
+      <div class="recommendations-grid">
+        {% for recommended_product in recommended_products limit: 4 %}
+          {% unless recommended_product.id == product.id %}
+            <div class="recommendation-card">
+              <a href="{{ recommended_product.url }}" class="recommendation-link">
+                {% if recommended_product.featured_image %}
+                  <img src="{{ recommended_product.featured_image | image_url: width: 400 }}" 
+                       alt="{{ recommended_product.title | escape }}"
+                       loading="lazy"
+                       class="recommendation-image">
+                {% else %}
+                  <div class="recommendation-image-placeholder">
+                    <span>No Image</span>
+                  </div>
+                {% endif %}
+                <h3 class="recommendation-title">{{ recommended_product.title }}</h3>
+                <p class="recommendation-price">{{ recommended_product.price | money }}</p>
+                {% if recommended_product.compare_at_price > recommended_product.price %}
+                  <p class="recommendation-compare-price">{{ recommended_product.compare_at_price | money }}</p>
+                {% endif %}
+              </a>
+            </div>
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+.product-recommendations {
+  padding: 60px 0;
+  background: #f9f9f9;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.recommendation-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-5px);
+}
+
+.recommendation-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.recommendation-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.recommendation-image-placeholder {
+  width: 100%;
+  height: 200px;
+  background: var(--light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-gray);
+}
+
+.recommendation-title {
+  padding: 15px;
+  font-size: 16px;
+  margin: 0;
+}
+
+.recommendation-price {
+  padding: 0 15px 15px;
+  font-weight: 600;
+  color: #333;
+}
+</style>
+

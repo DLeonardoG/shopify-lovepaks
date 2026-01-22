@@ -1,0 +1,101 @@
+{% comment %}
+  Comparison Table Section
+  How we stack up against competitors
+{% endcomment %}
+
+{% if product.metafields.custom.comparison %}
+  <section class="product-comparison">
+    <div class="container">
+      <h2 class="section-title">How we stack up</h2>
+      
+      <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Our Product</th>
+              <th>Other Products</th>
+              <th>Traditional Option</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in product.metafields.custom.comparison %}
+              <tr>
+                <td class="comparison-feature">{{ row.feature }}</td>
+                <td class="comparison-our">
+                  {% if row.our_value == true %}
+                    ✓
+                  {% elsif row.our_value == false %}
+                    ✗
+                  {% else %}
+                    {{ row.our_value }}
+                  {% endif %}
+                </td>
+                <td class="comparison-other">
+                  {% if row.other_value == true %}
+                    ✓
+                  {% elsif row.other_value == false %}
+                    ✗
+                  {% else %}
+                    {{ row.other_value }}
+                  {% endif %}
+                </td>
+                <td class="comparison-traditional">
+                  {% if row.traditional_value == true %}
+                    ✓
+                  {% elsif row.traditional_value == false %}
+                    ✗
+                  {% else %}
+                    {{ row.traditional_value }}
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+.product-comparison {
+  padding: 60px 0;
+  background: #f9f9f9;
+}
+
+.comparison-table-wrapper {
+  overflow-x: auto;
+  margin-top: 40px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.comparison-table th {
+  background: #333;
+  color: white;
+  padding: 20px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.comparison-table td {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.comparison-feature {
+  font-weight: 600;
+}
+
+.comparison-our {
+  background: #f0f9ff;
+}
+</style>
+

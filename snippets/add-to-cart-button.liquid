@@ -1,0 +1,35 @@
+{% comment %}
+  Add to Cart Button
+  Handles AJAX add to cart and opens cart drawer
+{% endcomment %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign is_available = current_variant.available %}
+
+<button 
+  type="submit" 
+  class="add-to-cart-btn {% unless is_available %}disabled{% endunless %}"
+  id="add-to-cart-btn"
+  {% unless is_available %}disabled{% endunless %}
+  aria-label="Add to cart">
+  <span class="btn-text">
+    {% if is_available %}
+      + Add to bag
+    {% else %}
+      Sold Out
+    {% endif %}
+  </span>
+  <span class="btn-loader" style="display: none;">
+    <span class="spinner"></span>
+    Adding...
+  </span>
+</button>
+
+{% comment %} Military Discount Badge (if applicable) {% endcomment %}
+{% if product.tags contains 'military-discount' or product.tags contains 'govx' %}
+  <div class="govx-badge">
+    <img src="{{ 'govx-logo.svg' | asset_url }}" alt="Military Discount Available" />
+    <span>Military discounts available</span>
+  </div>
+{% endif %}
+

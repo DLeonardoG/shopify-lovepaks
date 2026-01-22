@@ -1,0 +1,61 @@
+{% comment %}
+  Product Benefits Section
+  Shows scientifically proven benefits
+{% endcomment %}
+
+{% if product.metafields.custom.benefits %}
+  <section class="product-benefits">
+    <div class="container">
+      <h2 class="section-title">Scientifically Proven Benefits</h2>
+      
+      <div class="benefits-grid">
+        {% for benefit in product.metafields.custom.benefits %}
+          <div class="benefit-card">
+            {% if benefit.icon %}
+              <img src="{{ benefit.icon | image_url: width: 100 }}" 
+                   alt="{{ benefit.title | escape }}"
+                   class="benefit-icon">
+            {% endif %}
+            <h3 class="benefit-title">{{ benefit.title }}</h3>
+            <p class="benefit-description">{{ benefit.description }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+.product-benefits {
+  padding: 60px 0;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.benefit-card {
+  text-align: center;
+  padding: 30px;
+}
+
+.benefit-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+}
+
+.benefit-title {
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.benefit-description {
+  color: #666;
+  line-height: 1.6;
+}
+</style>
+
