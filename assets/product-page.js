@@ -304,6 +304,31 @@
     }
   }
 
+  // Check if we're in a Shopify environment
+  function isShopifyEnvironment() {
+    // Check if we're on a Shopify domain
+    const hostname = window.location.hostname;
+    const isShopifyDomain = hostname.includes('myshopify.com') || 
+                           hostname.includes('shopify.com') ||
+                           hostname.includes('shopifycdn.com');
+    
+    // Check if Shopify theme object exists
+    const hasShopifyTheme = typeof window.Shopify !== 'undefined' || 
+                           typeof window.theme !== 'undefined';
+    
+    // Check if we're NOT on localhost (local dev server)
+    const isLocalhost = hostname === 'localhost' || 
+                       hostname === '127.0.0.1' || 
+                       hostname.startsWith('192.168.') ||
+                       hostname.startsWith('10.') ||
+                       hostname === '[::1]';
+    
+    // We're in Shopify environment if:
+    // 1. We're on a Shopify domain, OR
+    // 2. We have Shopify theme objects AND we're not on localhost
+    return isShopifyDomain || (hasShopifyTheme && !isLocalhost);
+  }
+
   // Handle add to cart (AJAX)
   function initAddToCart() {
     const form = document.getElementById('product-form');
@@ -375,6 +400,11 @@
       // Declare ajaxSuccess outside try block so it's available in finally
       let ajaxSuccess = false;
       
+      // Check if we're in a Shopify environment
+      const inShopifyEnv = isShopifyEnvironment();
+      console.log('Shopify environment detected:', inShopifyEnv);
+      console.log('Current hostname:', window.location.hostname);
+      
       try {
         // Get quantity
         const quantityInput = document.getElementById('quantity');
@@ -388,119 +418,137 @@
         if (variantIdInput) variantIdInput.value = variant.id;
         if (quantityInput) quantityInput.value = quantity;
         
-        // Try AJAX first
-        try {
-          // Use old format (most compatible)
-          const cartData = {
-            id: variant.id,
-            quantity: quantity
-          };
-          
-          if (sellingPlanId) {
-            cartData.selling_plan = sellingPlanId;
-          }
-          
-          console.log('Trying AJAX with data:', cartData);
-          console.log('Variant ID type:', typeof variant.id);
-          console.log('Variant ID value:', variant.id);
-          console.log('Variant available:', variant.available);
-          console.log('Product ID:', product.id);
-          
-          // Ensure variant ID is a number (not a string)
-          const variantIdNum = typeof variant.id === 'string' ? parseInt(variant.id) : variant.id;
-          const finalCartData = {
-            id: variantIdNum,
-            quantity: quantity
-          };
-          
-          if (sellingPlanId) {
-            finalCartData.selling_plan = sellingPlanId;
-          }
-          
-          console.log('Final cart data to send:', finalCartData);
-          
-          const response = await fetch('/cart/add.js', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify(finalCartData)
-          });
-          
-          console.log('AJAX response status:', response.status);
-          console.log('AJAX response headers:', [...response.headers.entries()]);
-          
-          if (response.ok) {
-            const data = await response.json();
-            console.log('AJAX success:', data);
-            ajaxSuccess = true;
+        // Only try AJAX if we're in a Shopify environment
+        if (inShopifyEnv) {
+          try {
+            // Use old format (most compatible)
+            const cartData = {
+              id: variant.id,
+              quantity: quantity
+            };
             
-            // Update cart UI
-            if (window.updateCartUI) {
-              await window.updateCartUI();
+            if (sellingPlanId) {
+              cartData.selling_plan = sellingPlanId;
             }
             
-            // Open cart drawer
-            if (window.openCartDrawer) {
-              window.openCartDrawer();
+            console.log('Trying AJAX with data:', cartData);
+            console.log('Variant ID type:', typeof variant.id);
+            console.log('Variant ID value:', variant.id);
+            console.log('Variant available:', variant.available);
+            console.log('Product ID:', product.id);
+            
+            // Ensure variant ID is a number (not a string)
+            const variantIdNum = typeof variant.id === 'string' ? parseInt(variant.id) : variant.id;
+            const finalCartData = {
+              id: variantIdNum,
+              quantity: quantity
+            };
+            
+            if (sellingPlanId) {
+              finalCartData.selling_plan = sellingPlanId;
+            }
+            
+            console.log('Final cart data to send:', finalCartData);
+            
+            const response = await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              credentials: 'same-origin',
+              body: JSON.stringify(finalCartData)
+            });
+            
+            console.log('AJAX response status:', response.status);
+            console.log('AJAX response headers:', [...response.headers.entries()]);
+            
+            if (response.ok) {
+              const data = await response.json();
+              console.log('AJAX success:', data);
+              ajaxSuccess = true;
+              
+              // Update cart UI
+              if (window.updateCartUI) {
+                await window.updateCartUI();
+              }
+              
+              // Open cart drawer
+              if (window.openCartDrawer) {
+                window.openCartDrawer();
+              } else {
+                window.location.href = '/cart';
+              }
+              
+              // Show success message
+              if (window.showToast) {
+                window.showToast('Product added to cart!', 'success');
+              }
             } else {
-              window.location.href = '/cart';
+              const errorText = await response.text();
+              console.warn('AJAX returned non-OK status:', response.status);
+              console.warn('Error response:', errorText);
+              
+              // For 401/403, still try form submit as fallback (might work)
+              // Only skip if it's a different error that suggests the endpoint doesn't exist
+              if (response.status === 404) {
+                console.warn('Cart API endpoint not found (404), will try form submit');
+                throw new Error('ENDPOINT_NOT_FOUND');
+              }
+              
+              // For 401/403, log but still try form submit
+              if (response.status === 401 || response.status === 403) {
+                console.warn('Authentication error (401/403), will try form submit as fallback');
+              }
+              
+              throw new Error('AJAX failed with status: ' + response.status);
             }
+          } catch (ajaxError) {
+            console.warn('AJAX failed:', ajaxError);
             
-            // Show success message
-            if (window.showToast) {
-              window.showToast('Product added to cart!', 'success');
+            // Only skip form submit if endpoint doesn't exist
+            if (ajaxError.message && ajaxError.message.includes('ENDPOINT_NOT_FOUND')) {
+              console.warn('Cart API endpoint not available, will try form submit');
+              ajaxSuccess = false;
+            } else {
+              // For other errors (including 401/403), try form submit as fallback
+              ajaxSuccess = false;
             }
-          } else {
-            const errorText = await response.text();
-            console.warn('AJAX returned non-OK status:', response.status);
-            console.warn('Error response:', errorText);
-            
-            // If 401 or 403, don't try form submit (it will also fail)
-            if (response.status === 401 || response.status === 403) {
-              console.error('Authentication error (401/403), form submit would also fail');
-              throw new Error('AUTH_ERROR: ' + response.status);
-            }
-            
-            throw new Error('AJAX failed with status: ' + response.status);
           }
-        } catch (ajaxError) {
-          console.warn('AJAX failed:', ajaxError);
+        } else {
+          // Not in Shopify environment, skip AJAX and go straight to form submit
+          console.log('Not in Shopify environment, skipping AJAX and using form submit');
+          ajaxSuccess = false;
+        }
+        
+        // If AJAX didn't work, use traditional form submit
+        if (!ajaxSuccess) {
+          console.log('AJAX failed or skipped, using traditional form submit...');
           
-          // If it's an auth error, don't try form submit
-          if (ajaxError.message && ajaxError.message.includes('AUTH_ERROR')) {
-            console.error('Authentication error detected, not attempting form submit');
-            ajaxSuccess = false;
+          // If we're in local development, show a helpful message
+          if (!inShopifyEnv) {
+            console.warn('Running in local development environment. Form submission may not work.');
+            console.warn('To test cart functionality, please use Shopify theme preview or deploy to Shopify.');
             
             // Reset button
             addToCartBtn.disabled = false;
             if (btnText) btnText.style.display = 'inline';
             if (btnLoader) btnLoader.style.display = 'none';
             
-            // Show error message
-            const errorMsg = 'Unable to add product to cart. This may be due to:\n' +
-                            '1. Invalid product variant\n' +
-                            '2. Product not available\n' +
-                            '3. Authentication issue\n\n' +
-                            'Please refresh the page and try again.';
+            // Show helpful message
+            const localDevMsg = 'You are running in local development mode.\n\n' +
+                              'The cart functionality requires a Shopify environment.\n\n' +
+                              'To test this feature:\n' +
+                              '1. Use Shopify Theme Preview, or\n' +
+                              '2. Deploy the theme to your Shopify store\n\n' +
+                              'The form will still attempt to submit, but it may not work locally.';
             
             if (window.showToast) {
-              window.showToast('Error adding to cart. Please refresh and try again.', 'error');
+              window.showToast('Cart requires Shopify environment. See console for details.', 'info');
             } else {
-              alert(errorMsg);
+              console.info(localDevMsg);
             }
-            
-            return; // Exit early, don't try form submit
           }
-          
-          ajaxSuccess = false;
-        }
-        
-        // If AJAX didn't work (and it's not an auth error), use traditional form submit
-        if (!ajaxSuccess) {
-          console.log('AJAX failed, using traditional form submit...');
           
           // Update form inputs to ensure correct values
           if (variantIdInput) variantIdInput.value = variant.id;
@@ -526,6 +574,7 @@
           // For form submit, update inputs and allow natural submission
           console.log('Using form submit fallback...');
           console.log('Variant ID for form:', variant.id);
+          console.log('Quantity for form:', quantity);
           
           // Update form inputs
           if (variantIdInput) {
