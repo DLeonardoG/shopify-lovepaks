@@ -1,11 +1,22 @@
 {% comment %}
-  Hero Section with Video Background
+  Hero Section with Video Background (Desktop) / Image Background (Mobile)
 {% endcomment %}
 
 <section class="hero">
+    {% comment %} Video for desktop - hidden on mobile {% endcomment %}
     <video class="hero-video" autoplay muted loop playsinline preload="auto" webkit-playsinline>
         <source src="{{ 'video_start.mp4' | file_url }}" type="video/mp4">
     </video>
+    
+    {% comment %} Lifestyle product image for mobile - hidden on desktop {% endcomment %}
+    <div class="hero-background-image">
+        {% comment %} 
+          Replace with actual lifestyle product image filename
+          This image should be uploaded to Shopify Files
+        {% endcomment %}
+        <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="" class="hero-bg-img" aria-hidden="true">
+    </div>
+    
     <div class="hero-overlay"></div>
     <div class="hero-watermark">
         <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="{{ shop.name }}" class="watermark-logo">

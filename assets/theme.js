@@ -396,37 +396,59 @@ function initTestimonialsLoadMore() {
     const hiddenTestimonials = document.querySelectorAll('.testimonial-hidden');
     
     if (loadMoreBtn && hiddenTestimonials.length > 0) {
+        let isExpanded = false;
+        
         loadMoreBtn.addEventListener('click', () => {
-            // Show all hidden testimonials
-            hiddenTestimonials.forEach((testimonial, index) => {
+            if (!isExpanded) {
+                // Show all hidden testimonials
+                hiddenTestimonials.forEach((testimonial, index) => {
+                    setTimeout(() => {
+                        testimonial.classList.add('show');
+                        // Trigger scroll animation
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    entry.target.classList.add('visible');
+                                }
+                            });
+                        }, { threshold: 0.1 });
+                        observer.observe(testimonial);
+                    }, index * 100); // Stagger animation
+                });
+                
+                // Change button text to "Load Less"
                 setTimeout(() => {
-                    testimonial.classList.add('show');
-                    // Trigger scroll animation
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('visible');
-                            }
+                    loadMoreBtn.textContent = 'Load Less Reviews';
+                    isExpanded = true;
+                }, hiddenTestimonials.length * 100 + 200);
+                
+                // Smooth scroll to first newly shown testimonial
+                setTimeout(() => {
+                    if (hiddenTestimonials[0]) {
+                        hiddenTestimonials[0].scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'nearest' 
                         });
-                    }, { threshold: 0.1 });
-                    observer.observe(testimonial);
-                }, index * 100); // Stagger animation
-            });
-            
-            // Hide the button after loading
-            setTimeout(() => {
-                loadMoreBtn.classList.add('hidden');
-            }, hiddenTestimonials.length * 100 + 200);
-            
-            // Smooth scroll to first newly shown testimonial
-            setTimeout(() => {
-                if (hiddenTestimonials[0]) {
-                    hiddenTestimonials[0].scrollIntoView({ 
+                    }
+                }, 300);
+            } else {
+                // Hide testimonials
+                hiddenTestimonials.forEach((testimonial) => {
+                    testimonial.classList.remove('show');
+                });
+                
+                // Change button text back to "Load More"
+                loadMoreBtn.textContent = 'Load More Reviews';
+                isExpanded = false;
+                
+                // Smooth scroll to button
+                setTimeout(() => {
+                    loadMoreBtn.scrollIntoView({ 
                         behavior: 'smooth', 
-                        block: 'nearest' 
+                        block: 'center' 
                     });
-                }
-            }, 300);
+                }, 100);
+            }
         });
     } else if (loadMoreBtn && hiddenTestimonials.length === 0) {
         // Hide button if there are no hidden testimonials
@@ -593,11 +615,14 @@ function initPartnerNavigation() {
 }
 
 /**
- * Initialize hero video
+ * Initialize hero video (desktop) and background image (mobile)
  */
 function initHeroVideo() {
     const heroVideo = document.querySelector('.hero-video');
-    if (heroVideo) {
+    const heroBgImage = document.querySelector('.hero-bg-img');
+    
+    // Initialize video for desktop
+    if (heroVideo && window.innerWidth > 768) {
         // Set video properties
         heroVideo.setAttribute('loop', 'true');
         heroVideo.setAttribute('muted', 'true');
@@ -628,6 +653,19 @@ function initHeroVideo() {
             heroVideo.currentTime = 0;
             heroVideo.play();
         });
+    }
+    
+    // Initialize background image for mobile
+    if (heroBgImage && window.innerWidth <= 768) {
+        // Ensure image loads properly
+        heroBgImage.addEventListener('load', () => {
+            heroBgImage.style.opacity = '1';
+        });
+        
+        // If image is already loaded
+        if (heroBgImage.complete) {
+            heroBgImage.style.opacity = '1';
+        }
     }
 }
 
