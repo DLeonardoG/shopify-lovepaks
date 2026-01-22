@@ -385,12 +385,62 @@ function isValidEmail(email) {
 }
 
 // ============================================
-// 7. TOAST NOTIFICATIONS
+// 7. TESTIMONIALS LOAD MORE
+// ============================================
+
+/**
+ * Initialize testimonials load more functionality
+ */
+function initTestimonialsLoadMore() {
+    const loadMoreBtn = document.getElementById('testimonials-load-more');
+    const hiddenTestimonials = document.querySelectorAll('.testimonial-hidden');
+    
+    if (loadMoreBtn && hiddenTestimonials.length > 0) {
+        loadMoreBtn.addEventListener('click', () => {
+            // Show all hidden testimonials
+            hiddenTestimonials.forEach((testimonial, index) => {
+                setTimeout(() => {
+                    testimonial.classList.add('show');
+                    // Trigger scroll animation
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    observer.observe(testimonial);
+                }, index * 100); // Stagger animation
+            });
+            
+            // Hide the button after loading
+            setTimeout(() => {
+                loadMoreBtn.classList.add('hidden');
+            }, hiddenTestimonials.length * 100 + 200);
+            
+            // Smooth scroll to first newly shown testimonial
+            setTimeout(() => {
+                if (hiddenTestimonials[0]) {
+                    hiddenTestimonials[0].scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'nearest' 
+                    });
+                }
+            }, 300);
+        });
+    } else if (loadMoreBtn && hiddenTestimonials.length === 0) {
+        // Hide button if there are no hidden testimonials
+        loadMoreBtn.classList.add('hidden');
+    }
+}
+
+// ============================================
+// 8. TOAST NOTIFICATIONS
 // ============================================
 // (Already implemented in utility functions)
 
 // ============================================
-// 8. BACK TO TOP BUTTON
+// 9. BACK TO TOP BUTTON
 // ============================================
 
 /**
@@ -422,7 +472,7 @@ function initBackToTop() {
 }
 
 // ============================================
-// 9. SMOOTH SCROLLING
+// 10. SMOOTH SCROLLING
 // ============================================
 
 /**
@@ -462,7 +512,7 @@ function initSmoothScroll() {
 }
 
 // ============================================
-// 10. ANALYTICS & TRACKING (Optional)
+// 11. ANALYTICS & TRACKING (Optional)
 // ============================================
 
 /**
@@ -498,7 +548,7 @@ function trackAddToCart(productId, productName, price) {
 }
 
 // ============================================
-// 11. PERFORMANCE OPTIMIZATIONS
+// 12. PERFORMANCE OPTIMIZATIONS
 // ============================================
 
 /**
@@ -526,7 +576,7 @@ function initLazyLoading() {
 }
 
 // ============================================
-// 12. INITIALIZATION
+// 13. INITIALIZATION
 // ============================================
 
 /**
@@ -592,6 +642,7 @@ function init() {
     initScrollAnimations();
     initShoppingCart();
     initNewsletter();
+    initTestimonialsLoadMore();
     initBackToTop();
     initSmoothScroll();
     initLazyLoading();
@@ -612,7 +663,7 @@ if (document.readyState === 'loading') {
 }
 
 // ============================================
-// 13. GLOBAL ERROR HANDLING
+// 14. GLOBAL ERROR HANDLING
 // ============================================
 
 window.addEventListener('error', (e) => {
@@ -621,11 +672,11 @@ window.addEventListener('error', (e) => {
 });
 
 // ============================================
-// 14. EXPORT FUNCTIONS (for module usage)
+// 15. EXPORT FUNCTIONS (for module usage)
 // ============================================
 
 // ============================================
-// 15. PARTNER NAVIGATION
+// 16. PARTNER NAVIGATION
 // ============================================
 
 /**
