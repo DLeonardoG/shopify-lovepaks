@@ -698,6 +698,7 @@ p {
     flex-direction: column;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     position: relative;
+    margin-top: 20px;
 }
 
 .product-card:hover {
