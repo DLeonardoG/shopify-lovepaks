@@ -1,21 +1,26 @@
 {% comment %}
-  Products Page - Using Shopify Collections
+  Products Page - New Layout with Subscription, Bundles, and Singles
   Handle: products
-  This page displays products from a Shopify collection
-  Each product links to its individual product page
+  Layout: Hero → Subscription Block → Bundles → Singles
 {% endcomment %}
 
 <!-- Hero Banner -->
 <section class="products-hero-banner">
     <div class="container">
         <div class="products-hero-content fade-in">
-            <h1 class="products-hero-title">Shop Love Paks</h1>
-            <p class="products-hero-subtitle">Wellness laundry detergent infused with rose quartz microcrystals</p>
+            <span class="products-hero-eyebrow">Products</span>
+            <h1 class="products-hero-title">Wellness laundry, your way.</h1>
+            <p class="products-hero-subtitle">
+                Rose quartz micro‑crystal–infused detergent Paks® in two formulas—scented or fragrance-free.
+            </p>
+            <p class="products-hero-offer">
+                Free shipping at $75+ • Save more with bundles & subscription
+            </p>
         </div>
     </div>
 </section>
 
-<!-- Video Section -->
+<!-- Video Section (Optional - can be removed if not needed) -->
 <section class="products-video-section">
     <div class="container">
         <div class="products-video-wrapper">
@@ -27,189 +32,53 @@
     </div>
 </section>
 
-<!-- Products Section - Using Shopify Collection -->
-<section class="products-main-section">
-    <div class="container">
-        <div class="products-header">
-            <h2 class="products-section-title">Choose Your Experience</h2>
-            <p class="products-section-subtitle">Select the perfect formula for your laundry needs</p>
-        </div>
+<!-- Subscription Block (BEST VALUE) -->
+{% render 'products-subscription-block' %}
 
-        {% comment %}
-          Use collection 'all' or create a 'featured' collection
-          You can also use collections['all'] or collections.featured
-        {% endcomment %}
+<!-- Bundles Section -->
+{% section 'products-bundles' %}
+
+<!-- Singles Section -->
+<section class="products-singles-section" id="singles-section">
+    <div class="container">
+        <div class="singles-section-header">
+            <h2 class="singles-section-title">Shop Singles</h2>
+        </div>
+        
+        {% comment %} Get products from collection {% endcomment %}
         {% assign products_collection = collections.all %}
         {% if collections.featured %}
             {% assign products_collection = collections.featured %}
         {% endif %}
-
-        {% if products_collection.products.size > 0 %}
-            <div class="products-grid">
-                {% for product in products_collection.products %}
-                    {% comment %} Skip Master Case product - it's for wholesale only {% endcomment %}
+        
+        {% comment %} Get specific products by handle {% endcomment %}
+        {% assign citrus_product = all_products['citrus-flower-blossom'] %}
+        {% assign fragrance_product = all_products['dye-scent-free'] %}
+        
+        <div class="singles-grid">
+            {% comment %} Show Citrus Flower Blossom {% endcomment %}
+            {% if citrus_product %}
+                {% render 'product-single-card', product: citrus_product %}
+            {% endif %}
+            
+            {% comment %} Show Dye & Scent Free {% endcomment %}
+            {% if fragrance_product %}
+                {% render 'product-single-card', product: fragrance_product %}
+            {% endif %}
+            
+            {% comment %} Fallback: Show products from collection if specific products not found {% endcomment %}
+            {% unless citrus_product and fragrance_product %}
+                {% for product in products_collection.products limit: 2 %}
                     {% unless product.handle == 'master-case' or product.tags contains 'wholesale' or product.tags contains 'master-case' %}
-                        <div class="product-card-enhanced fade-in" data-product-id="{{ product.id }}">
-                            <a href="{{ product.url }}" class="product-link-wrapper">
-                                <div class="product-image-container">
-                                    {% if product.featured_image %}
-                                        <img src="{{ product.featured_image | image_url: width: 1200 }}" 
-                                             alt="{{ product.featured_image.alt | escape }}" 
-                                             class="product-main-image"
-                                             loading="lazy"
-                                             width="600"
-                                             height="600">
-                                    {% else %}
-                                        <img src="{{ 'packaging-normal.jpg' | file_img_url: '1200x' }}" 
-                                             alt="{{ product.title | escape }}" 
-                                             class="product-main-image"
-                                             loading="lazy"
-                                             width="600"
-                                             height="600">
-                                    {% endif %}
-                                    
-                                    {% comment %} Badge logic {% endcomment %}
-                                    {% if product.tags contains 'most-popular' or product.tags contains 'popular' %}
-                                        <span class="product-badge-enhanced">Most Popular</span>
-                                    {% elsif product.tags contains 'sensitive' or product.tags contains 'sensitive-skin' %}
-                                        <span class="product-badge-enhanced badge-sensitive">Sensitive Skin</span>
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="product-info-container">
-                                    <h3 class="product-name-enhanced">{{ product.title }}</h3>
-                                    <p class="product-description-enhanced">
-                                        {% if product.description != blank %}
-                                            {{ product.description | strip_html | truncatewords: 20 }}
-                                        {% else %}
-                                            Wellness laundry detergent infused with rose quartz microcrystals.
-                                        {% endif %}
-                                    </p>
-                                    
-                                    <div class="product-features-enhanced">
-                                        <div class="feature-item">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                            <span>Infused with rose quartz microcrystals</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                            <span>Plant-based formula</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                            <span>Works in cold water</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                            <span>Microplastic-free</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                            <span>Eco-friendly packaging</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="product-price-section">
-                                        <span class="product-price-enhanced">
-                                            {{ product.price | money }}
-                                        </span>
-                                        {% if product.compare_at_price > product.price %}
-                                            <span class="product-compare-price">
-                                                {{ product.compare_at_price | money }}
-                                            </span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </a>
-                            
-                            {% comment %} Add to Cart Button - Direct to product page {% endcomment %}
-                            <div class="product-cta-wrapper">
-                                <a href="{{ product.url }}" class="btn-add-to-cart">
-                                    View Product
-                                </a>
-                            </div>
-                        </div>
+                        {% render 'product-single-card', product: product %}
                     {% endunless %}
                 {% endfor %}
-            </div>
-        {% else %}
-            {% comment %} Fallback: Show static products if collection is empty {% endcomment %}
-            <div class="products-grid">
-                {% comment %} Citrus Flower Blossom - Fallback {% endcomment %}
-                {% assign citrus_product = all_products['citrus-flower-blossom'] %}
-                {% if citrus_product %}
-                    <div class="product-card-enhanced fade-in">
-                        <a href="{{ citrus_product.url }}" class="product-link-wrapper">
-                            <div class="product-image-container">
-                                <img src="{{ citrus_product.featured_image | default: 'packaging-normal.jpg' | image_url: width: 1200 }}" 
-                                     alt="{{ citrus_product.title }}" 
-                                     class="product-main-image"
-                                     loading="lazy"
-                                     width="600"
-                                     height="600">
-                                <span class="product-badge-enhanced">Most Popular</span>
-                            </div>
-                            <div class="product-info-container">
-                                <h3 class="product-name-enhanced">{{ citrus_product.title }}</h3>
-                                <p class="product-description-enhanced">
-                                    {{ citrus_product.description | strip_html | truncatewords: 20 }}
-                                </p>
-                                <div class="product-price-section">
-                                    <span class="product-price-enhanced">{{ citrus_product.price | money }}</span>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="product-cta-wrapper">
-                            <a href="{{ citrus_product.url }}" class="btn-add-to-cart">View Product</a>
-                        </div>
-                    </div>
-                {% endif %}
-
-                {% comment %} Dye & Scent Free - Fallback {% endcomment %}
-                {% assign dye_product = all_products['dye-scent-free'] %}
-                {% if dye_product %}
-                    <div class="product-card-enhanced fade-in">
-                        <a href="{{ dye_product.url }}" class="product-link-wrapper">
-                            <div class="product-image-container">
-                                <img src="{{ dye_product.featured_image | default: 'packaging-piel-sensibles.jpg' | image_url: width: 1200 }}" 
-                                     alt="{{ dye_product.title }}" 
-                                     class="product-main-image"
-                                     loading="lazy"
-                                     width="600"
-                                     height="600">
-                                <span class="product-badge-enhanced badge-sensitive">Sensitive Skin</span>
-                            </div>
-                            <div class="product-info-container">
-                                <h3 class="product-name-enhanced">{{ dye_product.title }}</h3>
-                                <p class="product-description-enhanced">
-                                    {{ dye_product.description | strip_html | truncatewords: 20 }}
-                                </p>
-                                <div class="product-price-section">
-                                    <span class="product-price-enhanced">{{ dye_product.price | money }}</span>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="product-cta-wrapper">
-                            <a href="{{ dye_product.url }}" class="btn-add-to-cart">View Product</a>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        {% endif %}
+            {% endunless %}
+        </div>
     </div>
 </section>
 
-<!-- Benefits Section -->
+<!-- Benefits Section (Keep existing) -->
 <section class="products-benefits-section">
     <div class="container">
         <h2 class="benefits-section-title">Why Choose Love Paks</h2>
@@ -266,13 +135,17 @@
     </div>
 </section>
 
+<!-- Load JavaScript -->
+<script src="{{ 'bundle-cart.js' | asset_url }}" defer></script>
+<script src="{{ 'products-page.js' | asset_url }}" defer></script>
+
 <style>
 /* Products Page Hero Banner */
 .products-hero-banner {
-    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--burgundy) 100%);
-    padding: clamp(60px, 8vw, 120px) var(--spacing-md);
+    background: linear-gradient(135deg, var(--primary-pink, #ec008c) 0%, var(--burgundy, #8b1538) 100%);
+    padding: clamp(60px, 8vw, 120px) var(--spacing-md, 20px);
     text-align: center;
-    color: var(--white);
+    color: var(--white, #ffffff);
     position: relative;
     overflow: hidden;
 }
@@ -292,17 +165,28 @@
 .products-hero-content {
     position: relative;
     z-index: 1;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
+}
+
+.products-hero-eyebrow {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.9;
+    margin-bottom: var(--spacing-sm, 12px);
 }
 
 .products-hero-title {
     font-family: 'Montserrat', sans-serif;
     font-size: clamp(2.5rem, 6vw, 4rem);
     font-weight: 800;
-    margin-bottom: var(--spacing-sm);
-    color: var(--white);
+    margin-bottom: var(--spacing-md, 16px);
+    color: var(--white, #ffffff);
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    line-height: 1.2;
 }
 
 .products-hero-subtitle {
@@ -310,12 +194,22 @@
     opacity: 0.95;
     font-weight: 400;
     line-height: 1.6;
+    margin-bottom: var(--spacing-md, 16px);
+}
+
+.products-hero-offer {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    opacity: 0.85;
+    font-weight: 500;
+    margin-top: var(--spacing-lg, 24px);
+    padding-top: var(--spacing-md, 16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Video Section */
 .products-video-section {
     padding: 0;
-    background: var(--off-white);
+    background: var(--off-white, #f8f9fa);
 }
 
 .products-video-wrapper {
@@ -325,7 +219,7 @@
     margin: 0 auto;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    background: var(--light-gray);
+    background: var(--light-gray, #e0e0e0);
 }
 
 .products-video {
@@ -344,212 +238,37 @@
     pointer-events: none;
 }
 
-/* Products Main Section */
-.products-main-section {
-    padding: var(--spacing-xxl) var(--spacing-md);
-    background: var(--white);
+/* Singles Section */
+.products-singles-section {
+    padding: var(--spacing-xxl, 60px) var(--spacing-md, 20px);
+    background: var(--white, #ffffff);
 }
 
-.products-header {
+.singles-section-header {
     text-align: center;
-    margin-bottom: var(--spacing-xl);
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: var(--spacing-xl, 40px);
 }
 
-.products-section-title {
+.singles-section-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(2rem, 5vw, 2.5rem);
     font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: var(--spacing-sm);
+    color: var(--text-dark, #1a1a1a);
+    margin: 0;
 }
 
-.products-section-subtitle {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: var(--text-gray);
-}
-
-.products-grid {
+.singles-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--spacing-xl);
-    max-width: 1400px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl, 40px);
+    max-width: 1000px;
     margin: 0 auto;
-}
-
-/* Enhanced Product Card */
-.product-card-enhanced {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
-    border: 1px solid rgba(236, 0, 140, 0.1);
-    display: flex;
-    flex-direction: column;
-}
-
-.product-card-enhanced:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
-}
-
-.product-link-wrapper {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.product-image-container {
-    position: relative;
-    width: 100%;
-    padding-top: 100%;
-    overflow: hidden;
-    background: var(--light-gray);
-}
-
-.product-main-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-slow);
-}
-
-.product-card-enhanced:hover .product-main-image {
-    transform: scale(1.05);
-}
-
-.product-badge-enhanced {
-    position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    background: var(--primary-pink);
-    color: var(--white);
-    padding: var(--spacing-xs) var(--spacing-md);
-    border-radius: var(--radius-full);
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: var(--shadow-md);
-    z-index: 2;
-}
-
-.product-badge-enhanced.badge-sensitive {
-    background: var(--accent-blue);
-}
-
-.product-info-container {
-    padding: var(--spacing-lg);
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.product-name-enhanced {
-    font-family: 'Montserrat', sans-serif;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: var(--spacing-sm);
-}
-
-.product-description-enhanced {
-    font-size: 1rem;
-    color: var(--text-gray);
-    line-height: 1.6;
-    margin-bottom: var(--spacing-md);
-}
-
-.product-features-enhanced {
-    margin: var(--spacing-md) 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-}
-
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    font-size: 0.9375rem;
-    color: var(--text-dark);
-}
-
-.feature-item svg {
-    flex-shrink: 0;
-    color: var(--primary-pink);
-    stroke-width: 3;
-}
-
-.product-price-section {
-    margin: var(--spacing-md) 0;
-    padding: var(--spacing-md) 0;
-    border-top: 2px solid var(--light-gray);
-    border-bottom: 2px solid var(--light-gray);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-}
-
-.product-price-enhanced {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--text-dark);
-}
-
-.product-compare-price {
-    font-size: 1.5rem;
-    color: var(--text-gray);
-    text-decoration: line-through;
-}
-
-.product-cta-wrapper {
-    padding: 0 var(--spacing-lg) var(--spacing-lg);
-    margin-top: auto;
-}
-
-.btn-add-to-cart {
-    width: 100%;
-    padding: var(--spacing-md) var(--spacing-lg);
-    background: var(--primary-pink);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 1.125rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    font-family: 'Montserrat', sans-serif;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-}
-
-.btn-add-to-cart:hover {
-    background: var(--burgundy);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.btn-add-to-cart:active {
-    transform: translateY(0);
 }
 
 /* Benefits Section */
 .products-benefits-section {
-    padding: var(--spacing-xxl) var(--spacing-md);
-    background: var(--off-white);
+    padding: var(--spacing-xxl, 60px) var(--spacing-md, 20px);
+    background: var(--off-white, #f8f9fa);
 }
 
 .benefits-section-title {
@@ -557,34 +276,34 @@
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
     text-align: center;
-    color: var(--text-dark);
-    margin-bottom: var(--spacing-xl);
+    color: var(--text-dark, #1a1a1a);
+    margin-bottom: var(--spacing-xl, 40px);
 }
 
 .benefits-grid-enhanced {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
+    gap: var(--spacing-lg, 24px);
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .benefit-card-enhanced {
-    background: var(--white);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
+    background: var(--white, #ffffff);
+    padding: var(--spacing-lg, 24px);
+    border-radius: var(--radius-lg, 16px);
     text-align: center;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform var(--transition-base, 0.3s), box-shadow var(--transition-base, 0.3s);
 }
 
 .benefit-card-enhanced:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .benefit-icon-wrapper {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md, 16px);
     display: flex;
     justify-content: center;
 }
@@ -599,53 +318,49 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: var(--spacing-xs);
+    color: var(--text-dark, #1a1a1a);
+    margin-bottom: var(--spacing-xs, 8px);
 }
 
 .benefit-description-enhanced {
     font-size: 0.9375rem;
-    color: var(--text-gray);
+    color: var(--text-gray, #666);
     line-height: 1.6;
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .products-hero-banner {
-        padding: clamp(40px, 6vw, 80px) var(--spacing-md);
+        padding: clamp(40px, 6vw, 80px) var(--spacing-md, 20px);
     }
     
-    .products-main-section {
-        padding: var(--spacing-xl) var(--spacing-md);
+    .products-singles-section {
+        padding: var(--spacing-xl, 40px) var(--spacing-md, 20px);
     }
     
-    .products-grid {
+    .singles-grid {
         grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-    
-    .product-info-container {
-        padding: var(--spacing-md);
+        gap: var(--spacing-lg, 24px);
     }
     
     .benefits-grid-enhanced {
         grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-md);
+        gap: var(--spacing-md, 16px);
     }
     
     .benefit-icon-enhanced {
         width: 64px;
         height: 64px;
     }
+    
+    .products-video-wrapper {
+        aspect-ratio: 4 / 3;
+    }
 }
 
 @media (max-width: 480px) {
     .benefits-grid-enhanced {
         grid-template-columns: 1fr;
-    }
-    
-    .products-video-wrapper {
-        aspect-ratio: 4 / 3;
     }
 }
 </style>

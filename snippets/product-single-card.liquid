@@ -1,0 +1,272 @@
+{% comment %}
+  Product Single Card - Enhanced card for individual products
+  Shows product with "Add to Cart" button and subscription nudge
+{% endcomment %}
+
+{% assign product = product | default: null %}
+{% if product == null %}{% break %}{% endif %}
+
+<div class="product-single-card" data-product-id="{{ product.id }}">
+  <a href="{{ product.url }}" class="product-single-link">
+    <div class="product-single-image-container">
+      {% if product.featured_image %}
+        <img 
+          src="{{ product.featured_image | image_url: width: 800 }}" 
+          alt="{{ product.featured_image.alt | default: product.title | escape }}" 
+          class="product-single-image"
+          loading="lazy"
+          width="400"
+          height="400">
+      {% else %}
+        <div class="product-single-image-placeholder">
+          <span>No Image</span>
+        </div>
+      {% endif %}
+      
+      {% comment %} Product badges {% endcomment %}
+      {% if product.tags contains 'most-popular' or product.tags contains 'popular' %}
+        <span class="product-single-badge badge-popular">Most Popular</span>
+      {% elsif product.tags contains 'sensitive' or product.tags contains 'sensitive-skin' %}
+        <span class="product-single-badge badge-sensitive">Sensitive Skin</span>
+      {% endif %}
+    </div>
+    
+    <div class="product-single-info">
+      <h3 class="product-single-name">{{ product.title }}</h3>
+      
+      <div class="product-single-specs">
+        <span class="product-single-paks">39 Paks®</span>
+      </div>
+      
+      <div class="product-single-price-section">
+        <span class="product-single-price">{{ product.price | money }}</span>
+        {% if product.compare_at_price > product.price %}
+          <span class="product-single-compare-price">{{ product.compare_at_price | money }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </a>
+  
+  <div class="product-single-actions">
+    <button 
+      type="button" 
+      class="btn-add-to-cart-single" 
+      data-product-id="{{ product.id }}"
+      data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+      data-product-handle="{{ product.handle }}">
+      Add to Cart
+    </button>
+    
+    <div class="product-single-subscription-nudge">
+      <span>Subscribe & save 20% + free ship →</span>
+      <a href="#subscription-block" class="single-nudge-link">Start Subscription</a>
+    </div>
+  </div>
+</div>
+
+<style>
+.product-single-card {
+  background: var(--white, #ffffff);
+  border-radius: var(--radius-lg, 16px);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--light-gray, #e0e0e0);
+  transition: all var(--transition-base, 0.3s);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.product-single-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-pink, #ec008c);
+}
+
+.product-single-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.product-single-image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  background: var(--light-gray, #f5f5f5);
+}
+
+.product-single-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow, 0.5s);
+}
+
+.product-single-card:hover .product-single-image {
+  transform: scale(1.05);
+}
+
+.product-single-image-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-gray, #999);
+  font-size: 0.875rem;
+}
+
+.product-single-badge {
+  position: absolute;
+  top: var(--spacing-md, 16px);
+  right: var(--spacing-md, 16px);
+  padding: var(--spacing-xs, 6px) var(--spacing-sm, 12px);
+  border-radius: var(--radius-full, 999px);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+.badge-popular {
+  background: var(--primary-pink, #ec008c);
+  color: var(--white, #ffffff);
+}
+
+.badge-sensitive {
+  background: var(--accent-blue, #0066cc);
+  color: var(--white, #ffffff);
+}
+
+.product-single-info {
+  padding: var(--spacing-lg, 24px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.product-single-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text-dark, #1a1a1a);
+  margin: 0 0 var(--spacing-sm, 12px);
+  line-height: 1.3;
+}
+
+.product-single-specs {
+  margin-bottom: var(--spacing-sm, 12px);
+}
+
+.product-single-paks {
+  font-size: 0.9375rem;
+  color: var(--text-gray, #666);
+  font-weight: 500;
+}
+
+.product-single-price-section {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm, 12px);
+  margin-top: auto;
+  padding-top: var(--spacing-md, 16px);
+  border-top: 1px solid var(--light-gray, #e0e0e0);
+}
+
+.product-single-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark, #1a1a1a);
+}
+
+.product-single-compare-price {
+  font-size: 1.25rem;
+  color: var(--text-gray, #999);
+  text-decoration: line-through;
+}
+
+.product-single-actions {
+  padding: 0 var(--spacing-lg, 24px) var(--spacing-lg, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 12px);
+}
+
+.btn-add-to-cart-single {
+  width: 100%;
+  padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
+  background: var(--primary-pink, #ec008c);
+  color: var(--white, #ffffff);
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all var(--transition-base, 0.3s);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn-add-to-cart-single:hover {
+  background: var(--burgundy, #8b1538);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(236, 0, 140, 0.3);
+}
+
+.btn-add-to-cart-single:active {
+  transform: translateY(0);
+}
+
+.btn-add-to-cart-single:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.product-single-subscription-nudge {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-gray, #666);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs, 6px);
+  flex-wrap: wrap;
+}
+
+.single-nudge-link {
+  color: var(--primary-pink, #ec008c);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-base, 0.3s);
+}
+
+.single-nudge-link:hover {
+  color: var(--burgundy, #8b1538);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .product-single-info {
+    padding: var(--spacing-md, 16px);
+  }
+  
+  .product-single-actions {
+    padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
+  }
+}
+</style>
+

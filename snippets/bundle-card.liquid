@@ -1,0 +1,219 @@
+{% comment %}
+  Bundle Card - Reusable card for displaying bundle offers
+  Parameters:
+    - bundle_type: 'try-both', 'citrus-3month', 'fragrance-3month'
+    - bundle_title: Title of the bundle
+    - bundle_savings: Savings percentage (e.g., "10%", "15%")
+    - bundle_includes: Description of what's included
+    - bundle_description: Marketing description
+    - bundle_products: Array of product handles to include
+    - free_shipping: Boolean for free shipping badge
+{% endcomment %}
+
+{% assign bundle_type = bundle_type | default: 'try-both' %}
+{% assign bundle_title = bundle_title | default: 'Bundle' %}
+{% assign bundle_savings = bundle_savings | default: '10%' %}
+{% assign bundle_includes = bundle_includes | default: '' %}
+{% assign bundle_description = bundle_description | default: '' %}
+{% assign free_shipping = free_shipping | default: false %}
+
+<div class="bundle-card" data-bundle-type="{{ bundle_type }}">
+  <div class="bundle-card-header">
+    <h3 class="bundle-title">{{ bundle_title }}</h3>
+    <div class="bundle-savings-badge">
+      Save {{ bundle_savings }}
+    </div>
+  </div>
+  
+  <div class="bundle-includes">
+    {{ bundle_includes }}
+  </div>
+  
+  {% if free_shipping %}
+    <div class="bundle-free-shipping-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 13h14M5 13l4-4m-4 4l4 4M19 13H5m14 0l-4-4m4 4l-4 4"></path>
+      </svg>
+      <span>+ Free Shipping</span>
+    </div>
+  {% endif %}
+  
+  <p class="bundle-description">
+    {{ bundle_description }}
+  </p>
+  
+  <button 
+    type="button" 
+    class="btn-add-bundle" 
+    data-bundle-type="{{ bundle_type }}"
+    data-bundle-products="{{ bundle_products | join: ',' }}">
+    Add Bundle
+  </button>
+  
+  <div class="bundle-subscription-nudge">
+    {% if bundle_type == 'try-both' %}
+      <span>Or subscribe & save 20% →</span>
+    {% else %}
+      <span>Want 20% off? Subscribe quarterly →</span>
+    {% endif %}
+    <a href="#subscription-block" class="bundle-nudge-link">Start Subscription</a>
+  </div>
+</div>
+
+<style>
+.bundle-card {
+  background: var(--white, #ffffff);
+  border-radius: var(--radius-lg, 16px);
+  padding: var(--spacing-xl, 40px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--light-gray, #e0e0e0);
+  transition: all var(--transition-base, 0.3s);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bundle-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-pink, #ec008c);
+}
+
+.bundle-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md, 16px);
+  gap: var(--spacing-md, 16px);
+}
+
+.bundle-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text-dark, #1a1a1a);
+  margin: 0;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.bundle-savings-badge {
+  background: linear-gradient(135deg, var(--primary-pink, #ec008c) 0%, var(--burgundy, #8b1538) 100%);
+  color: var(--white, #ffffff);
+  padding: var(--spacing-xs, 6px) var(--spacing-md, 12px);
+  border-radius: var(--radius-full, 999px);
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bundle-includes {
+  font-size: 1rem;
+  color: var(--text-dark, #1a1a1a);
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm, 12px);
+  line-height: 1.5;
+}
+
+.bundle-free-shipping-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs, 6px);
+  background: rgba(236, 0, 140, 0.1);
+  color: var(--primary-pink, #ec008c);
+  padding: var(--spacing-xs, 6px) var(--spacing-sm, 10px);
+  border-radius: var(--radius-md, 6px);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md, 16px);
+  width: fit-content;
+}
+
+.bundle-free-shipping-badge svg {
+  flex-shrink: 0;
+}
+
+.bundle-description {
+  font-size: 0.9375rem;
+  color: var(--text-gray, #666);
+  line-height: 1.6;
+  margin: var(--spacing-md, 16px) 0;
+  flex: 1;
+}
+
+.btn-add-bundle {
+  width: 100%;
+  padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
+  background: var(--primary-pink, #ec008c);
+  color: var(--white, #ffffff);
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all var(--transition-base, 0.3s);
+  font-family: 'Montserrat', sans-serif;
+  margin-top: auto;
+}
+
+.btn-add-bundle:hover {
+  background: var(--burgundy, #8b1538);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(236, 0, 140, 0.3);
+}
+
+.btn-add-bundle:active {
+  transform: translateY(0);
+}
+
+.btn-add-bundle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.bundle-subscription-nudge {
+  margin-top: var(--spacing-md, 16px);
+  padding-top: var(--spacing-md, 16px);
+  border-top: 1px solid var(--light-gray, #e0e0e0);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-gray, #666);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs, 6px);
+  flex-wrap: wrap;
+}
+
+.bundle-nudge-link {
+  color: var(--primary-pink, #ec008c);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-base, 0.3s);
+}
+
+.bundle-nudge-link:hover {
+  color: var(--burgundy, #8b1538);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .bundle-card {
+    padding: var(--spacing-lg, 24px);
+  }
+  
+  .bundle-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .bundle-savings-badge {
+    align-self: flex-start;
+  }
+}
+</style>
+

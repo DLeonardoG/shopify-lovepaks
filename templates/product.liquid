@@ -153,8 +153,8 @@
     <!-- Product Sections Below -->
     <div class="product-sections">
       
-      <!-- Frequently Bought Together -->
-      {% section 'product-recommendations' %}
+      <!-- FAQ Section - Always shown at the top -->
+      {% section 'product-faq' %}
       
       <!-- Benefits Section -->
       {% if product.metafields.custom.benefits %}
@@ -181,11 +181,11 @@
         {% section 'product-lifestyle' %}
       {% endif %}
       
-      <!-- FAQ Section -->
-      {% section 'product-faq' %}
-      
-      <!-- Reviews Section -->
-      {% section 'product-reviews' %}
+      {% comment %}
+        Removed sections:
+        - product-recommendations (Frequently Bought Together) - Not needed
+        - product-reviews - Not needed
+      {% endcomment %}
       
     </div>
     

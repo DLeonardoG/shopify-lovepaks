@@ -1,0 +1,315 @@
+{% comment %}
+  Products Subscription Block - BEST VALUE
+  Displays subscription option prominently above bundles and singles
+{% endcomment %}
+
+{% assign citrus_product = all_products['citrus-flower-blossom'] %}
+{% assign fragrance_product = all_products['dye-scent-free'] %}
+
+{% if citrus_product.selling_plan_groups.size > 0 or fragrance_product.selling_plan_groups.size > 0 %}
+  <section class="products-subscription-block" id="subscription-block">
+    <div class="container">
+      <div class="subscription-block-card">
+        <div class="subscription-badge-best-value">
+          <span class="star-icon">★</span>
+          <span>BEST VALUE</span>
+        </div>
+        
+        <h2 class="subscription-block-title">
+          Subscribe & Save 20% + Free Shipping
+        </h2>
+        
+        <p class="subscription-block-description">
+          Delivered quarterly (3 pouches / 3-month supply).
+        </p>
+        
+        <div class="subscription-formula-selector">
+          <label class="formula-selector-label">Choose your formula:</label>
+          <div class="formula-options">
+            <label class="formula-option">
+              <input 
+                type="radio" 
+                name="subscription-formula" 
+                value="citrus" 
+                id="subscription-citrus"
+                checked>
+              <span class="formula-option-text">Citrus Flower Blossom</span>
+            </label>
+            <label class="formula-option">
+              <input 
+                type="radio" 
+                name="subscription-formula" 
+                value="fragrance-free" 
+                id="subscription-fragrance-free">
+              <span class="formula-option-text">Dye & Scent Free</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="subscription-benefits">
+          <div class="benefit-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>You save 20% every shipment</span>
+          </div>
+          <div class="benefit-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Free shipping</span>
+          </div>
+          <div class="benefit-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Quarterly reset</span>
+          </div>
+        </div>
+        
+        <button 
+          type="button" 
+          class="btn-subscription-start" 
+          id="start-subscription-btn"
+          data-citrus-product-id="{{ citrus_product.id }}"
+          data-fragrance-product-id="{{ fragrance_product.id }}"
+          data-citrus-variant-id="{{ citrus_product.selected_or_first_available_variant.id }}"
+          data-fragrance-variant-id="{{ fragrance_product.selected_or_first_available_variant.id }}">
+          Start Subscription
+        </button>
+        
+        <p class="subscription-note-small">
+          Pause, skip, or cancel anytime
+        </p>
+        
+        <div class="subscription-alternative-link">
+          <a href="#bundles-section" class="link-shop-bundles">
+            Shop bundles instead
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<style>
+.products-subscription-block {
+  padding: var(--spacing-xxl, 60px) var(--spacing-md, 20px);
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.subscription-block-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--white, #ffffff);
+  border-radius: var(--radius-lg, 16px);
+  padding: var(--spacing-xl, 40px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--primary-pink, #ec008c);
+  position: relative;
+  text-align: center;
+}
+
+.subscription-badge-best-value {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--primary-pink, #ec008c) 0%, var(--burgundy, #8b1538) 100%);
+  color: var(--white, #ffffff);
+  padding: var(--spacing-xs, 8px) var(--spacing-lg, 24px);
+  border-radius: var(--radius-full, 999px);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
+  box-shadow: 0 4px 16px rgba(236, 0, 140, 0.3);
+}
+
+.star-icon {
+  font-size: 1.125rem;
+}
+
+.subscription-block-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-dark, #1a1a1a);
+  margin: var(--spacing-lg, 24px) 0 var(--spacing-sm, 12px);
+}
+
+.subscription-block-description {
+  font-size: 1.125rem;
+  color: var(--text-gray, #666);
+  margin-bottom: var(--spacing-lg, 24px);
+}
+
+.subscription-formula-selector {
+  margin: var(--spacing-xl, 40px) 0;
+  text-align: left;
+}
+
+.formula-selector-label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-dark, #1a1a1a);
+  margin-bottom: var(--spacing-md, 16px);
+  font-size: 1rem;
+}
+
+.formula-options {
+  display: flex;
+  gap: var(--spacing-md, 16px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.formula-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 12px);
+  padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
+  border: 2px solid var(--light-gray, #e0e0e0);
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  transition: all var(--transition-base, 0.3s);
+  background: var(--white, #ffffff);
+  flex: 1;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.formula-option:hover {
+  border-color: var(--primary-pink, #ec008c);
+  background: rgba(236, 0, 140, 0.05);
+}
+
+.formula-option input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.formula-option input[type="radio"]:checked + .formula-option-text {
+  font-weight: 600;
+  color: var(--primary-pink, #ec008c);
+}
+
+.formula-option:has(input[type="radio"]:checked) {
+  border-color: var(--primary-pink, #ec008c);
+  background: rgba(236, 0, 140, 0.1);
+}
+
+.formula-option-text {
+  font-size: 1rem;
+  color: var(--text-dark, #1a1a1a);
+  transition: all var(--transition-base, 0.3s);
+}
+
+.subscription-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 12px);
+  margin: var(--spacing-xl, 40px) 0;
+  text-align: left;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 12px);
+  font-size: 1rem;
+  color: var(--text-dark, #1a1a1a);
+}
+
+.benefit-item svg {
+  flex-shrink: 0;
+  color: var(--primary-pink, #ec008c);
+  stroke-width: 3;
+}
+
+.btn-subscription-start {
+  width: 100%;
+  max-width: 400px;
+  padding: var(--spacing-md, 16px) var(--spacing-xl, 40px);
+  background: var(--primary-pink, #ec008c);
+  color: var(--white, #ffffff);
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all var(--transition-base, 0.3s);
+  font-family: 'Montserrat', sans-serif;
+  margin: var(--spacing-lg, 24px) auto;
+  display: block;
+}
+
+.btn-subscription-start:hover {
+  background: var(--burgundy, #8b1538);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(236, 0, 140, 0.3);
+}
+
+.btn-subscription-start:active {
+  transform: translateY(0);
+}
+
+.btn-subscription-start:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.subscription-note-small {
+  font-size: 0.875rem;
+  color: var(--text-gray, #666);
+  margin-top: var(--spacing-md, 16px);
+  font-style: italic;
+}
+
+.subscription-alternative-link {
+  margin-top: var(--spacing-lg, 24px);
+  padding-top: var(--spacing-lg, 24px);
+  border-top: 1px solid var(--light-gray, #e0e0e0);
+}
+
+.link-shop-bundles {
+  color: var(--primary-pink, #ec008c);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: color var(--transition-base, 0.3s);
+}
+
+.link-shop-bundles:hover {
+  color: var(--burgundy, #8b1538);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .subscription-block-card {
+    padding: var(--spacing-lg, 24px);
+  }
+  
+  .formula-options {
+    flex-direction: column;
+  }
+  
+  .formula-option {
+    width: 100%;
+  }
+  
+  .subscription-benefits {
+    text-align: center;
+  }
+}
+</style>
+

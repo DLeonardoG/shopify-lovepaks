@@ -1,0 +1,93 @@
+{% comment %}
+  Products Bundles Section
+  Displays 3 bundle offers in a grid
+{% endcomment %}
+
+{% assign citrus_product = all_products['citrus-flower-blossom'] %}
+{% assign fragrance_product = all_products['dye-scent-free'] %}
+
+<section class="products-bundles-section" id="bundles-section">
+  <div class="container">
+    <div class="bundles-section-header">
+      <h2 class="bundles-section-title">Bundle & Save</h2>
+    </div>
+    
+    <div class="bundles-grid">
+      {% comment %} Bundle 1: Try Both (10% off) {% endcomment %}
+      {% if citrus_product and fragrance_product %}
+        {% render 'bundle-card',
+          bundle_type: 'try-both',
+          bundle_title: 'TRY BOTH (Save 10%)',
+          bundle_savings: '10%',
+          bundle_includes: 'Citrus + Fragrance-Free<br>1 + 1 pouches',
+          bundle_description: 'Great for first-time buyers',
+          bundle_products: 'citrus-flower-blossom,dye-scent-free',
+          free_shipping: false %}
+      {% endif %}
+      
+      {% comment %} Bundle 2: Citrus 3-Month Supply (15% off + free shipping) {% endcomment %}
+      {% if citrus_product %}
+        {% render 'bundle-card',
+          bundle_type: 'citrus-3month',
+          bundle_title: '3-MONTH SUPPLY (Save 15%)',
+          bundle_savings: '15%',
+          bundle_includes: 'Citrus Flower Blossom x3',
+          bundle_description: 'Never run out—stock up',
+          bundle_products: 'citrus-flower-blossom',
+          free_shipping: true %}
+      {% endif %}
+      
+      {% comment %} Bundle 3: Fragrance-Free 3-Month Supply (15% off + free shipping) {% endcomment %}
+      {% if fragrance_product %}
+        {% render 'bundle-card',
+          bundle_type: 'fragrance-3month',
+          bundle_title: '3-MONTH SUPPLY (Save 15%)',
+          bundle_savings: '15%',
+          bundle_includes: 'Dye & Scent Free x3',
+          bundle_description: 'Gentle & simple—stock up',
+          bundle_products: 'dye-scent-free',
+          free_shipping: true %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+.products-bundles-section {
+  padding: var(--spacing-xxl, 60px) var(--spacing-md, 20px);
+  background: var(--white, #ffffff);
+}
+
+.bundles-section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl, 40px);
+}
+
+.bundles-section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-dark, #1a1a1a);
+  margin: 0;
+}
+
+.bundles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl, 40px);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .products-bundles-section {
+    padding: var(--spacing-xl, 40px) var(--spacing-md, 20px);
+  }
+  
+  .bundles-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg, 24px);
+  }
+}
+</style>
+
