@@ -4,6 +4,9 @@
   Exact copy of shop-landing.html logic
 {% endcomment %}
 
+{% comment %} Load styles directly in template {% endcomment %}
+{{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
+
 <!-- Hero Section -->
 <section class="shop-hero">
     <div class="container">
