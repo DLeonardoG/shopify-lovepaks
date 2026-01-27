@@ -74,12 +74,28 @@
                     </div>
 
                     <div class="package-footer">
-                        <button class="btn-primary btn-large add-to-cart-btn"
-                                data-package="starter"
-                                data-price="229"
-                                data-name="Master Case">
-                            Add to Cart
-                        </button>
+                        {% comment %} 
+                          Buscar producto "Master Case" por handle o usar variant ID
+                          Reemplazar con el variant ID real del producto en Shopify
+                        {% endcomment %}
+                        {% assign master_case_product = all_products['master-case'] %}
+                        {% if master_case_product %}
+                            <button class="btn-primary btn-large add-to-cart-btn"
+                                    data-package="starter"
+                                    data-price="229"
+                                    data-name="Master Case"
+                                    data-variant-id="{{ master_case_product.selected_or_first_available_variant.id }}">
+                                Add to Cart
+                            </button>
+                        {% else %}
+                            <button class="btn-primary btn-large add-to-cart-btn"
+                                    data-package="starter"
+                                    data-price="229"
+                                    data-name="Master Case"
+                                    data-variant-id="REPLACE_WITH_VARIANT_ID">
+                                Add to Cart
+                            </button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -166,8 +182,4 @@
         </div>
     </div>
 </section>
-
-{% comment %} Load scripts directly in template {% endcomment %}
-{{ 'shopify-cart.js' | asset_url | script_tag }}
-{{ 'wholesale.js' | asset_url | script_tag }}
 

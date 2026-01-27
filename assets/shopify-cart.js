@@ -12,6 +12,19 @@
  */
 async function addToCartShopify(variantId, quantity = 1) {
     try {
+        // Ensure variantId is a number
+        const variantIdNum = typeof variantId === 'string' ? parseInt(variantId) : variantId;
+        
+        if (!variantIdNum || isNaN(variantIdNum)) {
+            throw new Error('Invalid variant ID');
+        }
+        
+        if (!quantity || quantity < 1) {
+            quantity = 1;
+        }
+        
+        console.log('Adding to cart - Variant ID:', variantIdNum, 'Quantity:', quantity);
+        
         const response = await fetch('/cart/add.js', {
             method: 'POST',
             headers: {
@@ -21,23 +34,41 @@ async function addToCartShopify(variantId, quantity = 1) {
             credentials: 'same-origin', // Important for Shopify
             body: JSON.stringify({
                 items: [{
-                    id: variantId,
+                    id: variantIdNum,
                     quantity: quantity
                 }]
             })
         });
         
         if (!response.ok) {
-            throw new Error('Failed to add item to cart');
+            // Try to get error details
+            let errorMessage = 'Failed to add item to cart';
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.description || errorData.message || errorMessage;
+            } catch (e) {
+                // If response is not JSON, use status text
+                errorMessage = response.statusText || errorMessage;
+            }
+            
+            console.error('Cart API error:', response.status, errorMessage);
+            throw new Error(errorMessage);
         }
         
         const data = await response.json();
+        console.log('Product added to cart successfully:', data);
+        
+        // Update cart UI
         await updateCartUI();
+        
+        // Show success message
         showToast('Product added to cart!', 'success');
+        
         return data;
     } catch (error) {
         console.error('Error adding to cart:', error);
-        showToast('Error adding product to cart', 'error');
+        const errorMessage = error.message || 'Error adding product to cart';
+        showToast(errorMessage, 'error');
         throw error;
     }
 }

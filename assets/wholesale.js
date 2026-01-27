@@ -1,7 +1,6 @@
 /**
- * LOVE BRANDS - WHOLESALE PAGE
- * Handles package selection and cart functionality
- * Exact copy of shop-landing.js logic
+ * LOVE BRANDS - WHOLESALE PAGE (MASTERCASE)
+ * Handles package selection and cart functionality using Shopify Cart API
  */
 
 // ============================================
@@ -9,11 +8,7 @@
 // ============================================
 
 const ShopState = {
-    selectedPackage: null,
-    cart: {
-        items: [],
-        total: 0
-    }
+    selectedPackage: null
 };
 
 // ============================================
@@ -35,54 +30,74 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-/**
- * Save cart to localStorage
- */
-function saveCartToStorage() {
-    localStorage.setItem('lovebrands_shop_cart', JSON.stringify(ShopState.cart));
-}
-
-/**
- * Get cart from localStorage
- */
-function getCartFromStorage() {
-    const cart = localStorage.getItem('lovebrands_shop_cart');
-    return cart ? JSON.parse(cart) : { items: [], total: 0 };
-}
-
 // ============================================
 // ADD TO CART FUNCTIONALITY
 // ============================================
 
 /**
- * Add package to cart
+ * Add package to cart using Shopify Cart API
  */
-function addToCart(packageId, packageName, price) {
-    // Clear cart (solo un paquete a la vez)
-    ShopState.cart.items = [];
-
-    // Add new package
-    ShopState.cart.items.push({
-        id: packageId,
-        name: packageName,
-        price: parseFloat(price),
-        quantity: 1,
-        type: 'package'
-    });
-
-    // Update total
-    ShopState.cart.total = parseFloat(price);
-
-    // Save to localStorage
-    saveCartToStorage();
-
-    // Show success message
-    showToast(`${packageName} added to cart!`, 'success');
-
-    // Redirect to upsell page after short delay
-    setTimeout(() => {
-        window.location.href = '/pages/upsell';
-    }, 1000);
+async function addToCart(variantId, packageName, price) {
+    try {
+        // Check if addToCartShopify is available (from shopify-cart.js)
+        if (typeof window.addToCartShopify === 'function') {
+            // Use Shopify Cart API
+            await window.addToCartShopify(variantId, 1);
+            
+            // Show success message
+            showToast(`${packageName} added to cart!`, 'success');
+            
+            // Update cart UI
+            if (window.updateCartUI) {
+                await window.updateCartUI();
+            }
+            
+            // Redirect to upsell page after short delay
+            setTimeout(() => {
+                window.location.href = '/pages/upsell';
+            }, 1000);
+        } else {
+            // Fallback: Use direct fetch to Shopify Cart API
+            const response = await fetch('/cart/add.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    items: [{
+                        id: variantId,
+                        quantity: 1
+                    }]
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.description || 'Failed to add item to cart');
+            }
+            
+            const data = await response.json();
+            
+            // Show success message
+            showToast(`${packageName} added to cart!`, 'success');
+            
+            // Update cart UI
+            if (window.updateCartUI) {
+                await window.updateCartUI();
+            }
+            
+            // Redirect to upsell page after short delay
+            setTimeout(() => {
+                window.location.href = '/pages/upsell';
+            }, 1000);
+        }
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        showToast(error.message || 'Error adding product to cart', 'error');
+        throw error;
+    }
 }
 
 // ============================================
@@ -97,20 +112,35 @@ function initEventListeners() {
     const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
 
     addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const packageId = this.getAttribute('data-package');
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const variantId = this.getAttribute('data-variant-id');
             const packageName = this.getAttribute('data-name');
             const price = this.getAttribute('data-price');
+            
+            // Validate variant ID
+            if (!variantId || variantId === 'REPLACE_WITH_VARIANT_ID') {
+                showToast('Product variant not configured. Please contact support.', 'error');
+                console.error('Variant ID not set. Please set data-variant-id attribute on the button.');
+                return;
+            }
 
             // Visual feedback
+            const originalText = this.textContent;
             this.classList.add('loading');
             this.textContent = 'Adding to Cart...';
             this.disabled = true;
 
-            // Simulate loading
-            setTimeout(() => {
-                addToCart(packageId, packageName, price);
-            }, 500);
+            try {
+                // Add to cart using Shopify API
+                await addToCart(variantId, packageName, price);
+            } catch (error) {
+                // Reset button on error
+                this.classList.remove('loading');
+                this.textContent = originalText;
+                this.disabled = false;
+            }
         });
     });
 }
@@ -191,13 +221,10 @@ function initFAQ() {
 }
 
 /**
- * Initialize shop landing page
+ * Initialize wholesale/mastercase page
  */
 function init() {
-    console.log('🛍️ Shop Landing - Initializing...');
-
-    // Load cart from storage
-    ShopState.cart = getCartFromStorage();
+    console.log('🏪 MasterCase Page - Initializing...');
 
     // Initialize event listeners
     initEventListeners();
@@ -208,7 +235,7 @@ function init() {
     // Initialize FAQ accordion
     initFAQ();
 
-    console.log('✅ Shop Landing - Ready!');
+    console.log('✅ MasterCase Page - Ready!');
 }
 
 // Wait for DOM to be ready

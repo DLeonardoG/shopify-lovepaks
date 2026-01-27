@@ -418,106 +418,84 @@
         if (variantIdInput) variantIdInput.value = variant.id;
         if (quantityInput) quantityInput.value = quantity;
         
-        // Only try AJAX if we're in a Shopify environment
-        if (inShopifyEnv) {
+        // Use centralized addToCartShopify function if available
+        if (inShopifyEnv && window.addToCartShopify) {
           try {
-            // Use old format (most compatible)
-            const cartData = {
-              id: variant.id,
-              quantity: quantity
-            };
-            
-            if (sellingPlanId) {
-              cartData.selling_plan = sellingPlanId;
-            }
-            
-            console.log('Trying AJAX with data:', cartData);
-            console.log('Variant ID type:', typeof variant.id);
-            console.log('Variant ID value:', variant.id);
-            console.log('Variant available:', variant.available);
-            console.log('Product ID:', product.id);
-            
-            // Ensure variant ID is a number (not a string)
+            // Ensure variant ID is a number
             const variantIdNum = typeof variant.id === 'string' ? parseInt(variant.id) : variant.id;
-            const finalCartData = {
-              id: variantIdNum,
-              quantity: quantity
-            };
             
+            console.log('Using addToCartShopify with variant:', variantIdNum, 'quantity:', quantity);
+            
+            // For subscriptions, we need to use a different approach
             if (sellingPlanId) {
-              finalCartData.selling_plan = sellingPlanId;
-            }
-            
-            console.log('Final cart data to send:', finalCartData);
-            
-            const response = await fetch('/cart/add.js', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              credentials: 'same-origin',
-              body: JSON.stringify(finalCartData)
-            });
-            
-            console.log('AJAX response status:', response.status);
-            console.log('AJAX response headers:', [...response.headers.entries()]);
-            
-            if (response.ok) {
-              const data = await response.json();
-              console.log('AJAX success:', data);
-              ajaxSuccess = true;
+              // Use direct API call for subscriptions
+              const response = await fetch('/cart/add.js', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                  items: [{
+                    id: variantIdNum,
+                    quantity: quantity,
+                    selling_plan: sellingPlanId
+                  }]
+                })
+              });
               
-              // Update cart UI
-              if (window.updateCartUI) {
-                await window.updateCartUI();
+              if (response.ok) {
+                const data = await response.json();
+                console.log('Subscription added to cart:', data);
+                ajaxSuccess = true;
+                
+                // Update cart UI
+                if (window.updateCartUI) {
+                  await window.updateCartUI();
+                }
+                
+                // Open cart drawer
+                if (window.openCartDrawer) {
+                  window.openCartDrawer();
+                }
+                
+                // Show success message
+                if (window.showToast) {
+                  window.showToast('Subscription added to cart!', 'success');
+                }
+              } else {
+                const errorData = await response.json().catch(() => ({ description: 'Failed to add subscription' }));
+                throw new Error(errorData.description || 'Failed to add subscription');
               }
+            } else {
+              // Use centralized function for regular products
+              await window.addToCartShopify(variantIdNum, quantity);
+              ajaxSuccess = true;
               
               // Open cart drawer
               if (window.openCartDrawer) {
                 window.openCartDrawer();
-              } else {
-                window.location.href = '/cart';
               }
-              
-              // Show success message
-              if (window.showToast) {
-                window.showToast('Product added to cart!', 'success');
-              }
-            } else {
-              const errorText = await response.text();
-              console.warn('AJAX returned non-OK status:', response.status);
-              console.warn('Error response:', errorText);
-              
-              // For 401/403, still try form submit as fallback (might work)
-              // Only skip if it's a different error that suggests the endpoint doesn't exist
-              if (response.status === 404) {
-                console.warn('Cart API endpoint not found (404), will try form submit');
-                throw new Error('ENDPOINT_NOT_FOUND');
-              }
-              
-              // For 401/403, log but still try form submit
-              if (response.status === 401 || response.status === 403) {
-                console.warn('Authentication error (401/403), will try form submit as fallback');
-              }
-              
-              throw new Error('AJAX failed with status: ' + response.status);
             }
           } catch (ajaxError) {
-            console.warn('AJAX failed:', ajaxError);
+            console.error('Error adding to cart:', ajaxError);
             
-            // Only skip form submit if endpoint doesn't exist
-            if (ajaxError.message && ajaxError.message.includes('ENDPOINT_NOT_FOUND')) {
-              console.warn('Cart API endpoint not available, will try form submit');
-              ajaxSuccess = false;
-            } else {
-              // For other errors (including 401/403), try form submit as fallback
-              ajaxSuccess = false;
+            // Show error message
+            if (window.showToast) {
+              window.showToast(ajaxError.message || 'Error adding product to cart', 'error');
             }
+            
+            // Reset button
+            addToCartBtn.disabled = false;
+            if (btnText) btnText.style.display = 'inline';
+            if (btnLoader) btnLoader.style.display = 'none';
+            
+            return; // Don't try form submit, show error instead
           }
         } else {
-          // Not in Shopify environment, skip AJAX and go straight to form submit
-          console.log('Not in Shopify environment, skipping AJAX and using form submit');
+          // Not in Shopify environment or function not available, skip AJAX
+          console.log('Not in Shopify environment or addToCartShopify not available, using form submit');
           ajaxSuccess = false;
         }
         
@@ -674,12 +652,14 @@
         console.error('Full error details:', error);
         return; // Don't submit, stay on page
       } finally {
-        // Only reset button if AJAX succeeded AND we didn't already reset it
-        // (form submit will redirect, so we don't need to reset in that case)
-        if (ajaxSuccess && addToCartBtn.disabled) {
-          addToCartBtn.disabled = false;
-          if (btnText) btnText.style.display = 'inline';
-          if (btnLoader) btnLoader.style.display = 'none';
+        // Reset button if AJAX succeeded (form submit will redirect, so we don't need to reset in that case)
+        if (ajaxSuccess) {
+          // Small delay to allow cart drawer to open
+          setTimeout(() => {
+            addToCartBtn.disabled = false;
+            if (btnText) btnText.style.display = 'inline';
+            if (btnLoader) btnLoader.style.display = 'none';
+          }, 500);
         }
       }
     });

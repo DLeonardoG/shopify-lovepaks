@@ -23,6 +23,9 @@
       button.textContent = 'Starting Subscription...';
 
       try {
+        // Ensure variantId is a number
+        const variantIdNum = typeof variantId === 'string' ? parseInt(variantId) : variantId;
+        
         const response = await fetch('/cart/add.js', {
           method: 'POST',
           headers: {
@@ -32,7 +35,7 @@
           credentials: 'same-origin',
           body: JSON.stringify({
             items: [{
-              id: variantId,
+              id: variantIdNum,
               quantity: 1,
               selling_plan: sellingPlanId
             }]
@@ -160,42 +163,56 @@
     button.textContent = 'Adding...';
 
     try {
-      const response = await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({
-          items: [{
-            id: variantId,
-            quantity: 1
-          }]
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.description || 'Failed to add product to cart');
-      }
-
-      const data = await response.json();
-      console.log('Product added to cart:', data);
-
-      // Update cart UI
-      if (window.updateCartUI) {
-        await window.updateCartUI();
-      }
-
-      // Open cart drawer
-      if (window.openCartDrawer) {
-        window.openCartDrawer();
+      // Use centralized addToCartShopify function if available
+      if (window.addToCartShopify) {
+        // Ensure variantId is a number
+        const variantIdNum = typeof variantId === 'string' ? parseInt(variantId) : variantId;
+        await window.addToCartShopify(variantIdNum, 1);
+        
+        // Open cart drawer
+        if (window.openCartDrawer) {
+          window.openCartDrawer();
+        }
       } else {
-        window.location.href = '/cart';
-      }
+        // Fallback to direct API call
+        const variantIdNum = typeof variantId === 'string' ? parseInt(variantId) : variantId;
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            items: [{
+              id: variantIdNum,
+              quantity: 1
+            }]
+          })
+        });
 
-      showToast('Product added to cart!', 'success');
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ description: 'Failed to add product to cart' }));
+          throw new Error(errorData.description || 'Failed to add product to cart');
+        }
+
+        const data = await response.json();
+        console.log('Product added to cart:', data);
+
+        // Update cart UI
+        if (window.updateCartUI) {
+          await window.updateCartUI();
+        }
+
+        // Open cart drawer
+        if (window.openCartDrawer) {
+          window.openCartDrawer();
+        } else {
+          window.location.href = '/cart';
+        }
+
+        showToast('Product added to cart!', 'success');
+      }
 
     } catch (error) {
       console.error('Error adding product to cart:', error);

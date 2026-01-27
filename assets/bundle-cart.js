@@ -92,9 +92,9 @@
           }
         }
 
-        // Add all items to cart
+        // Add all items to cart (ensure IDs are numbers)
         const items = variantIds.map(id => ({
-          id: id,
+          id: typeof id === 'string' ? parseInt(id) : id,
           quantity: 1
         }));
 
