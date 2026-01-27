@@ -1,0 +1,223 @@
+{% comment %}
+  Wholesale Page - MasterCase Program
+  Handle: wholesale
+  Based on shop-landing.html reference
+{% endcomment %}
+
+<!-- Hero Section -->
+<section class="shop-hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Become a Partner with Our MasterCase Program</h1>
+            <p class="hero-subtitle">Sell our product at your location and increase monthly recurring revenue by providing your members with our wellness product.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Product Packages -->
+<section class="packages-section">
+    <div class="container">
+        <div class="packages-grid">
+            <!-- Master Case -->
+            <div class="package-card horizontal-layout" data-package="starter">
+                <!-- Product Images Showcase -->
+                <div class="product-showcase">
+                    <div class="showcase-images horizontal-layout">
+                        <div class="product-image-wrapper">
+                            {% comment %} 
+                              Replace with actual Shopify file URLs or use file_img_url filter
+                              You can upload these images to Shopify Files and reference them
+                            {% endcomment %}
+                            {% assign citrus_image = 'packaging-normal.jpg' %}
+                            {% if citrus_image %}
+                                <img src="{{ citrus_image | file_img_url: '800x' }}" 
+                                     alt="Citrus Blossom Laundry Paks" 
+                                     class="product-img"
+                                     loading="lazy">
+                            {% else %}
+                                <img src="https://lovepaks.com/cdn/shop/files/packaging-normal.jpg?v=1768273734&width=800" 
+                                     alt="Citrus Blossom Laundry Paks" 
+                                     class="product-img"
+                                     loading="lazy">
+                            {% endif %}
+                            <div class="product-label">Citrus Blossom</div>
+                        </div>
+                        <div class="product-image-wrapper">
+                            {% assign dye_free_image = 'packaging-piel-sensibles.jpg' %}
+                            {% if dye_free_image %}
+                                <img src="{{ dye_free_image | file_img_url: '800x' }}" 
+                                     alt="Dye & Scent Free Paks" 
+                                     class="product-img"
+                                     loading="lazy">
+                            {% else %}
+                                <img src="https://lovepaks.com/cdn/shop/files/packaging-piel-sensibles.jpg?v=1768273765&width=800" 
+                                     alt="Dye & Scent Free Paks" 
+                                     class="product-img"
+                                     loading="lazy">
+                            {% endif %}
+                            <div class="product-label">Dye & Scent Free</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="package-content">
+                    <div class="package-header">
+                        <h3 class="package-name">Master Case</h3>
+                        <div class="package-price">
+                            {% comment %}
+                              Get wholesale price from product or use metafield
+                              You can set up a product "Master Case" with wholesale pricing
+                            {% endcomment %}
+                            {% assign master_case_product = all_products['master-case'] %}
+                            {% if master_case_product %}
+                                {% if customer.tags contains 'wholesale-partner' %}
+                                    {% assign wholesale_price = master_case_product.price | times: 0.5 %}
+                                    <span class="price-amount">{{ wholesale_price | money }}</span>
+                                {% else %}
+                                    <span class="price-amount">{{ master_case_product.price | money }}</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="price-amount">$229</span>
+                            {% endif %}
+                            <span class="price-label">wholesale price</span>
+                        </div>
+                    </div>
+
+                    <div class="package-body">
+                        <div class="package-description">
+                            <p>Each Master Case contains 10 pouches. Each pouch contains 39 Love Paks. Total: 390 Love Paks per Master Case.</p>
+                        </div>
+                        <div class="package-summary">
+                            <div class="summary-item">
+                                <span class="summary-label">Quantity:</span>
+                                <span class="summary-value">10 units</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Packs per pouch:</span>
+                                <span class="summary-value">39 packs</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Total packs:</span>
+                                <span class="summary-value">390 packs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="package-footer">
+                        {% comment %} 
+                          Add to cart functionality
+                          Replace with actual variant ID from your Master Case product
+                        {% endcomment %}
+                        {% assign master_case_product = all_products['master-case'] %}
+                        {% if master_case_product %}
+                            {% assign variant = master_case_product.selected_or_first_available_variant %}
+                            <form action="/cart/add" method="post" enctype="multipart/form-data" class="add-to-cart-form">
+                                <input type="hidden" name="id" value="{{ variant.id }}">
+                                <button type="submit" class="btn-primary btn-large add-to-cart-btn"
+                                        data-package="starter"
+                                        data-price="{% if customer.tags contains 'wholesale-partner' %}{{ variant.price | times: 0.5 | money_without_currency }}{% else %}{{ variant.price | money_without_currency }}{% endif %}"
+                                        data-name="Master Case"
+                                        data-variant-id="{{ variant.id }}">
+                                    Add to Cart
+                                </button>
+                            </form>
+                        {% else %}
+                            {% comment %} Fallback if product doesn't exist - replace with actual variant ID {% endcomment %}
+                            <form action="/cart/add" method="post" enctype="multipart/form-data" class="add-to-cart-form">
+                                <input type="hidden" name="id" value="REPLACE_WITH_VARIANT_ID">
+                                <button type="submit" class="btn-primary btn-large add-to-cart-btn"
+                                        data-package="starter"
+                                        data-price="229"
+                                        data-name="Master Case"
+                                        data-variant-id="REPLACE_WITH_VARIANT_ID">
+                                    Add to Cart
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>What is the minimum order quantity?</span>
+                    <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>The minimum order quantity for wholesale partnership is one Master Case (10 units).</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>What are the payment terms?</span>
+                    <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>We offer flexible payment options including Invoice (Net 30), Credit Card, and Bank Transfer. Payment terms can be discussed during partnership setup.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>How long does shipping take?</span>
+                    <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Standard delivery time is 7-10 business days from order confirmation. Express shipping options are available upon request.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>What marketing materials are provided?</span>
+                    <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Partners receive access to professional marketing materials including product images, social media templates, email marketing templates, and custom branded materials upon request.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>Can I return products if they don't sell?</span>
+                    <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>Defective products can be returned within 30 days for credit. Please refer to our supply agreement for detailed return policies.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    <span>Is there a monthly commitment required?</span>
+                    <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <p>The Master Case Monthly is designed for recurring orders, but there's no strict monthly commitment. You can order as needed based on your inventory requirements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

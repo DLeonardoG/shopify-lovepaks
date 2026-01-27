@@ -4,7 +4,8 @@
   Requiere: Customer con tag 'wholesale-partner'
 {% endcomment %}
 
-{% unless customer.tags contains 'wholesale-partner' %}
+{% comment %} Check if user is a partner {% endcomment %}
+{% unless customer.tags contains 'wholesale-partner' or customer.tags contains 'partner' or customer.tags contains 'partner-pending-approval' %}
     <script>
         window.location.href = '/pages/partner-signup';
     </script>
@@ -113,11 +114,11 @@
                                 <div class="info-grid" id="company-info">
                                     <div class="info-item">
                                         <div class="info-label">Company Name</div>
-                                        <div class="info-value">{{ customer.metafields.custom.partner_company_name | default: customer.company | default: 'N/A' }}</div>
+                                        <div class="info-value">{{ customer.metafields.custom.company_legal_name | default: customer.company | default: 'N/A' }}</div>
                                     </div>
                                     <div class="info-item">
                                         <div class="info-label">Contact Name</div>
-                                        <div class="info-value">{{ customer.first_name }} {{ customer.last_name }}</div>
+                                        <div class="info-value">{{ customer.metafields.custom.contact_name | default: customer.first_name | append: ' ' | append: customer.last_name }}</div>
                                     </div>
                                     <div class="info-item">
                                         <div class="info-label">Email</div>
@@ -125,7 +126,15 @@
                                     </div>
                                     <div class="info-item">
                                         <div class="info-label">Phone</div>
-                                        <div class="info-value">{{ customer.phone | default: 'N/A' }}</div>
+                                        <div class="info-value">{{ customer.metafields.custom.phone | default: customer.phone | default: 'N/A' }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">EIN</div>
+                                        <div class="info-value">{{ customer.metafields.custom.ein | default: 'N/A' }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Address</div>
+                                        <div class="info-value">{{ customer.metafields.custom.address | default: 'N/A' }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -153,6 +162,62 @@
                                     controls.
                                 </p>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Partnership Agreements -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Partnership Agreements</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="agreements-list">
+                                <div class="agreement-item">
+                                    <div class="agreement-info">
+                                        <h4 class="agreement-name">Supply Agreement</h4>
+                                        {% assign signatureData = customer.metafields.custom.signature_data.value | default: customer.metafields.custom.signature_data %}
+                                        {% if signatureData %}
+                                            {% assign sigData = signatureData | parse_json %}
+                                            <p class="agreement-date">Accepted on: {{ sigData.date | default: 'N/A' }}</p>
+                                        {% else %}
+                                            <p class="agreement-date">Accepted on: N/A</p>
+                                        {% endif %}
+                                    </div>
+                                    <a href="/pages/supply-agreement" class="btn-secondary btn-small" target="_blank">Download PDF</a>
+                                </div>
+
+                                <div class="agreement-item">
+                                    <div class="agreement-info">
+                                        <h4 class="agreement-name">E-commerce Agreement</h4>
+                                        {% if signatureData %}
+                                            <p class="agreement-date">Accepted on: {{ sigData.date | default: 'N/A' }}</p>
+                                        {% else %}
+                                            <p class="agreement-date">Accepted on: N/A</p>
+                                        {% endif %}
+                                    </div>
+                                    <a href="/pages/ecommerce-agreement" class="btn-secondary btn-small" target="_blank">Download PDF</a>
+                                </div>
+
+                                <div class="agreement-item">
+                                    <div class="agreement-info">
+                                        <h4 class="agreement-name">Image Licensing Policy</h4>
+                                        {% if signatureData %}
+                                            <p class="agreement-date">Accepted on: {{ sigData.date | default: 'N/A' }}</p>
+                                        {% else %}
+                                            <p class="agreement-date">Accepted on: N/A</p>
+                                        {% endif %}
+                                    </div>
+                                    <a href="/pages/image-licensing-policy" class="btn-secondary btn-small" target="_blank">Download PDF</a>
+                                </div>
+                            </div>
+
+                            {% if signatureData %}
+                                <div class="signature-info">
+                                    <p class="signature-label">Signed by:</p>
+                                    <p class="signature-name">{{ sigData.full_name }}</p>
+                                    <p class="signature-title">{{ sigData.title }}</p>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

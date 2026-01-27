@@ -379,11 +379,14 @@ p {
     font-size: 15px;
     transition: all var(--transition-fast);
     border: none;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .nav-cta:hover {
     background: var(--primary-pink);
     transform: translateY(-1px);
+    color: white;
 }
 
 /* Mobile Menu Toggle */
@@ -3316,10 +3319,28 @@ p {
     justify-content: center;
     color: var(--text-dark);
     transition: color var(--transition-fast);
+    text-decoration: none;
 }
 
 .nav-cart-btn:hover {
     color: var(--primary-pink);
+}
+
+.nav-link.active {
+    color: var(--primary-pink);
+}
+
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-partner {
+    background: var(--light-gray);
+}
+
+.nav-partner:hover {
+    background: var(--primary-pink);
+    color: white;
 }
 
 .cart-count-badge {

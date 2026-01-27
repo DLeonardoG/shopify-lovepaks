@@ -1,7 +1,7 @@
 {% comment %}
-  Partner Signup Page
+  Partner Signup Page - Complete Shopify Integration
   Handle: partner-signup
-  Nota: Este formulario puede integrarse con Shopify Forms o una app de formularios
+  Integrates with Shopify Customer API and Metafields
 {% endcomment %}
 
 <!-- Partner Signup Container -->
@@ -37,45 +37,54 @@
             <h1>Welcome to Love Brands Partnership</h1>
             <p class="step-description">We're one step closer to accessing your partner account. Let's start by collecting your company information.</p>
 
-            <form class="partner-form" id="company-form">
+            <form class="partner-form" id="company-form" novalidate>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="company-name">Legal Name (Company) *</label>
-                        <input type="text" id="company-name" name="companyName" required>
+                        <input type="text" id="company-name" name="companyName" required autocomplete="organization">
+                        <span class="error-message" id="company-name-error"></span>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="address">Address *</label>
-                        <input type="text" id="address" name="address" required>
+                        <textarea id="address" name="address" rows="3" required autocomplete="street-address"></textarea>
+                        <span class="error-message" id="address-error"></span>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="ein">EIN (Employer Identification Number) *</label>
-                        <input type="text" id="ein" name="ein" placeholder="XX-XXXXXXX" required>
+                        <input type="text" id="ein" name="ein" placeholder="XX-XXXXXXX" required pattern="[0-9]{2}-[0-9]{7}" maxlength="10">
+                        <small class="field-hint">Format: XX-XXXXXXX</small>
+                        <span class="error-message" id="ein-error"></span>
                     </div>
                     <div class="form-group">
                         <label for="cell-phone">Cell Phone *</label>
-                        <input type="tel" id="cell-phone" name="cellPhone" placeholder="(XXX) XXX-XXXX" required>
+                        <input type="tel" id="cell-phone" name="cellPhone" placeholder="(XXX) XXX-XXXX" required autocomplete="tel">
+                        <span class="error-message" id="cell-phone-error"></span>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="main-contact">Main Contact Name *</label>
-                        <input type="text" id="main-contact" name="mainContact" required>
+                        <input type="text" id="main-contact" name="mainContact" required autocomplete="name">
+                        <span class="error-message" id="main-contact-error"></span>
                     </div>
                     <div class="form-group">
                         <label for="contact-email">Contact Email *</label>
-                        <input type="email" id="contact-email" name="contactEmail" required>
+                        <input type="email" id="contact-email" name="contactEmail" required autocomplete="email">
+                        <span class="error-message" id="contact-email-error"></span>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary btn-large">Continue to Legal Disclosures</button>
+                    <button type="submit" class="btn-primary btn-large" id="continue-step-1">
+                        Continue to Legal Disclosures
+                    </button>
                 </div>
             </form>
         </div>
@@ -85,40 +94,130 @@
     <div class="signup-step" id="step-2">
         <div class="step-content">
             <h1>Legal Disclosures</h1>
-            <p class="step-description">Please review and scroll through each agreement below.</p>
+            <p class="step-description">Please review and scroll through each agreement below. You must scroll to the bottom of each agreement to continue.</p>
 
             <div class="agreements-container">
                 <div class="agreement-box" id="supply-agreement-box">
-                    <h3>Supply Agreement</h3>
+                    <div class="agreement-header">
+                        <h3>Supply Agreement</h3>
+                        <span class="agreement-status" id="supply-status">Not read</span>
+                    </div>
                     <div class="agreement-content" id="supply-agreement">
                         <h4>SUPPLY AGREEMENT</h4>
                         <p>The undersigned Partner hereby confirms its agreement that the following conditions apply to its purchase of any Products from Love Brands, a wholly owned brand, trademark, and subsidiary of Saje Holdings, LLC ("Love Brands"):</p>
-                        <p><strong>Note:</strong> This is a simplified version. The full agreement should be loaded from a separate page or file.</p>
-                        <p>For the complete Supply Agreement, please contact us at partners@lovebrands.com</p>
+                        
+                        <h5>1. TERMS OF SALE</h5>
+                        <p>All sales are subject to the terms and conditions set forth in this Agreement. Love Brands reserves the right to accept or reject any order in its sole discretion.</p>
+                        
+                        <h5>2. PRICING</h5>
+                        <p>Pricing for wholesale partners is set forth in the current price list, which may be updated from time to time. Love Brands will provide at least 30 days' notice of any price changes.</p>
+                        
+                        <h5>3. PAYMENT TERMS</h5>
+                        <p>Payment terms are Net 30 unless otherwise agreed in writing. Love Brands reserves the right to require payment in advance or modify payment terms for new partners or partners with past due accounts.</p>
+                        
+                        <h5>4. SHIPPING AND DELIVERY</h5>
+                        <p>All products are shipped FOB shipping point. Risk of loss passes to Partner upon delivery to the carrier. Partner is responsible for all shipping costs unless otherwise specified.</p>
+                        
+                        <h5>5. RETURNS AND EXCHANGES</h5>
+                        <p>Defective products may be returned within 30 days of receipt for credit. All returns must be pre-authorized by Love Brands. Non-defective products are not returnable.</p>
+                        
+                        <h5>6. INTELLECTUAL PROPERTY</h5>
+                        <p>All trademarks, trade names, and intellectual property of Love Brands remain the exclusive property of Love Brands. Partner may not use Love Brands' intellectual property except as expressly authorized in writing.</p>
+                        
+                        <h5>7. TERMINATION</h5>
+                        <p>Either party may terminate this Agreement with 30 days' written notice. Love Brands may terminate immediately for breach of this Agreement.</p>
+                        
+                        <h5>8. GOVERNING LAW</h5>
+                        <p>This Agreement shall be governed by the laws of the State of California, without regard to its conflict of law provisions.</p>
+                        
+                        <p class="agreement-end">END OF SUPPLY AGREEMENT</p>
                     </div>
-                    <div class="scroll-indicator">Scroll to bottom to continue</div>
+                    <div class="scroll-indicator" id="supply-indicator">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        Scroll to bottom to continue
+                    </div>
                 </div>
 
                 <div class="agreement-box" id="ecommerce-agreement-box">
-                    <h3>E-commerce Agreement</h3>
+                    <div class="agreement-header">
+                        <h3>E-commerce Agreement</h3>
+                        <span class="agreement-status" id="ecommerce-status">Not read</span>
+                    </div>
                     <div class="agreement-content" id="ecommerce-agreement">
                         <h4>E-COMMERCE AGREEMENT</h4>
                         <p>This Ecommerce Authorization Agreement is made as of today's date of consent (the "Effective Date"), by and between You, Your Company, and its Affiliates (the "Company") and Love Brands.</p>
-                        <p><strong>Note:</strong> This is a simplified version. The full agreement should be loaded from a separate page or file.</p>
-                        <p>For the complete E-commerce Agreement, please contact us at partners@lovebrands.com</p>
+                        
+                        <h5>1. AUTHORIZATION TO SELL</h5>
+                        <p>Love Brands hereby authorizes Company to sell Love Brands products through Company's e-commerce platform, subject to the terms and conditions of this Agreement.</p>
+                        
+                        <h5>2. AUTHORIZED CHANNELS</h5>
+                        <p>Company may sell Love Brands products only through its own e-commerce website and approved third-party marketplaces as specified in writing by Love Brands.</p>
+                        
+                        <h5>3. PRICING AND PROMOTIONS</h5>
+                        <p>Company agrees to maintain minimum advertised prices (MAP) as set by Love Brands. Company may not advertise prices below MAP without prior written authorization.</p>
+                        
+                        <h5>4. PRODUCT LISTINGS</h5>
+                        <p>Company must use only approved product images, descriptions, and marketing materials provided by Love Brands. Company may not modify or create derivative works without authorization.</p>
+                        
+                        <h5>5. BRAND GUIDELINES</h5>
+                        <p>Company agrees to comply with all Love Brands brand guidelines and use Love Brands trademarks only as authorized in writing.</p>
+                        
+                        <h5>6. REPORTING</h5>
+                        <p>Company agrees to provide monthly sales reports to Love Brands within 10 days of month end, including units sold, revenue, and channel breakdown.</p>
+                        
+                        <h5>7. TERMINATION</h5>
+                        <p>Either party may terminate this Agreement with 30 days' written notice. Love Brands may terminate immediately for breach of MAP policy or brand guidelines.</p>
+                        
+                        <p class="agreement-end">END OF E-COMMERCE AGREEMENT</p>
                     </div>
-                    <div class="scroll-indicator">Scroll to bottom to continue</div>
+                    <div class="scroll-indicator" id="ecommerce-indicator">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        Scroll to bottom to continue
+                    </div>
                 </div>
 
                 <div class="agreement-box" id="licensing-agreement-box">
-                    <h3>Image Licensing Policy</h3>
+                    <div class="agreement-header">
+                        <h3>Image Licensing Policy</h3>
+                        <span class="agreement-status" id="licensing-status">Not read</span>
+                    </div>
                     <div class="agreement-content" id="licensing-agreement">
                         <h4>IMAGE LICENSING POLICY</h4>
-                        <p>Love Brands develops, manufactures, and sells innovative wellness cleaning products and supplies.</p>
-                        <p><strong>Note:</strong> This is a simplified version. The full policy should be loaded from a separate page or file.</p>
-                        <p>For the complete Image Licensing Policy, please contact us at partners@lovebrands.com</p>
+                        <p>Love Brands develops, manufactures, and sells innovative wellness cleaning products and supplies. This policy governs the use of Love Brands' images and marketing materials.</p>
+                        
+                        <h5>1. GRANT OF LICENSE</h5>
+                        <p>Love Brands grants Partner a limited, non-exclusive, non-transferable license to use approved images and marketing materials solely for the purpose of promoting and selling Love Brands products.</p>
+                        
+                        <h5>2. APPROVED MATERIALS</h5>
+                        <p>Partner may only use images and materials provided through Love Brands' partner portal or explicitly approved in writing. Partner may not use images from third-party sources or create derivative works without authorization.</p>
+                        
+                        <h5>3. RESTRICTIONS</h5>
+                        <p>Partner may not: (a) modify images without authorization, (b) use images in a manner that misrepresents products, (c) use images for products other than Love Brands products, or (d) transfer or sublicense images to third parties.</p>
+                        
+                        <h5>4. ATTRIBUTION</h5>
+                        <p>When using Love Brands images, Partner must include appropriate attribution as specified in brand guidelines. Partner may not remove watermarks or copyright notices.</p>
+                        
+                        <h5>5. QUALITY STANDARDS</h5>
+                        <p>All uses of Love Brands images must maintain high quality standards and accurately represent products. Images may not be distorted, cropped inappropriately, or used in a manner that damages brand reputation.</p>
+                        
+                        <h5>6. TERMINATION</h5>
+                        <p>This license terminates automatically upon termination of the partnership agreement. Upon termination, Partner must immediately cease all use of Love Brands images and materials.</p>
+                        
+                        <h5>7. OWNERSHIP</h5>
+                        <p>All images and materials remain the exclusive property of Love Brands. This license does not grant Partner any ownership rights in Love Brands' intellectual property.</p>
+                        
+                        <p class="agreement-end">END OF IMAGE LICENSING POLICY</p>
                     </div>
-                    <div class="scroll-indicator">Scroll to bottom to continue</div>
+                    <div class="scroll-indicator" id="licensing-indicator">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        Scroll to bottom to continue
+                    </div>
                 </div>
             </div>
 
@@ -148,48 +247,63 @@
                 <h3>Digital Signature</h3>
                 <p>By signing below, you confirm that you have read, understand, and agree to all terms and conditions outlined in:</p>
                 <ul class="agreement-list">
-                    <li>Supply Agreement</li>
-                    <li>E-commerce Agreement</li>
-                    <li>Image Licensing Policy</li>
+                    <li>✓ Supply Agreement</li>
+                    <li>✓ E-commerce Agreement</li>
+                    <li>✓ Image Licensing Policy</li>
                 </ul>
 
-                {% form 'create_customer' %}
+                {% form 'contact', id: 'signature-form', class: 'partner-signup-form' %}
+                    {% comment %} 
+                      Shopify Forms - This form submits to /contact endpoint
+                      All data will be sent and can be processed by Shopify Flow
+                    {% endcomment %}
+                    <input type="hidden" name="form_type" value="partner_signup">
+                    <input type="hidden" name="utf8" value="✓">
+                    
+                    {% comment %} Company Data (from Step 1) - Hidden fields {% endcomment %}
+                    <input type="hidden" id="hidden-company-name" name="contact[company_legal_name]">
+                    <input type="hidden" id="hidden-address" name="contact[address]">
+                    <input type="hidden" id="hidden-ein" name="contact[ein]">
+                    <input type="hidden" id="hidden-phone" name="contact[phone]">
+                    <input type="hidden" id="hidden-contact-name" name="contact[contact_name]">
+                    <input type="hidden" id="hidden-contact-email" name="contact[email]">
+                    
+                    {% comment %} Agreements Data (from Step 2) {% endcomment %}
+                    <input type="hidden" id="hidden-agreements" name="contact[agreements_accepted]">
+                    
+                    {% comment %} Signature Data (will be populated by JavaScript) {% endcomment %}
+                    <input type="hidden" id="hidden-signature-data" name="contact[signature_data]">
+                    
+                    {% comment %} Visible Signature Fields {% endcomment %}
                     <div class="form-group">
                         <label for="signature-name">Full Name (Type to sign) *</label>
-                        <input type="text" id="signature-name" name="customer[first_name]" class="signature-input" required>
-                        <small>Your typed name serves as your digital signature</small>
+                        <input type="text" id="signature-name" name="contact[signature_name]" class="signature-input" required minlength="3">
+                        <small class="field-hint">Your typed name serves as your digital signature</small>
+                        <span class="error-message" id="signature-name-error"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="signature-title">Title/Position *</label>
-                        <input type="text" id="signature-title" name="customer[note][title]" required>
+                        <input type="text" id="signature-title" name="contact[signature_title]" required>
+                        <span class="error-message" id="signature-title-error"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="signature-date">Date</label>
-                        <input type="text" id="signature-date" name="customer[note][signature_date]" readonly value="{{ 'now' | date: '%B %d, %Y' }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="customer-email">Email *</label>
-                        <input type="email" id="customer-email" name="customer[email]" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="customer-password">Password *</label>
-                        <input type="password" id="customer-password" name="customer[password]" required>
+                        <input type="text" id="signature-date" name="contact[signature_date]" readonly>
                     </div>
 
                     <div class="checkbox-group">
-                        <input type="checkbox" id="authorize-checkbox" name="customer[note][authorized]" required>
+                        <input type="checkbox" id="authorize-checkbox" name="contact[authorized]" value="yes" required>
                         <label for="authorize-checkbox">
-                            I am authorized to sign this agreement on behalf of my company and accept all terms and conditions
+                            I am authorized to sign this agreement on behalf of my company and accept all terms and conditions *
                         </label>
+                        <span class="error-message" id="authorize-checkbox-error"></span>
                     </div>
 
                     <div class="form-actions">
                         <button type="button" class="btn-secondary" id="back-to-step-2">Back</button>
-                        <button type="submit" class="btn-primary btn-large" id="submit-application">
+                        <button type="submit" class="btn-primary btn-large" id="submit-application" disabled>
                             Submit Application
                         </button>
                     </div>
@@ -201,9 +315,14 @@
     <!-- Step 4: Success / Dashboard Redirect -->
     <div class="signup-step" id="step-4">
         <div class="step-content text-center">
-            <div class="success-icon">✓</div>
+            <div class="success-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
             <h1>Welcome to Love Brands Partnership!</h1>
             <p class="success-message">Your application has been submitted successfully. You now have access to all partner benefits.</p>
+            <p class="success-submessage">You will receive a confirmation email shortly with your partner account details.</p>
 
             <div class="form-actions">
                 <a href="/pages/partner-dashboard" class="btn-primary btn-large" id="go-to-dashboard">
@@ -214,3 +333,11 @@
     </div>
 </div>
 
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loading-overlay" style="display: none;">
+    <div class="loading-spinner"></div>
+    <p>Processing your application...</p>
+</div>
+
+<!-- Load Partner Signup JavaScript -->
+{{ 'partner-signup.js' | asset_url | script_tag }}
