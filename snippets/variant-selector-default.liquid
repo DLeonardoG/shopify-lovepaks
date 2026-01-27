@@ -1,22 +1,28 @@
 {% comment %}
   Default Variant Selector (for other options)
+  Hidden if option is "Title" with only "Default Title" values
 {% endcomment %}
 
-<div class="variant-selector default-selector">
-  <label class="variant-label" for="option-{{ option.position }}">
-    {{ option.name }}:
-  </label>
-  
-  <select 
-    id="option-{{ option.position }}"
-    class="variant-select"
-    data-option-name="{{ option.name }}"
-    data-option-position="{{ option.position }}">
-    {% for value in option.values %}
-      <option value="{{ value }}" {% if product.selected_or_first_available_variant.options[option.position] == value %}selected{% endif %}>
-        {{ value }}
-      </option>
-    {% endfor %}
-  </select>
-</div>
+{% comment %} Don't render if this is Title option with Default Title only {% endcomment %}
+{% unless option.name == 'Title' and option.values.size == 1 and option.values.first == 'Default Title' %}
+  <div class="variant-selector default-selector">
+    <label class="variant-label" for="option-{{ option.position }}">
+      {{ option.name }}:
+    </label>
+    
+    <select 
+      id="option-{{ option.position }}"
+      class="variant-select"
+      data-option-name="{{ option.name }}"
+      data-option-position="{{ option.position }}">
+      {% for value in option.values %}
+        {% unless value == 'Default Title' and option.name == 'Title' %}
+          <option value="{{ value }}" {% if product.selected_or_first_available_variant.options[option.position] == value %}selected{% endif %}>
+            {{ value }}
+          </option>
+        {% endunless %}
+      {% endfor %}
+    </select>
+  </div>
+{% endunless %}
 

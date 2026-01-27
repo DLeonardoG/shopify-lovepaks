@@ -23,6 +23,10 @@
           Delivered quarterly (3 pouches / 3-month supply).
         </p>
         
+        <p class="subscription-block-subdescription">
+          You save 20% every shipment • Free shipping • Quarterly reset
+        </p>
+        
         <div class="subscription-formula-selector">
           <label class="formula-selector-label">Choose your formula:</label>
           <div class="formula-options">
@@ -46,26 +50,6 @@
           </div>
         </div>
         
-        <div class="subscription-benefits">
-          <div class="benefit-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            <span>You save 20% every shipment</span>
-          </div>
-          <div class="benefit-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            <span>Free shipping</span>
-          </div>
-          <div class="benefit-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            <span>Quarterly reset</span>
-          </div>
-        </div>
         
         <button 
           type="button" 
@@ -144,7 +128,14 @@
 .subscription-block-description {
   font-size: 1.125rem;
   color: var(--text-gray, #666);
+  margin-bottom: var(--spacing-sm, 12px);
+}
+
+.subscription-block-subdescription {
+  font-size: 0.9375rem;
+  color: var(--text-gray, #666);
   margin-bottom: var(--spacing-lg, 24px);
+  font-style: italic;
 }
 
 .subscription-formula-selector {

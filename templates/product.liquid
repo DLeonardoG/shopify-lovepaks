@@ -63,9 +63,10 @@
         <h1 class="product-title">{{ product.title }}</h1>
         
         <!-- Variant Description -->
-        {% if product.selected_or_first_available_variant.title != product.title %}
+        {% assign variant_title = product.selected_or_first_available_variant.title %}
+        {% if variant_title != product.title and variant_title != 'Default Title' %}
           <p class="variant-description" id="variant-description">
-            {{ product.selected_or_first_available_variant.title }}
+            {{ variant_title }}
           </p>
         {% endif %}
         
@@ -88,12 +89,35 @@
           <!-- Flavor Selector -->
           {% if product.options_with_values.size > 0 %}
             {% for option in product.options_with_values %}
-              {% if option.name == 'Flavor' or option.name == 'Option1' %}
-                {% render 'variant-selector-flavor', option: option, product: product %}
-              {% elsif option.name == 'Size' or option.name == 'Option2' %}
-                {% render 'variant-selector-size', option: option, product: product %}
-              {% else %}
-                {% render 'variant-selector-default', option: option, product: product %}
+              {% comment %} Skip "Title" option if it only has "Default Title" value {% endcomment %}
+              {% assign should_show_option = true %}
+              
+              {% comment %} Check if option is Title with Default Title {% endcomment %}
+              {% if option.name == 'Title' %}
+                {% if option.values.size == 1 and option.values.first == 'Default Title' %}
+                  {% assign should_show_option = false %}
+                {% elsif option.values.size > 0 %}
+                  {% assign all_default = true %}
+                  {% for value in option.values %}
+                    {% unless value == 'Default Title' %}
+                      {% assign all_default = false %}
+                      {% break %}
+                    {% endunless %}
+                  {% endfor %}
+                  {% if all_default %}
+                    {% assign should_show_option = false %}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+              
+              {% if should_show_option %}
+                {% if option.name == 'Flavor' or option.name == 'Option1' %}
+                  {% render 'variant-selector-flavor', option: option, product: product %}
+                {% elsif option.name == 'Size' or option.name == 'Option2' %}
+                  {% render 'variant-selector-size', option: option, product: product %}
+                {% else %}
+                  {% render 'variant-selector-default', option: option, product: product %}
+                {% endif %}
               {% endif %}
             {% endfor %}
           {% endif %}

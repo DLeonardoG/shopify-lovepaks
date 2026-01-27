@@ -27,16 +27,10 @@
   
   <div class="bundle-includes">
     {{ bundle_includes }}
+    {% if free_shipping %}
+      <span class="bundle-includes-shipping"> + Free Shipping</span>
+    {% endif %}
   </div>
-  
-  {% if free_shipping %}
-    <div class="bundle-free-shipping-badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M5 13h14M5 13l4-4m-4 4l4 4M19 13H5m14 0l-4-4m4 4l-4 4"></path>
-      </svg>
-      <span>+ Free Shipping</span>
-    </div>
-  {% endif %}
   
   <p class="bundle-description">
     {{ bundle_description }}
@@ -52,9 +46,9 @@
   
   <div class="bundle-subscription-nudge">
     {% if bundle_type == 'try-both' %}
-      <span>Or subscribe & save 20% →</span>
+      <span class="bundle-nudge-text">Or subscribe & save 20% →</span>
     {% else %}
-      <span>Want 20% off? Subscribe quarterly →</span>
+      <span class="bundle-nudge-text">Want 20% off? Subscribe quarterly →</span>
     {% endif %}
     <a href="#subscription-block" class="bundle-nudge-link">Start Subscription</a>
   </div>
@@ -116,22 +110,9 @@
   line-height: 1.5;
 }
 
-.bundle-free-shipping-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs, 6px);
-  background: rgba(236, 0, 140, 0.1);
+.bundle-includes-shipping {
   color: var(--primary-pink, #ec008c);
-  padding: var(--spacing-xs, 6px) var(--spacing-sm, 10px);
-  border-radius: var(--radius-md, 6px);
-  font-size: 0.875rem;
   font-weight: 600;
-  margin-bottom: var(--spacing-md, 16px);
-  width: fit-content;
-}
-
-.bundle-free-shipping-badge svg {
-  flex-shrink: 0;
 }
 
 .bundle-description {
@@ -187,6 +168,10 @@
   justify-content: center;
   gap: var(--spacing-xs, 6px);
   flex-wrap: wrap;
+}
+
+.bundle-nudge-text {
+  display: inline;
 }
 
 .bundle-nudge-link {

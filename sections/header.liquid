@@ -26,9 +26,6 @@
             <a href="/pages/contact" class="nav-link {% if page.handle == 'contact' %}active{% endif %}">Contact</a>
             <a href="/pages/mastercase" class="nav-link {% if page.handle == 'mastercase' %}active{% endif %}">Become a Partner</a>
             
-            {% comment %} Shop Button {% endcomment %}
-            <a href="{{ routes.collections_url }}" class="nav-cta">Shop</a>
-            
             {% comment %} Cart Icon with Count {% endcomment %}
             <a href="{{ routes.cart_url }}" class="nav-cart-btn" id="nav-cart-btn" aria-label="View cart">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
