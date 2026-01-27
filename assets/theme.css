@@ -538,7 +538,7 @@ p {
     
     .hero-bg-img {
         object-fit: cover;
-        object-position: center center;
+        object-position: right center;
     }
     
     .hero-watermark {
@@ -555,7 +555,7 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 700px;
+    max-width: 850px;
     margin: 0 auto;
     text-align: center;
 }
