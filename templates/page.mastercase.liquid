@@ -1,6 +1,7 @@
 {% comment %}
-  Wholesale Page - MasterCase Program
-  Handle: wholesale
+  MasterCase Page - Wholesale Partner Program
+  Handle: mastercase (or wholesale - set in Shopify Admin)
+  Template: page.mastercase
   Exact copy of shop-landing.html logic
 {% endcomment %}
 
@@ -165,4 +166,8 @@
         </div>
     </div>
 </section>
+
+{% comment %} Load scripts directly in template {% endcomment %}
+{{ 'shopify-cart.js' | asset_url | script_tag }}
+{{ 'wholesale.js' | asset_url | script_tag }}
 

@@ -27,6 +27,10 @@
         {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
     {% elsif template.name == 'page' and page.handle == 'wholesale' %}
         {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
+    {% elsif template.name == 'page' and page.handle == 'mastercase' %}
+        {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
+    {% elsif template.name == 'page' and template.suffix == 'mastercase' %}
+        {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
     {% elsif template.name == 'page' and page.handle == 'products' %}
         {% comment %} Styles are included in the template itself {% endcomment %}
     {% elsif template.name == 'page' and page.handle == 'partner-signup' %}
@@ -77,6 +81,12 @@
     {% elsif template.name == 'page' and page.handle == 'shop-landing' %}
         {{ 'shop-landing.js' | asset_url | script_tag }}
     {% elsif template.name == 'page' and page.handle == 'wholesale' %}
+        {{ 'shopify-cart.js' | asset_url | script_tag }}
+        {{ 'wholesale.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and page.handle == 'mastercase' %}
+        {{ 'shopify-cart.js' | asset_url | script_tag }}
+        {{ 'wholesale.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and template.suffix == 'mastercase' %}
         {{ 'shopify-cart.js' | asset_url | script_tag }}
         {{ 'wholesale.js' | asset_url | script_tag }}
     {% elsif template.name == 'page' and page.handle == 'partner-signup' %}
