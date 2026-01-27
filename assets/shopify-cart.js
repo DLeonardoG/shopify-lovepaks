@@ -69,10 +69,25 @@ async function updateCartUI() {
         // Update cart count in header and drawer
         if (cartCount) {
             cartCount.textContent = cart.item_count;
+            cartCount.style.display = cart.item_count > 0 ? 'flex' : 'none';
         }
         if (headerCartCount) {
             headerCartCount.textContent = cart.item_count;
             headerCartCount.style.display = cart.item_count > 0 ? 'flex' : 'none';
+        } else {
+            // If badge doesn't exist but cart has items, create it
+            const cartButton = document.getElementById('nav-cart-btn');
+            if (cartButton && cart.item_count > 0) {
+                let badge = cartButton.querySelector('.cart-count-badge');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'cart-count-badge';
+                    badge.id = 'header-cart-count';
+                    cartButton.appendChild(badge);
+                }
+                badge.textContent = cart.item_count;
+                badge.style.display = 'flex';
+            }
         }
         
         // Update cart total
@@ -201,6 +216,29 @@ async function updateCartQuantity(itemKey, quantity) {
 }
 
 /**
+ * Show toast notification (fallback if not available from theme.js)
+ */
+function showToast(message, type = 'success') {
+    if (window.showToast) {
+        window.showToast(message, type);
+        return;
+    }
+    
+    // Fallback toast implementation
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.textContent = message;
+        toast.className = `toast show ${type}`;
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    } else {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+}
+
+/**
  * Format money (Shopify returns prices in cents)
  */
 function formatMoney(cents) {
@@ -271,6 +309,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // Attach listeners to initial cart items
     attachCartDrawerListeners();
+    
+    // Handle cart button click to open drawer instead of navigating
+    const cartButton = document.getElementById('nav-cart-btn');
+    if (cartButton) {
+        cartButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Open cart drawer if function exists
+            if (window.openCartDrawer) {
+                window.openCartDrawer();
+            } else {
+                // Fallback: navigate to cart page
+                window.location.href = '/cart';
+            }
+        });
+    }
 });
 
 // Make functions globally available
