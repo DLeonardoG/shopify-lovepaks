@@ -167,7 +167,7 @@
         addToCartBtn.disabled = false;
         addToCartBtn.classList.remove('disabled');
         addToCartBtn.removeAttribute('disabled');
-        if (btnText) btnText.textContent = '+ Add to bag';
+        if (btnText) btnText.textContent = 'Add to cart';
       } else {
         addToCartBtn.disabled = true;
         addToCartBtn.classList.add('disabled');

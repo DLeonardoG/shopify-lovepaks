@@ -32,9 +32,9 @@
         {% endfor %}
         
         {% if visible_products_count > 0 %}
-            <div class="products-carousel-wrapper">
+            <div class="products-carousel-wrapper {% if visible_products_count <= 3 %}centered-products{% endif %}">
                 <div class="products-carousel" id="products-carousel">
-                    <div class="products-carousel-track" id="products-carousel-track">
+                    <div class="products-carousel-track {% if visible_products_count <= 3 %}centered-track{% endif %}" id="products-carousel-track">
                         {% for product in products_collection.products %}
                             {% comment %} Show only products with 'unit' tag, skip Master Case and wholesale products {% endcomment %}
                             {% if product.tags contains 'unit' %}
@@ -105,20 +105,22 @@
                     </div>
                 </div>
                 
-                {% comment %} Navigation Controls {% endcomment %}
-                <button class="carousel-btn carousel-prev" id="products-carousel-prev" aria-label="Previous products">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <button class="carousel-btn carousel-next" id="products-carousel-next" aria-label="Next products">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                
-                {% comment %} Dots Indicator {% endcomment %}
-                <div class="carousel-dots" id="products-carousel-dots"></div>
+                {% comment %} Navigation Controls - Only show if more than 3 products {% endcomment %}
+                {% if visible_products_count > 3 %}
+                    <button class="carousel-btn carousel-prev" id="products-carousel-prev" aria-label="Previous products">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn carousel-next" id="products-carousel-next" aria-label="Next products">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    
+                    {% comment %} Dots Indicator - Only show if more than 3 products {% endcomment %}
+                    <div class="carousel-dots" id="products-carousel-dots"></div>
+                {% endif %}
             </div>
         {% else %}
             {% comment %} No products message {% endcomment %}
@@ -155,9 +157,25 @@
     gap: 32px;
 }
 
+/* Centered layout for 3 or fewer products */
+.products-carousel-wrapper.centered-products {
+    padding: 0;
+}
+
+.products-carousel-track.centered-track {
+    justify-content: center;
+    transform: none !important;
+}
+
 .carousel-slide {
     flex: 0 0 calc(33.333% - 22px);
     min-width: 0;
+}
+
+/* When centered, adjust slide width */
+.centered-track .carousel-slide {
+    flex: 0 0 calc(33.333% - 22px);
+    max-width: 360px;
 }
 
 @media (max-width: 968px) {
@@ -467,6 +485,11 @@
         
         const slides = track.querySelectorAll('.carousel-slide');
         if (slides.length === 0) return;
+        
+        // If 3 or fewer products, don't initialize carousel functionality
+        if (slides.length <= 3) {
+            return;
+        }
         
         let currentIndex = 0;
         let slidesPerView = getSlidesPerView();
