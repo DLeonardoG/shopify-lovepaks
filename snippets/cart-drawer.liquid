@@ -109,9 +109,7 @@
         </div>
         
         <!-- Checkout Button -->
-        <form action="/checkout" method="post">
-          <button type="submit" class="cart-checkout-btn">Checkout</button>
-        </form>
+        <button type="button" class="cart-checkout-btn" id="cart-checkout-btn">Checkout</button>
         
         <!-- Continue Shopping -->
         <a href="/collections/all" class="continue-shopping">Continue Shopping</a>
@@ -191,6 +189,22 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+  
+  // Handle checkout button
+  const checkoutBtn = document.getElementById('cart-checkout-btn');
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', async function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (window.handleCheckout) {
+        await window.handleCheckout();
+      } else {
+        // Fallback: direct redirect
+        window.location.href = '/checkout';
+      }
+    });
+  }
 });
 </script>
 

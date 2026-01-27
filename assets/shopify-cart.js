@@ -9,6 +9,7 @@
 
 /**
  * Add item to Shopify cart
+ * Uses the correct format and ensures the item is saved properly
  */
 async function addToCartShopify(variantId, quantity = 1) {
     try {
@@ -25,13 +26,14 @@ async function addToCartShopify(variantId, quantity = 1) {
         
         console.log('Adding to cart - Variant ID:', variantIdNum, 'Quantity:', quantity);
         
-        const response = await fetch('/cart/add.js', {
+        // Try new format first (items array) - more reliable
+        let response = await fetch('/cart/add.js', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            credentials: 'same-origin', // Important for Shopify
+            credentials: 'same-origin',
             body: JSON.stringify({
                 items: [{
                     id: variantIdNum,
@@ -39,6 +41,23 @@ async function addToCartShopify(variantId, quantity = 1) {
                 }]
             })
         });
+        
+        // If new format fails, try old format for compatibility
+        if (!response.ok) {
+            console.log('New format failed, trying old format...');
+            response = await fetch('/cart/add.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    id: variantIdNum,
+                    quantity: quantity
+                })
+            });
+        }
         
         if (!response.ok) {
             // Try to get error details
@@ -58,13 +77,36 @@ async function addToCartShopify(variantId, quantity = 1) {
         const data = await response.json();
         console.log('Product added to cart successfully:', data);
         
-        // Update cart UI
-        await updateCartUI();
+        // Small delay to ensure Shopify has saved the cart
+        await new Promise(resolve => setTimeout(resolve, 100));
         
-        // Show success message
-        showToast('Product added to cart!', 'success');
+        // Verify the item was added by fetching cart
+        const verifyResponse = await fetch('/cart.js', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            credentials: 'same-origin'
+        });
         
-        return data;
+        if (verifyResponse.ok) {
+            const cart = await verifyResponse.json();
+            console.log('Cart verified - Item count:', cart.item_count);
+            
+            // Update cart UI with verified data
+            await updateCartUI();
+            
+            // Show success message
+            showToast('Product added to cart!', 'success');
+            
+            return data;
+        } else {
+            // Even if verification fails, the item was added
+            console.warn('Could not verify cart, but item was added');
+            await updateCartUI();
+            showToast('Product added to cart!', 'success');
+            return data;
+        }
     } catch (error) {
         console.error('Error adding to cart:', error);
         const errorMessage = error.message || 'Error adding product to cart';
@@ -75,21 +117,30 @@ async function addToCartShopify(variantId, quantity = 1) {
 
 /**
  * Update cart UI from Shopify
+ * Fetches the latest cart data and updates all UI elements
  */
 async function updateCartUI() {
     try {
+        // Add a small delay to ensure Shopify has updated the cart
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
         const response = await fetch('/cart.js', {
             method: 'GET',
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache'
             },
-            credentials: 'same-origin'
+            credentials: 'same-origin',
+            cache: 'no-store'
         });
+        
         if (!response.ok) {
+            console.error('Failed to fetch cart:', response.status, response.statusText);
             throw new Error('Failed to fetch cart');
         }
         
         const cart = await response.json();
+        console.log('Cart updated - Items:', cart.item_count, 'Total:', cart.total_price);
         
         const cartCount = document.getElementById('cart-count');
         const headerCartCount = document.getElementById('header-cart-count');
@@ -190,9 +241,12 @@ async function updateCartUI() {
 
 /**
  * Remove item from cart
+ * Ensures the item is properly removed from Shopify cart
  */
 async function removeCartItem(itemKey) {
     try {
+        console.log('Removing item from cart:', itemKey);
+        
         const response = await fetch('/cart/change.js', {
             method: 'POST',
             headers: {
@@ -207,22 +261,39 @@ async function removeCartItem(itemKey) {
         });
         
         if (!response.ok) {
-            throw new Error('Failed to remove item');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.description || 'Failed to remove item');
         }
         
+        const data = await response.json();
+        console.log('Item removed successfully:', data);
+        
+        // Small delay to ensure Shopify has updated
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Update cart UI
         await updateCartUI();
         showToast('Item removed from cart', 'success');
     } catch (error) {
         console.error('Error removing item:', error);
-        showToast('Error removing item', 'error');
+        showToast(error.message || 'Error removing item', 'error');
     }
 }
 
 /**
  * Update cart quantity
+ * Ensures the quantity is properly updated in Shopify cart
  */
 async function updateCartQuantity(itemKey, quantity) {
     try {
+        // Ensure quantity is a valid number
+        const qty = parseInt(quantity) || 1;
+        if (qty < 1) {
+            throw new Error('Quantity must be at least 1');
+        }
+        
+        console.log('Updating cart quantity - Key:', itemKey, 'Quantity:', qty);
+        
         const response = await fetch('/cart/change.js', {
             method: 'POST',
             headers: {
@@ -232,17 +303,27 @@ async function updateCartQuantity(itemKey, quantity) {
             credentials: 'same-origin',
             body: JSON.stringify({
                 id: itemKey,
-                quantity: quantity
+                quantity: qty
             })
         });
         
         if (!response.ok) {
-            throw new Error('Failed to update quantity');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.description || 'Failed to update quantity');
         }
         
+        const data = await response.json();
+        console.log('Quantity updated successfully:', data);
+        
+        // Small delay to ensure Shopify has updated
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Update cart UI
         await updateCartUI();
     } catch (error) {
         console.error('Error updating quantity:', error);
+        showToast(error.message || 'Error updating quantity', 'error');
+        throw error;
     }
 }
 
@@ -289,9 +370,65 @@ function escapeHtml(text) {
 }
 
 /**
+ * Handle checkout button click
+ * Ensures cart is synced and redirects to Shopify checkout
+ */
+async function handleCheckout() {
+    try {
+        console.log('Checkout button clicked - Verifying cart...');
+        
+        // First, update cart UI to get latest data
+        await updateCartUI();
+        
+        // Verify cart has items
+        const response = await fetch('/cart.js', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            credentials: 'same-origin'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to verify cart');
+        }
+        
+        const cart = await response.json();
+        
+        if (cart.item_count === 0) {
+            showToast('Your cart is empty. Add items before checkout.', 'error');
+            return;
+        }
+        
+        console.log('Cart verified - Items:', cart.item_count, 'Redirecting to checkout...');
+        
+        // Close cart drawer
+        if (window.closeCartDrawer) {
+            window.closeCartDrawer();
+        }
+        
+        // Small delay to ensure drawer closes
+        await new Promise(resolve => setTimeout(resolve, 200));
+        
+        // Redirect to Shopify checkout (GET request, not POST)
+        window.location.href = '/checkout';
+        
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        showToast('Error preparing checkout. Please try again.', 'error');
+    }
+}
+
+/**
  * Attach event listeners to cart drawer
  */
 function attachCartDrawerListeners() {
+    // Checkout button
+    const checkoutBtn = document.getElementById('cart-checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', handleCheckout);
+    }
+    
     // Quantity controls
     document.querySelectorAll('.cart-item .qty-btn').forEach(btn => {
         btn.addEventListener('click', async function() {
@@ -388,4 +525,5 @@ window.removeCartItem = removeCartItem;
 window.updateCartQuantity = updateCartQuantity;
 window.updateCartUI = updateCartUI;
 window.attachCartDrawerListeners = attachCartDrawerListeners;
+window.handleCheckout = handleCheckout;
 

@@ -58,15 +58,15 @@
     <section class="catalog-products-section">
         <div class="container">
             <div class="catalog-section-header">
-                <h2 class="catalog-section-title">All Products</h2>
-                <p class="catalog-section-description">Browse our complete product range</p>
+                <h2 class="catalog-section-title">Unit Products</h2>
+                <p class="catalog-section-description">Browse our unit products</p>
             </div>
 
             <div class="catalog-products-grid">
                 {% assign all_products_collection = collections.all %}
                 {% if all_products_collection.products.size > 0 %}
                     {% for product in all_products_collection.products %}
-                        {% unless product.tags contains 'wholesale' or product.tags contains 'master-case' %}
+                        {% if product.tags contains 'unit' %}
                             <div class="catalog-product-card">
                                 <a href="{{ product.url }}" class="product-link">
                                     <div class="product-image-wrapper">
@@ -104,7 +104,7 @@
                                     </div>
                                 </a>
                             </div>
-                        {% endunless %}
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <div class="catalog-empty-state">
