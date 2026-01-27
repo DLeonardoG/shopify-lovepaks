@@ -1,0 +1,78 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "favicon": "shopify://shop_images/LoveBrands-Favicon_27da9f98-7cd0-4b56-9bff-4f9b02786464.png",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "hero": {
+        "type": "hero",
+        "settings": {}
+      },
+      "features": {
+        "type": "features",
+        "settings": {}
+      },
+      "products": {
+        "type": "products",
+        "settings": {}
+      },
+      "test-results": {
+        "type": "test-results",
+        "settings": {}
+      },
+      "rose-quartz": {
+        "type": "rose-quartz",
+        "settings": {}
+      },
+      "testimonials": {
+        "type": "testimonials",
+        "settings": {}
+      },
+      "featured-testimonial": {
+        "type": "featured-testimonial",
+        "settings": {}
+      },
+      "newsletter": {
+        "type": "newsletter",
+        "settings": {}
+      },
+      "cta": {
+        "type": "cta",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "9513407616245537438": {
+        "type": "shopify://apps/sami-wholesale/blocks/app-embed-block/799b9db0-2c2b-4b20-8675-98acd123fbb2",
+        "disabled": false,
+        "settings": {}
+      },
+      "5163884144194077907": {
+        "type": "shopify://apps/sami-b2b-lock/blocks/app-embed/8d86a3b4-97b3-44ab-adc1-ec01c5a89da9",
+        "disabled": false,
+        "settings": {}
+      },
+      "10436698916776057164": {
+        "type": "shopify://apps/appstle-subscription/blocks/appstle-subscription-helper/fe257d39-6f88-4f35-ab08-bd437e3aa94e",
+        "disabled": false,
+        "settings": {}
+      }
+    }
+  }
+}

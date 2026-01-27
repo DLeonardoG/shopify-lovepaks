@@ -10,7 +10,11 @@
     
     {% comment %} Lifestyle product image for mobile - hidden on desktop {% endcomment %}
     <div class="hero-background-image">
-        <img src="{{ 'aauraofcle' | file_img_url: 'master' }}" alt="" class="hero-bg-img" aria-hidden="true" width="1920" height="1080">
+        {% comment %} 
+          Replace with actual lifestyle product image filename
+          This image should be uploaded to Shopify Files
+        {% endcomment %}
+        <img src="{{ 'aauraofcle.jpg' | file_img_url: 'master' }}" alt="" class="hero-bg-img" aria-hidden="true" width="1920" height="1080">
     </div>
     
     <div class="hero-overlay"></div>
