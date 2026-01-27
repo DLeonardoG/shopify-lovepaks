@@ -313,11 +313,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Handle cart button click to open drawer instead of navigating
     const cartButton = document.getElementById('nav-cart-btn');
     if (cartButton) {
-        cartButton.addEventListener('click', function(e) {
+        cartButton.addEventListener('click', async function(e) {
             e.preventDefault();
             e.stopPropagation();
             
-            // Open cart drawer if function exists
+            // Check if cart is empty
+            try {
+                const response = await fetch('/cart.js', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin'
+                });
+                
+                if (response.ok) {
+                    const cart = await response.json();
+                    
+                    // If cart is empty, redirect to catalog
+                    if (cart.item_count === 0) {
+                        window.location.href = '/pages/catalog';
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking cart:', error);
+            }
+            
+            // If cart has items, open cart drawer
             if (window.openCartDrawer) {
                 window.openCartDrawer();
             } else {
