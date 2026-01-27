@@ -21,12 +21,14 @@
             {% assign products_collection = collections.featured %}
         {% endif %}
         
-        {% comment %} Count products excluding wholesale/master-case {% endcomment %}
+        {% comment %} Count products with 'unit' tag only {% endcomment %}
         {% assign visible_products_count = 0 %}
         {% for product in products_collection.products %}
-            {% unless product.handle == 'master-case' or product.tags contains 'wholesale' or product.tags contains 'master-case' %}
-                {% assign visible_products_count = visible_products_count | plus: 1 %}
-            {% endunless %}
+            {% if product.tags contains 'unit' %}
+                {% unless product.handle == 'master-case' or product.tags contains 'wholesale' or product.tags contains 'master-case' %}
+                    {% assign visible_products_count = visible_products_count | plus: 1 %}
+                {% endunless %}
+            {% endif %}
         {% endfor %}
         
         {% if visible_products_count > 0 %}
@@ -34,8 +36,9 @@
                 <div class="products-carousel" id="products-carousel">
                     <div class="products-carousel-track" id="products-carousel-track">
                         {% for product in products_collection.products %}
-                            {% comment %} Skip Master Case and wholesale products {% endcomment %}
-                            {% unless product.handle == 'master-case' or product.tags contains 'wholesale' or product.tags contains 'master-case' %}
+                            {% comment %} Show only products with 'unit' tag, skip Master Case and wholesale products {% endcomment %}
+                            {% if product.tags contains 'unit' %}
+                                {% unless product.handle == 'master-case' or product.tags contains 'wholesale' or product.tags contains 'master-case' %}
                                 <div class="product-card fade-in carousel-slide" data-product-id="{{ product.id }}">
                                     <a href="{{ product.url }}" class="product-card-link">
                                         <div class="product-image-wrapper">
@@ -96,7 +99,8 @@
                                         Shop Now
                                     </a>
                                 </div>
-                            {% endunless %}
+                                {% endunless %}
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>

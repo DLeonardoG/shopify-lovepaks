@@ -25,8 +25,6 @@
     <!-- Page-specific styles -->
     {% if template.name == 'page' and page.handle == 'shop-landing' %}
         {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
-    {% elsif template.name == 'page' and page.handle == 'wholesale' %}
-        {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
     {% elsif template.name == 'page' and page.handle == 'mastercase' %}
         {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
     {% elsif template.name == 'page' and template.suffix == 'mastercase' %}
@@ -80,9 +78,6 @@
         {{ 'product-page.js' | asset_url | script_tag }}
     {% elsif template.name == 'page' and page.handle == 'shop-landing' %}
         {{ 'shop-landing.js' | asset_url | script_tag }}
-    {% elsif template.name == 'page' and page.handle == 'wholesale' %}
-        {{ 'shopify-cart.js' | asset_url | script_tag }}
-        {{ 'wholesale.js' | asset_url | script_tag }}
     {% elsif template.name == 'page' and page.handle == 'mastercase' %}
         {{ 'shopify-cart.js' | asset_url | script_tag }}
         {{ 'wholesale.js' | asset_url | script_tag }}
