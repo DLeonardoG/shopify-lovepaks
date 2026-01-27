@@ -357,17 +357,28 @@ p {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    transition: background-color var(--transition-fast);
+    transition: all var(--transition-fast);
+    color: var(--text-dark);
+    margin-left: -20px;
 }
 
 .nav-user:hover {
     background-color: var(--light-gray);
+    color: var(--primary-pink);
+    transform: scale(1.05);
 }
 
-.nav-user svg {
+.nav-user svg,
+.nav-user .nav-icon {
     flex-shrink: 0;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
+    transition: all var(--transition-fast);
+}
+
+.nav-user:hover svg,
+.nav-user:hover .nav-icon {
+    transform: none;
 }
 
 .nav-cta {
@@ -3320,6 +3331,7 @@ p {
     color: var(--text-dark);
     transition: color var(--transition-fast);
     text-decoration: none;
+    margin-right: -20px;
 }
 
 .nav-cart-btn:hover {
