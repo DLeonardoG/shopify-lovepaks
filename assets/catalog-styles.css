@@ -137,12 +137,18 @@
 
 .catalog-products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    /* Usamos auto-fit + minmax con un ancho máximo fijo para que las cards
+       no se estiren a todo el ancho y el grid pueda centrarse correctamente */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 320px));
     gap: 30px;
     /* Reduce max-width so that product cards stay visually centered
        instead of stretching across the entire viewport when there are few items */
     max-width: 1000px;
     margin: 0 auto;
+    /* Center the grid itself within its available space */
+    justify-content: center;
+    /* Center items inside each grid column (por si las cards no ocupan 100%) */
+    justify-items: center;
 }
 
 .catalog-product-card {
