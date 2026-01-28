@@ -21,16 +21,6 @@
         Complete the registration form below. After submission, our team will review your application.
       </p>
 
-      {% unless customer %}
-        <p style="text-align:center; margin: 0 auto 32px; max-width: 720px;">
-          Already have an account? <a href="{{ routes.account_login_url }}">Log in</a> so we can approve your profile after you submit.
-        </p>
-      {% else %}
-        <p style="text-align:center; margin: 0 auto 32px; max-width: 720px;">
-          You are logged in as <strong>{{ customer.email }}</strong>. If you are not approved yet, please complete the form.
-        </p>
-      {% endunless %}
-
       <!-- Sami embed (Samita) -->
       <div class="samitaWS-registrationForm" data-id="MTEwOTY="></div>
     {% endif %}
