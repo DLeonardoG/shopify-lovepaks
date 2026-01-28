@@ -139,7 +139,9 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 30px;
-    max-width: 1400px;
+    /* Reduce max-width so that product cards stay visually centered
+       instead of stretching across the entire viewport when there are few items */
+    max-width: 1000px;
     margin: 0 auto;
 }
 
