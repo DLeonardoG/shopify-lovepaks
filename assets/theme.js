@@ -621,8 +621,8 @@ function initHeroVideo() {
     const heroVideo = document.querySelector('.hero-video');
     const heroBgImage = document.querySelector('.hero-bg-img');
     
-    // Initialize video for desktop
-    if (heroVideo && window.innerWidth > 768) {
+    // Initialize video for all devices (desktop + mobile)
+    if (heroVideo) {
         // Set video properties
         heroVideo.setAttribute('loop', 'true');
         heroVideo.setAttribute('muted', 'true');

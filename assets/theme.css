@@ -248,12 +248,29 @@ p {
 /* Section Eyebrow */
 .section-eyebrow {
     display: inline-block;
-    font-size: clamp(18px, 2vw, 24px);
+    font-size: clamp(14px, 1.5vw, 20px);
     font-weight: 700;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--primary-pink);
-    margin-bottom: 24px;
+    margin-bottom: 16px;
+}
+
+/* Remove bottom margin when stacked directly above section titles on homepage sections */
+.features-section .section-header .section-eyebrow,
+.test-results-section .section-header .section-eyebrow,
+.products-section .section-header .section-eyebrow {
+    margin-bottom: 0;
+}
+
+
+/* Desktop: Keep section-eyebrow smaller than title */
+@media (min-width: 769px) {
+    .section-eyebrow {
+        font-size: clamp(16px, 1.8vw, 24px);
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+    }
 }
 
 /* ============================================
@@ -1022,13 +1039,23 @@ p {
 .rose-quartz-content .section-eyebrow {
     color: var(--primary-pink);
     font-weight: 700;
-    font-size: clamp(18px, 2vw, 24px);
-    letter-spacing: 3px;
-    margin-bottom: 24px;
+    font-size: clamp(14px, 1.5vw, 20px);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
     display: block;
 }
 
+/* Desktop: Keep rose-quartz section-eyebrow smaller than title */
+@media (min-width: 769px) {
+    .rose-quartz-content .section-eyebrow {
+        font-size: clamp(16px, 1.8vw, 24px);
+        letter-spacing: 3px;
+        margin-bottom: 6px;
+    }
+}
+
 .rose-quartz-content h2 {
+    margin-top: 4px;
     margin-bottom: 40px;
     font-size: clamp(28px, 4vw, 40px);
     line-height: 1.2;
@@ -1735,9 +1762,17 @@ p {
 }
 
 .testimonials-section .section-eyebrow {
-    margin-bottom: 24px;
-    font-size: clamp(18px, 2vw, 24px);
-    letter-spacing: 3px;
+    margin-bottom: 0;
+    font-size: clamp(14px, 1.5vw, 20px);
+    letter-spacing: 2px;
+}
+
+@media (min-width: 769px) {
+    .testimonials-section .section-eyebrow {
+        font-size: clamp(16px, 1.8vw, 24px);
+        letter-spacing: 3px;
+        margin-bottom: 0;
+    }
 }
 
 .testimonials-section .section-title {
@@ -1909,9 +1944,17 @@ p {
 }
 
 .featured-testimonial-header .section-eyebrow {
-    margin-bottom: 24px;
-    font-size: clamp(18px, 2vw, 24px);
-    letter-spacing: 3px;
+    margin-bottom: 0;
+    font-size: clamp(14px, 1.5vw, 20px);
+    letter-spacing: 2px;
+}
+
+@media (min-width: 769px) {
+    .featured-testimonial-header .section-eyebrow {
+        font-size: clamp(16px, 1.8vw, 24px);
+        letter-spacing: 3px;
+        margin-bottom: 0;
+    }
 }
 
 .featured-testimonial-header .section-title {
