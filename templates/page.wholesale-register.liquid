@@ -6,13 +6,34 @@
 
 <section class="wholesale-register-section" style="padding: 72px 0;">
   <div class="container" style="max-width: 900px;">
-    <h1 style="text-align:center; margin-bottom: 16px;">Wholesale Registration</h1>
-    <p style="text-align:center; margin: 0 auto 32px; max-width: 720px;">
-      Complete your wholesale registration to access Master Case ordering.
-    </p>
+    {% if customer and customer.tags contains 'wholesale_approved' %}
+      <h1 style="text-align:center; margin-bottom: 16px;">You're approved for Wholesale</h1>
+      <p style="text-align:center; margin: 0 auto 24px; max-width: 720px;">
+        Your account is already approved. You can continue to the wholesale page.
+      </p>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <a class="btn-primary btn-large" href="/pages/wholesale-page">Continue</a>
+        <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
+      </div>
+    {% else %}
+      <h1 style="text-align:center; margin-bottom: 16px;">Wholesale Registration</h1>
+      <p style="text-align:center; margin: 0 auto 12px; max-width: 720px;">
+        Complete the registration form below. After submission, our team will review your application.
+      </p>
 
-    <!-- Sami embed -->
-    {SamitaWSRegistrationForm:MTEwOTY=}
+      {% unless customer %}
+        <p style="text-align:center; margin: 0 auto 32px; max-width: 720px;">
+          Already have an account? <a href="{{ routes.account_login_url }}">Log in</a> so we can approve your profile after you submit.
+        </p>
+      {% else %}
+        <p style="text-align:center; margin: 0 auto 32px; max-width: 720px;">
+          You are logged in as <strong>{{ customer.email }}</strong>. If you are not approved yet, please complete the form.
+        </p>
+      {% endunless %}
+
+      <!-- Sami embed -->
+      {SamitaWSRegistrationForm:MTEwOTY=}
+    {% endif %}
   </div>
 </section>
 

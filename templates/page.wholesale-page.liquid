@@ -1,0 +1,33 @@
+{% comment %}
+  Wholesale Landing Page (for approved accounts)
+  Create a Shopify Page with handle: wholesale-page
+  Assign template: page.wholesale-page
+{% endcomment %}
+
+<section style="padding: 72px 0;">
+  <div class="container" style="max-width: 900px;">
+    {% if customer and customer.tags contains 'wholesale_approved' %}
+      <h1 style="text-align:center; margin-bottom: 16px;">Wholesale Page</h1>
+      <p style="text-align:center; margin: 0 auto 24px; max-width: 720px;">
+        You're approved. From here we can link to the Sami wholesale menu later.
+      </p>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <a class="btn-primary btn-large" href="/pages/mastercase">Go to Master Case</a>
+        <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
+      </div>
+    {% else %}
+      <h1 style="text-align:center; margin-bottom: 16px;">Wholesale Access Required</h1>
+      <p style="text-align:center; margin: 0 auto 24px; max-width: 720px;">
+        You must be logged in and approved for wholesale access.
+      </p>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <a class="btn-primary btn-large" href="/pages/wholesale-register">Go to Registration</a>
+        {% unless customer %}
+          <a class="btn-secondary btn-large" href="{{ routes.account_login_url }}">Log in</a>
+        {% endunless %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+
