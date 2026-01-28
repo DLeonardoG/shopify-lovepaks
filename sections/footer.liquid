@@ -8,21 +8,23 @@
                 <img src="{{ 'LOVE_1.png' | file_img_url: 'master' }}" alt="{{ shop.name }}">
             {% endif %}
                 <p class="footer-description">
-                    The world's first wellness laundry detergent, infused with rose quartz. Laundry care that's good for you and the planet.
+                    The world's first rose quartz infused laundry detergent.
                 </p>
             </div>
             <div class="footer-section">
                 <h4 class="footer-section-title">Products</h4>
                 <div class="footer-links">
-                    {% for collection in collections limit: 4 %}
-                        <a href="{{ collection.url }}" class="footer-link">{{ collection.title }}</a>
+                    {% for collection in collections limit: 10 %}
+                        {% unless collection.title == "Automated Collection" or collection.title == "Hydrogen" or collection.title == "Home page" or collection.handle == "frontpage" %}
+                            <a href="{{ collection.url }}" class="footer-link">{{ collection.title }}</a>
+                        {% endunless %}
                     {% endfor %}
                 </div>
             </div>
             <div class="footer-section">
                 <h4 class="footer-section-title">Company</h4>
                 <div class="footer-links">
-                    <a href="/pages/about" class="footer-link">About Us</a>
+                    <a href="/collections/frontpage" class="footer-link">Home page</a>
                     <a href="/pages/how-it-works" class="footer-link">How It Works</a>
                     <a href="/blogs/news" class="footer-link">Blog</a>
                     <a href="/pages/contact" class="footer-link">Contact</a>

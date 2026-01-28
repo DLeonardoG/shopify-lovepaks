@@ -3,12 +3,12 @@
 {% endcomment %}
 
 <section class="hero">
-    {% comment %} Video for desktop - hidden on mobile {% endcomment %}
+    {% comment %} Video for desktop and mobile {% endcomment %}
     <video class="hero-video" autoplay muted loop playsinline preload="auto" webkit-playsinline>
         <source src="{{ 'video_start.mp4' | file_url }}" type="video/mp4">
     </video>
     
-    {% comment %} Lifestyle product image for mobile - hidden on desktop {% endcomment %}
+    {% comment %} Lifestyle product image for mobile - commented out, using video instead
     <div class="hero-background-image">
         {% comment %} 
           Replace with actual lifestyle product image filename
@@ -16,6 +16,7 @@
         {% endcomment %}
         <img src="{{ 'aauraofcle.jpg' | file_img_url: 'master' }}" alt="" class="hero-bg-img" aria-hidden="true" width="1920" height="1080">
     </div>
+    {% endcomment %}
     
     <div class="hero-overlay"></div>
     <div class="hero-watermark">

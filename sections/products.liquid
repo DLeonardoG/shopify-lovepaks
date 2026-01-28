@@ -151,10 +151,13 @@
     width: 100%;
 }
 
+
 .products-carousel-track {
     display: flex;
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     gap: 32px;
+    width: 100%;
+    align-items: stretch;
 }
 
 /* Centered layout for 3 or fewer products */
@@ -165,6 +168,13 @@
 .products-carousel-track.centered-track {
     justify-content: center;
     transform: none !important;
+}
+
+@media (max-width: 768px) {
+    .products-carousel-track.centered-track {
+        justify-content: flex-start;
+        transform: none !important;
+    }
 }
 
 .carousel-slide {
@@ -191,10 +201,52 @@
 @media (max-width: 768px) {
     .carousel-slide {
         flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        box-sizing: border-box;
     }
     
     .products-carousel-wrapper {
-        padding: 0 50px;
+        padding: 0 60px;
+        position: relative;
+    }
+    
+    .products-carousel-wrapper.centered-products {
+        padding: 0 60px;
+    }
+    
+    .products-carousel {
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    .products-carousel-track {
+        gap: 0;
+        width: 100%;
+        align-items: stretch;
+    }
+    
+    .products-carousel-track.centered-track {
+        gap: 0;
+        width: 100%;
+    }
+    
+    .centered-track .carousel-slide {
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .product-card {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    
+    .product-card-link {
+        width: 100%;
+        box-sizing: border-box;
     }
 }
 
@@ -284,6 +336,9 @@
     flex-direction: column;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     position: relative;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .product-card:hover {
@@ -298,6 +353,8 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    width: 100%;
+    min-width: 0;
 }
 
 .product-card-link:hover {
@@ -354,6 +411,9 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .product-badge {
@@ -378,6 +438,9 @@
     font-family: 'Montserrat', sans-serif;
     color: var(--text-dark);
     line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .product-description {
@@ -386,6 +449,9 @@
     line-height: 1.6;
     font-size: 14px;
     flex: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .product-price-wrapper {
@@ -448,17 +514,52 @@
         height: 300px;
     }
     
+    .product-content {
+        padding: 20px;
+        width: 100%;
+    }
+    
+    .product-name {
+        font-size: 20px;
+    }
+    
+    .product-description {
+        font-size: 13px;
+    }
+    
+    .product-price {
+        font-size: 24px;
+    }
+    
     .carousel-btn {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        z-index: 20;
     }
     
     .carousel-prev {
-        left: 10px;
+        left: 8px;
     }
     
     .carousel-next {
-        right: 10px;
+        right: 8px;
+    }
+    
+    .carousel-btn:hover {
+        transform: translateY(-50%) scale(1.05);
+    }
+    
+    .carousel-btn:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+    
+    .products-carousel-wrapper {
+        padding: 0 60px;
+    }
+    
+    .products-carousel-wrapper.centered-products {
+        padding: 0 60px;
     }
 }
 </style>
@@ -486,8 +587,18 @@
         const slides = track.querySelectorAll('.carousel-slide');
         if (slides.length === 0) return;
         
-        // If 3 or fewer products, don't initialize carousel functionality
-        if (slides.length <= 3) {
+        // Check if track is centered (3 or fewer products on desktop)
+        const isCentered = track.classList.contains('centered-track');
+        const isMobile = window.innerWidth <= 768;
+        
+        // If 3 or fewer products on desktop and not mobile, don't initialize carousel functionality
+        // But on mobile, always enable carousel if there's more than 1 product
+        if (slides.length <= 3 && !isMobile) {
+            return;
+        }
+        
+        // On mobile, enable carousel even for 3 or fewer products
+        if (isMobile && slides.length <= 1) {
             return;
         }
         
@@ -503,9 +614,25 @@
             return 3;
         }
         
+        // Get gap based on screen size
+        function getGap() {
+            if (window.innerWidth <= 768) return 0;
+            if (window.innerWidth <= 968) return 16;
+            return 32;
+        }
+        
         // Update carousel position
         function updateCarousel() {
-            const slideWidth = slides[0].offsetWidth + 32; // 32px is gap
+            // Don't update if track is centered and not mobile
+            const isCentered = track.classList.contains('centered-track');
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isCentered && !isMobile) {
+                return;
+            }
+            
+            const gap = getGap();
+            const slideWidth = slides[0].offsetWidth + gap;
             const translateX = -currentIndex * slideWidth;
             track.style.transform = `translateX(${translateX}px)`;
             

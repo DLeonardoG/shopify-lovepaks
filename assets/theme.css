@@ -248,12 +248,12 @@ p {
 /* Section Eyebrow */
 .section-eyebrow {
     display: inline-block;
-    font-size: 13px;
+    font-size: clamp(18px, 2vw, 24px);
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--primary-pink);
-    margin-bottom: 16px;
+    margin-bottom: 24px;
 }
 
 /* ============================================
@@ -526,20 +526,20 @@ p {
         padding: clamp(60px, 10vw, 100px) 0;
     }
     
-    /* Hide video on mobile */
-    .hero-video {
+    /* Video now shows on mobile too - no need to hide it */
+    /* .hero-video {
         display: none !important;
-    }
+    } */
     
-    /* Show background image on mobile */
-    .hero-background-image {
+    /* Background image commented out - using video instead on mobile */
+    /* .hero-background-image {
         display: block;
     }
     
     .hero-bg-img {
         object-fit: cover;
         object-position: right center;
-    }
+    } */
     
     .hero-watermark {
         bottom: 20px;
@@ -548,6 +548,18 @@ p {
     
     .watermark-logo {
         width: 120px;
+    }
+    
+    /* Make description smaller on mobile */
+    .hero-description {
+        font-size: 16px;
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Make overlay more transparent on mobile */
+    .hero-overlay {
+        background: linear-gradient(180deg, rgba(255, 245, 249, 0.1) 0%, rgba(255, 245, 249, 0.15) 100%);
     }
 }
 
@@ -733,6 +745,9 @@ p {
     display: flex;
     flex-direction: column;
     flex: 1;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .product-badge {
@@ -757,6 +772,9 @@ p {
     font-family: 'Montserrat', sans-serif;
     color: var(--text-dark);
     line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .product-description {
@@ -765,6 +783,9 @@ p {
     line-height: 1.6;
     font-size: 14px;
     flex: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .product-price-wrapper {
@@ -818,7 +839,20 @@ p {
     }
     
     .product-content {
-        padding: 24px;
+        padding: 20px;
+        width: 100%;
+    }
+    
+    .product-name {
+        font-size: 20px;
+    }
+    
+    .product-description {
+        font-size: 13px;
+    }
+    
+    .product-price {
+        font-size: 24px;
     }
 }
 
@@ -987,9 +1021,10 @@ p {
 
 .rose-quartz-content .section-eyebrow {
     color: var(--primary-pink);
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
+    font-weight: 700;
+    font-size: clamp(18px, 2vw, 24px);
+    letter-spacing: 3px;
+    margin-bottom: 24px;
     display: block;
 }
 
@@ -1700,8 +1735,9 @@ p {
 }
 
 .testimonials-section .section-eyebrow {
-    margin-bottom: 12px;
-    font-size: 13px;
+    margin-bottom: 24px;
+    font-size: clamp(18px, 2vw, 24px);
+    letter-spacing: 3px;
 }
 
 .testimonials-section .section-title {
@@ -1873,7 +1909,9 @@ p {
 }
 
 .featured-testimonial-header .section-eyebrow {
-    margin-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: clamp(18px, 2vw, 24px);
+    letter-spacing: 3px;
 }
 
 .featured-testimonial-header .section-title {
