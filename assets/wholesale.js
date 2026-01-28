@@ -114,6 +114,14 @@ function initEventListeners() {
     addToCartButtons.forEach(button => {
         button.addEventListener('click', async function(e) {
             e.preventDefault();
+
+            // If this button is meant to send users to a registration flow (e.g. wholesale signup),
+            // redirect instead of adding to cart.
+            const redirectUrl = this.getAttribute('data-redirect-url');
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+                return;
+            }
             
             const variantId = this.getAttribute('data-variant-id');
             const packageName = this.getAttribute('data-name');
