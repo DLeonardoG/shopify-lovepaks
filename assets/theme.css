@@ -2991,54 +2991,206 @@ p {
     cursor: pointer;
 }
 
-/* Subscription Widget */
+/* Subscription Widget (One-time vs Autoship) */
 .subscription-widget {
     margin-bottom: 24px;
-    padding: 20px;
-    background: var(--off-white);
     border-radius: var(--radius-sm);
 }
 
-.subscription-label {
+.subscription-options {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 12px;
-    cursor: pointer;
-    font-weight: 600;
 }
 
-.subscription-checkbox {
-    width: 20px;
-    height: 20px;
+.subscription-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #fff;
+    border: 2px solid var(--light-gray, #e5e7eb);
+    border-radius: var(--radius-sm);
     cursor: pointer;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.subscription-option:hover {
+    border-color: var(--text-gray, #6b7280);
+}
+
+.subscription-option--autoship {
+    background: #fff7ed;
+    border-color: #fed7aa;
+}
+
+.subscription-option--autoship:has(.subscription-radio:checked),
+.subscription-option--autoship .subscription-radio:checked ~ .option-content {
+    border-color: #ea580c;
+}
+
+.subscription-option:has(.subscription-radio:checked) {
+    border-color: var(--accent-green, #059669);
+    border-width: 2px;
+}
+
+.subscription-option--autoship:has(.subscription-radio:checked) {
+    border-color: #ea580c;
+    background: #ffedd5;
+}
+
+.subscription-radio {
+    margin-top: 2px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.option-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    flex: 1;
+}
+
+.option-content--autoship {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.option-label {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.option-price {
+    font-weight: 700;
+    font-size: 16px;
+    margin-left: auto;
+}
+
+.option-badge-most-popular {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #fdba74;
+    color: #9a3412;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.option-prices {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.option-price-compare {
+    font-size: 14px;
+    color: var(--text-muted, #6b7280);
+    text-decoration: line-through;
+}
+
+.option-price-discount {
+    font-weight: 700;
+    font-size: 18px;
+    color: #ea580c;
+}
+
+.option-price-per-day {
+    font-size: 12px;
+    color: var(--text-muted, #6b7280);
 }
 
 .subscription-details {
     margin-top: 16px;
-}
-
-.selling-plan-select {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid var(--light-gray);
+    padding: 16px;
+    background: #ffedd5;
+    border: 1px solid #fed7aa;
     border-radius: var(--radius-sm);
-    font-size: 14px;
-    background: white;
-    margin-bottom: 12px;
 }
 
-.subscription-note {
+.subscription-quantity-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 10px 0;
+    color: var(--text-gray, #374151);
+}
+
+.subscription-plan-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.subscription-pill {
+    padding: 10px 16px;
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.subscription-pill:hover {
+    border-color: #fdba74;
+    background: #fff7ed;
+}
+
+.subscription-pill.active {
+    border-color: #ea580c;
+    background: #ffedd5;
+    color: #9a3412;
+}
+
+.subscription-no-plans {
+    font-size: 13px;
+    color: var(--text-muted, #6b7280);
+}
+
+.subscription-benefits {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.subscription-benefits li {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: var(--accent-green);
-    margin: 0;
+    margin-bottom: 6px;
 }
 
-.subscription-icon {
-    font-size: 18px;
+.subscription-benefit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ea580c;
+    border-radius: 50%;
+    color: #ea580c;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
 }
+
+/* Legacy (por si algo sigue usando) */
+.subscription-label { display: flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; }
+.subscription-checkbox { width: 20px; height: 20px; cursor: pointer; }
+.selling-plan-select { width: 100%; padding: 12px; border: 2px solid var(--light-gray); border-radius: var(--radius-sm); font-size: 14px; background: white; margin-bottom: 12px; }
+.subscription-note { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--accent-green); margin: 0; }
+.subscription-icon { font-size: 18px; }
 
 /* Appstle integration notice (product page) */
 .product-appstle-notice {
@@ -3389,6 +3541,13 @@ p {
     font-size: 12px;
     color: var(--accent-green);
     margin: 0;
+}
+
+.cart-item-subscription-price,
+.cart__product-meta {
+    font-size: 12px;
+    color: var(--text-muted, #6b7280);
+    margin: 2px 0 0 0;
 }
 
 .subscription-badge {

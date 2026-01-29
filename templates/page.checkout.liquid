@@ -49,6 +49,10 @@
                         <div class="summary-item">
                             <div class="item-info">
                                 <div class="item-name">{{ item.product.title }}</div>
+                                {% if item.selling_plan_allocation %}
+                                  <p class="selling-plan">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                                  <p class="cart__product-meta">{{ item.selling_plan_allocation.price | money }}</p>
+                                {% endif %}
                                 <div class="item-label">Quantity: {{ item.quantity }}</div>
                             </div>
                             <div class="item-price">{{ item.line_price | money }}</div>
@@ -95,6 +99,10 @@
                         <div class="summary-item">
                             <div class="item-info">
                                 <div class="item-name">{{ item.product.title }}</div>
+                                {% if item.selling_plan_allocation %}
+                                  <p class="selling-plan">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                                  <p class="cart__product-meta">{{ item.selling_plan_allocation.price | money }}</p>
+                                {% endif %}
                                 <div class="item-label">Quantity: {{ item.quantity }}</div>
                             </div>
                             <div class="item-price">{{ item.line_price | money }}</div>

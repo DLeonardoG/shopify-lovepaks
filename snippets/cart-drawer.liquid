@@ -34,14 +34,17 @@
               <div class="cart-item-details">
                 <h4 class="cart-item-title">{{ item.product.title }}</h4>
                 <p class="cart-item-variant">{{ item.variant.title }}</p>
-                
+
                 {% if item.selling_plan_allocation %}
-                  <p class="cart-item-subscription">
+                  <p class="selling-plan cart-item-subscription">
                     <span class="subscription-badge">Subscription</span>
                     {{ item.selling_plan_allocation.selling_plan.name }}
                   </p>
+                  <p class="cart__product-meta cart-item-subscription-price">
+                    {{ item.selling_plan_allocation.price | money }}
+                  </p>
                 {% endif %}
-                
+
                 <div class="cart-item-price">
                   {{ item.final_line_price | money }}
                 </div>

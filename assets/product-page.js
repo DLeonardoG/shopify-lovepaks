@@ -136,6 +136,7 @@
       const pricePerDay = variant.price / days / 100;
       pricePerDayEl.textContent = `As low as ${formatMoney(pricePerDay * 100)}/day`;
     }
+
   }
 
   // Update main product image
@@ -288,18 +289,13 @@
     }
   }
 
-  // Handle subscription toggle
+  // Handle subscription toggle (checkbox + details; widget nativo o inyectado por app)
   function initSubscriptionToggle() {
     const subscriptionToggle = document.getElementById('subscription-toggle');
     const subscriptionDetails = document.getElementById('subscription-details');
-    
     if (subscriptionToggle && subscriptionDetails) {
       subscriptionToggle.addEventListener('change', function() {
-        if (this.checked) {
-          subscriptionDetails.style.display = 'block';
-        } else {
-          subscriptionDetails.style.display = 'none';
-        }
+        subscriptionDetails.style.display = this.checked ? 'block' : 'none';
       });
     }
   }
@@ -410,9 +406,10 @@
         const quantityInput = document.getElementById('quantity');
         const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
         
-        // Get selling plan if subscription is selected
+        // Get selling plan if subscription is selected (select o input que inyecte la app)
         const sellingPlanSelect = document.getElementById('selling-plan-select');
-        const sellingPlanId = sellingPlanSelect && sellingPlanSelect.value ? sellingPlanSelect.value : null;
+        const sellingPlanInput = document.getElementById('selling-plan-id');
+        const sellingPlanId = (sellingPlanSelect && sellingPlanSelect.value) || (sellingPlanInput && sellingPlanInput.value) || null;
         
         // Update form inputs to ensure they have correct values
         if (variantIdInput) variantIdInput.value = variant.id;

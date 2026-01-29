@@ -1,8 +1,10 @@
 {% comment %}
-  Subscription Widget
-  Toggle between one-time purchase and subscription
+  Subscription Widget (Shopify Selling Plans)
+  Solo se muestra si el producto tiene selling_plan_groups.
+  Para suscripciones con Appstle, el widget lo inyecta la app vía App embeds.
 {% endcomment %}
 
+{% if product.selling_plan_groups.size > 0 %}
 <div class="subscription-widget">
   <div class="subscription-toggle">
     <label class="subscription-label">
@@ -24,12 +26,10 @@
     <div class="subscription-details" id="subscription-details" style="display: none;">
       <select name="selling_plan_id" id="selling-plan-select" class="selling-plan-select">
         <option value="">One-time purchase</option>
-        {% comment %} Filter to show only quarterly plans with 20% discount {% endcomment %}
         {% for group in product.selling_plan_groups %}
           {% for plan in group.selling_plans %}
             {% assign discount_value = plan.price_adjustments.first.value | default: 0 %}
             {% assign plan_name_lower = plan.name | downcase %}
-            {% comment %} Show plan if it's quarterly (every 3 months) and has 20% discount {% endcomment %}
             {% if plan_name_lower contains 'quarterly' or plan_name_lower contains '3 month' or plan_name_lower contains 'every 3' or discount_value == 20 %}
               <option value="{{ plan.id }}" data-price-adjustment="{{ discount_value }}">
                 Quarterly Delivery - Save {{ discount_value }}%
@@ -46,4 +46,4 @@
     </div>
   </div>
 </div>
-
+{% endif %}
