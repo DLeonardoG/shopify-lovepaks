@@ -62,7 +62,7 @@
           window.location.href = '/cart';
         }
 
-        showToast('Subscription started! Save 20% + Free Shipping', 'success');
+        showToast('Subscription started! Save 20%', 'success');
 
       } catch (error) {
         console.error('Error adding subscription to cart:', error);

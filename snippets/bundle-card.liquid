@@ -4,18 +4,21 @@
     - bundle_type: 'try-both', 'citrus-3month', 'fragrance-3month'
     - bundle_title: Title of the bundle
     - bundle_savings: Savings percentage (e.g., "10%", "15%")
+    - bundle_savings_amount: Savings amount in cents (from Shopify)
+    - bundle_original_price: Original price in cents (from Shopify)
+    - bundle_final_price: Final price after discount in cents (from Shopify)
     - bundle_includes: Description of what's included
     - bundle_description: Marketing description
-    - bundle_products: Array of product handles to include
-    - free_shipping: Boolean for free shipping badge
+    - bundle_products: Comma-separated product handles
+    - bundle_quantities: Comma-separated quantities matching products order
 {% endcomment %}
 
-{% assign bundle_type = bundle_type | default: 'try-both' %}
+{% assign bundle_type = bundle_type | default: 'scent-free-3month' %}
 {% assign bundle_title = bundle_title | default: 'Bundle' %}
-{% assign bundle_savings = bundle_savings | default: '10%' %}
+{% assign bundle_savings = bundle_savings | default: '15%' %}
 {% assign bundle_includes = bundle_includes | default: '' %}
 {% assign bundle_description = bundle_description | default: '' %}
-{% assign free_shipping = free_shipping | default: false %}
+{% assign bundle_quantities = bundle_quantities | default: '3' %}
 
 <div class="bundle-card" data-bundle-type="{{ bundle_type }}">
   <div class="bundle-card-header">
@@ -27,10 +30,26 @@
   
   <div class="bundle-includes">
     {{ bundle_includes }}
-    {% if free_shipping %}
+    {% comment %} Free shipping only shown if total after discount > $75 {% endcomment %}
+    {% if bundle_final_price and bundle_final_price > 7500 %}
       <span class="bundle-includes-shipping"> + Free Shipping</span>
     {% endif %}
   </div>
+  
+  {% comment %} Show prices if available from Shopify {% endcomment %}
+  {% if bundle_original_price and bundle_final_price %}
+    <div class="bundle-price-section">
+      <div class="bundle-price-wrapper">
+        <span class="bundle-price">{{ bundle_final_price | money }}</span>
+        {% if bundle_original_price > bundle_final_price %}
+          <span class="bundle-compare-price">{{ bundle_original_price | money }}</span>
+        {% endif %}
+      </div>
+      {% if bundle_savings_amount %}
+        <p class="bundle-savings-amount">Save {{ bundle_savings_amount | money }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
   
   <p class="bundle-description">
     {{ bundle_description }}
@@ -40,17 +59,13 @@
     type="button" 
     class="btn-add-bundle" 
     data-bundle-type="{{ bundle_type }}"
-    data-bundle-products="{{ bundle_products | join: ',' }}">
+    data-bundle-products="{{ bundle_products }}"
+    data-bundle-quantities="{{ bundle_quantities }}">
     Add Bundle
   </button>
   
   <div class="bundle-subscription-nudge">
-    {% if bundle_type == 'try-both' %}
-      <span class="bundle-nudge-text">Or subscribe & save 20% →</span>
-    {% else %}
-      <span class="bundle-nudge-text">Want 20% off? Subscribe quarterly →</span>
-    {% endif %}
-    <a href="#subscription-block" class="bundle-nudge-link">Start Subscription</a>
+    <a href="#subscription-block" class="bundle-nudge-link">Want 20% off? Subscribe quarterly →</a>
   </div>
 </div>
 
@@ -115,6 +130,42 @@
   font-weight: 600;
 }
 
+.bundle-price-section {
+  margin: var(--spacing-md, 16px) 0;
+  padding: var(--spacing-md, 16px) 0;
+  border-top: 1px solid var(--light-gray, #e0e0e0);
+  border-bottom: 1px solid var(--light-gray, #e0e0e0);
+}
+
+.bundle-price-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm, 12px);
+  justify-content: center;
+  margin-bottom: var(--spacing-xs, 8px);
+}
+
+.bundle-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark, #1a1a1a);
+}
+
+.bundle-compare-price {
+  font-size: 1.125rem;
+  color: var(--text-gray, #999);
+  text-decoration: line-through;
+}
+
+.bundle-savings-amount {
+  font-size: 0.875rem;
+  color: var(--primary-pink, #ec008c);
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+}
+
 .bundle-description {
   font-size: 0.9375rem;
   color: var(--text-gray, #666);
@@ -162,23 +213,14 @@
   border-top: 1px solid var(--light-gray, #e0e0e0);
   text-align: center;
   font-size: 0.875rem;
-  color: var(--text-gray, #666);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs, 6px);
-  flex-wrap: wrap;
-}
-
-.bundle-nudge-text {
-  display: inline;
 }
 
 .bundle-nudge-link {
   color: var(--primary-pink, #ec008c);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   transition: color var(--transition-base, 0.3s);
+  display: inline-block;
 }
 
 .bundle-nudge-link:hover {

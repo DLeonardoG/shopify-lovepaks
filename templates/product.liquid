@@ -37,7 +37,7 @@
         
         <!-- Trust Badge -->
         <div class="product-trust-badge">
-          <p>Subscribe & all orders ship FREE + unlock more savings with bundles</p>
+          <p>Subscribe & save 20% + unlock more savings with bundles</p>
         </div>
         
         <!-- Reviews -->
@@ -86,46 +86,52 @@
         <form action="/cart/add" method="post" enctype="multipart/form-data" id="product-form">
           <input type="hidden" name="id" id="product-variant-id" value="{{ product.selected_or_first_available_variant.id }}">
           
-          <!-- Flavor Selector -->
+          <!-- Variant Selectors -->
           {% if product.options_with_values.size > 0 %}
             {% for option in product.options_with_values %}
-              {% comment %} Skip "Title" option if it only has "Default Title" value {% endcomment %}
+              {% comment %} Skip "Title" option completely if it only has "Default Title" values {% endcomment %}
               {% assign should_show_option = true %}
               
-              {% comment %} Check if option is Title with Default Title {% endcomment %}
-              {% if option.name == 'Title' %}
-                {% if option.values.size == 1 and option.values.first == 'Default Title' %}
+              {% comment %} Check if option is Title with only Default Title values {% endcomment %}
+              {% if option.name == 'Title' or option.name == 'title' or option.name == 'TITLE' %}
+                {% assign has_non_default = false %}
+                {% for value in option.values %}
+                  {% unless value == 'Default Title' or value == 'default title' or value == 'DEFAULT TITLE' %}
+                    {% assign has_non_default = true %}
+                    {% break %}
+                  {% endunless %}
+                {% endfor %}
+                {% unless has_non_default %}
                   {% assign should_show_option = false %}
-                {% elsif option.values.size > 0 %}
-                  {% assign all_default = true %}
-                  {% for value in option.values %}
-                    {% unless value == 'Default Title' %}
-                      {% assign all_default = false %}
-                      {% break %}
-                    {% endunless %}
-                  {% endfor %}
-                  {% if all_default %}
-                    {% assign should_show_option = false %}
-                  {% endif %}
-                {% endif %}
+                {% endunless %}
               {% endif %}
               
+              {% comment %} Only render if option should be shown {% endcomment %}
               {% if should_show_option %}
-                {% if option.name == 'Flavor' or option.name == 'Option1' %}
+                {% if option.name == 'Flavor' or option.name == 'flavor' or option.name == 'Option1' %}
                   {% render 'variant-selector-flavor', option: option, product: product %}
-                {% elsif option.name == 'Size' or option.name == 'Option2' %}
+                {% elsif option.name == 'Size' or option.name == 'size' or option.name == 'Option2' %}
                   {% render 'variant-selector-size', option: option, product: product %}
                 {% else %}
-                  {% render 'variant-selector-default', option: option, product: product %}
+                  {% comment %} Don't render Title option {% endcomment %}
+                  {% unless option.name == 'Title' or option.name == 'title' or option.name == 'TITLE' %}
+                    {% render 'variant-selector-default', option: option, product: product %}
+                  {% endunless %}
                 {% endif %}
               {% endif %}
             {% endfor %}
           {% endif %}
           
-          <!-- Subscription Toggle -->
+          <!-- Subscription Toggle (Shopify Selling Plans) -->
           {% if product.selling_plan_groups.size > 0 %}
             {% render 'subscription-widget', product: product %}
           {% endif %}
+
+          <!-- Appstle Subscription: widget se muestra al activar el app embed en el tema.
+               Pasos: Tienda → Temas → Personalizar → App embeds → activar "Appstle Subscriptions". -->
+          <div class="product-appstle-notice" aria-hidden="true">
+            <span class="appstle-notice-text">Subscription powered by Appstle</span>
+          </div>
           
           <!-- Quantity Selector -->
           <div class="quantity-selector">

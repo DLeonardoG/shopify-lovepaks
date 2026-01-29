@@ -1,34 +1,38 @@
 /**
  * BUNDLE CART JAVASCRIPT
  * Handles adding bundles to cart
- * Supports: Try Both, Citrus 3-Month, Fragrance-Free 3-Month
+ * Supports: 3 Scent Free, 3 Citrus, 2 Citrus + 1 Scent Free, 2 Scent Free + 1 Citrus
+ * All bundles have 15% discount
  */
 
 (function() {
   'use strict';
 
-  // Bundle configurations
+  // Bundle configurations - 15% discount on all bundles
   const BUNDLE_CONFIG = {
-    'try-both': {
-      products: ['citrus-flower-blossom', 'dye-scent-free'],
-      quantities: [1, 1],
-      discount: 10, // 10% off
-      discountCode: 'TRYBOTH10', // Optional: discount code to apply
-      freeShipping: false
+    'scent-free-3month': {
+      products: ['dye-scent-free'],
+      quantities: [3],
+      discount: 15, // 15% off
+      discountCode: 'BUNDLE15' // Discount code to apply
     },
     'citrus-3month': {
       products: ['citrus-flower-blossom'],
       quantities: [3],
       discount: 15, // 15% off
-      discountCode: 'CITRUS3MONTH15', // Optional: discount code to apply
-      freeShipping: true
+      discountCode: 'BUNDLE15'
     },
-    'fragrance-3month': {
-      products: ['dye-scent-free'],
-      quantities: [3],
+    '2citrus-1scent': {
+      products: ['citrus-flower-blossom', 'dye-scent-free'],
+      quantities: [2, 1],
       discount: 15, // 15% off
-      discountCode: 'FRAGRANCE3MONTH15', // Optional: discount code to apply
-      freeShipping: true
+      discountCode: 'BUNDLE15'
+    },
+    '2scent-1citrus': {
+      products: ['dye-scent-free', 'citrus-flower-blossom'],
+      quantities: [2, 1],
+      discount: 15, // 15% off
+      discountCode: 'BUNDLE15'
     }
   };
 
@@ -137,8 +141,7 @@
 
         // Show success message
         const savingsText = config.discount ? `Save ${config.discount}%` : '';
-        const shippingText = config.freeShipping ? ' + Free Shipping' : '';
-        showToast(`Bundle added to cart! ${savingsText}${shippingText}`, 'success');
+        showToast(`Bundle added to cart! ${savingsText}`, 'success');
 
       } catch (error) {
         console.error('Error adding bundle to cart:', error);

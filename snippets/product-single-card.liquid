@@ -35,10 +35,13 @@
       <h3 class="product-single-name">{{ product.title }}</h3>
       
       <div class="product-single-specs">
-        <span class="product-single-paks">39 Paks®</span>
+        {% comment %} Get Paks count from metafield or use default 39 {% endcomment %}
+        {% assign paks_count = product.metafields.custom.paks_count | default: 39 %}
+        <span class="product-single-paks">{{ paks_count }} Paks® • {{ product.price | money }}</span>
       </div>
       
-      <div class="product-single-price-section">
+      {% comment %} Price is now shown in specs line, but keep price section for styling consistency {% endcomment %}
+      <div class="product-single-price-section" style="display: none;">
         <span class="product-single-price">{{ product.price | money }}</span>
         {% if product.compare_at_price > product.price %}
           <span class="product-single-compare-price">{{ product.compare_at_price | money }}</span>
@@ -58,8 +61,7 @@
     </button>
     
     <div class="product-single-subscription-nudge">
-      <span>Subscribe & save 20% + free ship →</span>
-      <a href="#subscription-block" class="single-nudge-link">Start Subscription</a>
+      <a href="#subscription-block" class="single-nudge-link">Subscribe & save 20% →</a>
     </div>
   </div>
 </div>
@@ -170,9 +172,11 @@
 }
 
 .product-single-paks {
-  font-size: 0.9375rem;
-  color: var(--text-gray, #666);
-  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-dark, #1a1a1a);
+  font-weight: 600;
+  display: block;
+  margin-bottom: var(--spacing-md, 16px);
 }
 
 .product-single-price-section {
@@ -182,6 +186,11 @@
   margin-top: auto;
   padding-top: var(--spacing-md, 16px);
   border-top: 1px solid var(--light-gray, #e0e0e0);
+}
+
+.product-single-price-section[style*="display: none"] {
+  border-top: none;
+  padding-top: 0;
 }
 
 .product-single-price {
@@ -239,19 +248,15 @@
 .product-single-subscription-nudge {
   text-align: center;
   font-size: 0.875rem;
-  color: var(--text-gray, #666);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs, 6px);
-  flex-wrap: wrap;
+  margin-top: var(--spacing-sm, 12px);
 }
 
 .single-nudge-link {
   color: var(--primary-pink, #ec008c);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   transition: color var(--transition-base, 0.3s);
+  display: inline-block;
 }
 
 .single-nudge-link:hover {

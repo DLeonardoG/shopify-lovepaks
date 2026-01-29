@@ -9,6 +9,95 @@
     padding: 40px 0 80px;
 }
 
+/* Partner Benefits Hero (no pricing - first touch for Become a Partner) */
+.partner-benefits-hero {
+    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--burgundy, #722F37) 100%);
+    color: white;
+    padding: 48px 24px 56px;
+    margin: 0 0 0;
+    text-align: center;
+}
+
+.partner-benefits-inner {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.partner-benefits-title {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    margin: 0 0 12px;
+    color: white;
+}
+
+.partner-benefits-subtitle {
+    font-size: 18px;
+    line-height: 1.5;
+    opacity: 0.95;
+    margin: 0;
+}
+
+/* Partner Benefits Section */
+.partner-benefits-section {
+    padding: 40px 24px 48px;
+}
+
+.partner-benefits-heading {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-align: center;
+    margin: 0 0 32px;
+}
+
+.partner-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.partner-benefit-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: transform var(--transition-fast);
+}
+
+.partner-benefit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.partner-benefit-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+}
+
+.partner-benefit-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 8px;
+}
+
+.partner-benefit-card p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-gray);
+    margin: 0;
+}
+
+.partner-benefits-cta-text {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
 /* Progress Bar */
 .progress-container {
     max-width: 1000px;

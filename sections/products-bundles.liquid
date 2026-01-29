@@ -1,10 +1,37 @@
 {% comment %}
   Products Bundles Section
   Displays 3 bundle offers in a grid
+  Calculates prices and savings dynamically from Shopify products
 {% endcomment %}
 
 {% assign citrus_product = all_products['citrus-flower-blossom'] %}
 {% assign fragrance_product = all_products['dye-scent-free'] %}
+
+{% comment %} Calculate bundle prices from Shopify products {% endcomment %}
+{% if citrus_product and fragrance_product %}
+  {% assign citrus_price = citrus_product.selected_or_first_available_variant.price %}
+  {% assign fragrance_price = fragrance_product.selected_or_first_available_variant.price %}
+  
+  {% comment %} Bundle 1: 3 Scent Free (15% discount) {% endcomment %}
+  {% assign bundle1_original = fragrance_price | times: 3 %}
+  {% assign bundle1_discount_amount = bundle1_original | times: 15 | divided_by: 100 %}
+  {% assign bundle1_final_price = bundle1_original | minus: bundle1_discount_amount %}
+  
+  {% comment %} Bundle 2: 3 Citrus (15% discount) {% endcomment %}
+  {% assign bundle2_original = citrus_price | times: 3 %}
+  {% assign bundle2_discount_amount = bundle2_original | times: 15 | divided_by: 100 %}
+  {% assign bundle2_final_price = bundle2_original | minus: bundle2_discount_amount %}
+  
+  {% comment %} Bundle 3: 2 Citrus + 1 Scent Free (15% discount) {% endcomment %}
+  {% assign bundle3_original = citrus_price | times: 2 | plus: fragrance_price %}
+  {% assign bundle3_discount_amount = bundle3_original | times: 15 | divided_by: 100 %}
+  {% assign bundle3_final_price = bundle3_original | minus: bundle3_discount_amount %}
+  
+  {% comment %} Bundle 4: 2 Scent Free + 1 Citrus (15% discount) {% endcomment %}
+  {% assign bundle4_original = fragrance_price | times: 2 | plus: citrus_price %}
+  {% assign bundle4_discount_amount = bundle4_original | times: 15 | divided_by: 100 %}
+  {% assign bundle4_final_price = bundle4_original | minus: bundle4_discount_amount %}
+{% endif %}
 
 <section class="products-bundles-section" id="bundles-section">
   <div class="container">
@@ -13,40 +40,64 @@
     </div>
     
     <div class="bundles-grid">
-      {% comment %} Bundle 1: Try Both (10% off) {% endcomment %}
-      {% if citrus_product and fragrance_product %}
+      {% comment %} Bundle 1: 3 Scent Free (15% off) {% endcomment %}
+      {% if fragrance_product %}
         {% render 'bundle-card',
-          bundle_type: 'try-both',
-          bundle_title: 'TRY BOTH (Save 10%)',
-          bundle_savings: '10%',
-          bundle_includes: 'Citrus + Fragrance-Free<br>1 + 1 pouches',
-          bundle_description: 'New here? Try both formulas—uplifting scent + truly fragrance-free.',
-          bundle_products: 'citrus-flower-blossom,dye-scent-free',
-          free_shipping: false %}
+          bundle_type: 'scent-free-3month',
+          bundle_title: '3-MONTH SUPPLY (Save 15%)',
+          bundle_savings: '15%',
+          bundle_savings_amount: bundle1_discount_amount,
+          bundle_original_price: bundle1_original,
+          bundle_final_price: bundle1_final_price,
+          bundle_includes: 'Dye & Scent Free x3',
+          bundle_description: 'Gentle, simple, and consistent—ideal for sensitive skin and scent-sensitive homes.',
+          bundle_products: 'dye-scent-free',
+          bundle_quantities: '3' %}
       {% endif %}
       
-      {% comment %} Bundle 2: Citrus 3-Month Supply (15% off + free shipping) {% endcomment %}
+      {% comment %} Bundle 2: 3 Citrus (15% off) {% endcomment %}
       {% if citrus_product %}
         {% render 'bundle-card',
           bundle_type: 'citrus-3month',
           bundle_title: '3-MONTH SUPPLY (Save 15%)',
           bundle_savings: '15%',
+          bundle_savings_amount: bundle2_discount_amount,
+          bundle_original_price: bundle2_original,
+          bundle_final_price: bundle2_final_price,
           bundle_includes: 'Citrus Flower Blossom x3',
           bundle_description: 'Stock up on your brightest clean—made for everyday loads and active days.',
           bundle_products: 'citrus-flower-blossom',
-          free_shipping: true %}
+          bundle_quantities: '3' %}
       {% endif %}
       
-      {% comment %} Bundle 3: Fragrance-Free 3-Month Supply (15% off + free shipping) {% endcomment %}
-      {% if fragrance_product %}
+      {% comment %} Bundle 3: 2 Citrus + 1 Scent Free (15% off) {% endcomment %}
+      {% if citrus_product and fragrance_product %}
         {% render 'bundle-card',
-          bundle_type: 'fragrance-3month',
+          bundle_type: '2citrus-1scent',
           bundle_title: '3-MONTH SUPPLY (Save 15%)',
           bundle_savings: '15%',
-          bundle_includes: 'Dye & Scent Free x3',
-          bundle_description: 'Gentle, simple, and consistent—ideal for sensitive skin and scent-sensitive homes.',
-          bundle_products: 'dye-scent-free',
-          free_shipping: true %}
+          bundle_savings_amount: bundle3_discount_amount,
+          bundle_original_price: bundle3_original,
+          bundle_final_price: bundle3_final_price,
+          bundle_includes: 'Citrus Flower Blossom x2<br>Dye & Scent Free x1',
+          bundle_description: 'Mix and match—bright citrus for most loads, gentle scent-free for sensitive items.',
+          bundle_products: 'citrus-flower-blossom,dye-scent-free',
+          bundle_quantities: '2,1' %}
+      {% endif %}
+      
+      {% comment %} Bundle 4: 2 Scent Free + 1 Citrus (15% off) {% endcomment %}
+      {% if citrus_product and fragrance_product %}
+        {% render 'bundle-card',
+          bundle_type: '2scent-1citrus',
+          bundle_title: '3-MONTH SUPPLY (Save 15%)',
+          bundle_savings: '15%',
+          bundle_savings_amount: bundle4_discount_amount,
+          bundle_original_price: bundle4_original,
+          bundle_final_price: bundle4_final_price,
+          bundle_includes: 'Dye & Scent Free x2<br>Citrus Flower Blossom x1',
+          bundle_description: 'Mostly gentle, with a touch of uplifting citrus—perfect for sensitive households.',
+          bundle_products: 'dye-scent-free,citrus-flower-blossom',
+          bundle_quantities: '2,1' %}
       {% endif %}
     </div>
   </div>

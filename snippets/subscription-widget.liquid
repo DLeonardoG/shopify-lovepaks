@@ -24,18 +24,24 @@
     <div class="subscription-details" id="subscription-details" style="display: none;">
       <select name="selling_plan_id" id="selling-plan-select" class="selling-plan-select">
         <option value="">One-time purchase</option>
+        {% comment %} Filter to show only quarterly plans with 20% discount {% endcomment %}
         {% for group in product.selling_plan_groups %}
           {% for plan in group.selling_plans %}
-            <option value="{{ plan.id }}" data-price-adjustment="{{ plan.price_adjustments.first.value }}">
-              {{ plan.name }} - Save {{ plan.price_adjustments.first.value }}%
-            </option>
+            {% assign discount_value = plan.price_adjustments.first.value | default: 0 %}
+            {% assign plan_name_lower = plan.name | downcase %}
+            {% comment %} Show plan if it's quarterly (every 3 months) and has 20% discount {% endcomment %}
+            {% if plan_name_lower contains 'quarterly' or plan_name_lower contains '3 month' or plan_name_lower contains 'every 3' or discount_value == 20 %}
+              <option value="{{ plan.id }}" data-price-adjustment="{{ discount_value }}">
+                Quarterly Delivery - Save {{ discount_value }}%
+              </option>
+            {% endif %}
           {% endfor %}
         {% endfor %}
       </select>
       
       <p class="subscription-note">
         <span class="subscription-icon">✓</span>
-        Free shipping on subscriptions
+        Pause, skip, or cancel anytime
       </p>
     </div>
   </div>

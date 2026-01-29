@@ -1,30 +1,124 @@
 {% comment %}
-  MasterCase Page - Wholesale Partner Program
-  Handle: mastercase (or wholesale - set in Shopify Admin)
-  Template: page.mastercase
-  Exact copy of shop-landing.html logic
+  MasterCase Page - Wholesale Partner Program Landing
+  Handle: mastercase (Become a Partner goes here)
+  Benefits + headline tile + Why Partner With Us tiles. No public pricing (confidential).
 {% endcomment %}
 
-{% comment %} Load styles directly in template {% endcomment %}
 {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
 
-<!-- Hero Section -->
-<section class="shop-hero">
-    <div class="container">
-        <div class="hero-content">
-            <h1 class="hero-title">Become a Partner with Our MasterCase Program</h1>
-            <p class="hero-subtitle">Sell our product at your location and increase monthly recurring revenue by providing your members with our wellness product.</p>
+<!-- Join The Wellness Revolution! -->
+<section class="mastercase-wellness-hero">
+    <div class="mastercase-wellness-hero-inner container">
+        <div class="mastercase-wellness-hero-content">
+            <h1 class="mastercase-wellness-hero-title">Join The Wellness Revolution! <span class="mastercase-wellness-hero-heart" aria-hidden="true">♥</span></h1>
+            <p class="mastercase-wellness-hero-intro">Let's create something truly impactful together. Partner with Love Brands and tap into a growing market reshaping wellness and emotional well-being.</p>
+            <p class="mastercase-wellness-we-provide">We provide:</p>
+            <ul class="mastercase-wellness-benefits">
+                <li>Exclusive wholesale discounts to maximize your margins.</li>
+                <li>Unique, energy-infused products that attract high-demand, health-conscious consumers.</li>
+                <li>Customizable partnership opportunities that support your growth and drive revenue.</li>
+            </ul>
+            <p class="mastercase-wellness-cta-text">Ready to boost your profits and make a lasting impact?</p>
+            <a href="/pages/wholesale-register" class="mastercase-btn-cta">Contact us today!</a>
+        </div>
+        <div class="mastercase-wellness-hero-image-wrap">
+            <img src="{{ 'aauraofcle.jpg' | file_img_url: '800x' }}" alt="Wellness and opportunity" class="mastercase-wellness-hero-image" loading="lazy" width="800" height="533">
         </div>
     </div>
 </section>
 
-<!-- Product Packages -->
+<!-- Headline tile: full width above the 4 Why Partner tiles -->
+<section class="mastercase-headline-section">
+    <div class="container">
+        <div class="mastercase-headline-tile">
+            <h2 class="mastercase-headline-title">Generate $1500+ per month in recurring revenue with monthly profit examples</h2>
+        </div>
+    </div>
+</section>
+
+<!-- Why Partner With Us - 4 tiles -->
+<section class="mastercase-why-section">
+    <div class="container">
+        <h2 class="mastercase-why-heading">Why Partner With Us</h2>
+        <p class="mastercase-why-intro">At <strong>Love Brands</strong>, we understand wellness professionals' needs. Our energy-infused products enhance your space, offering practical and emotional benefits for your clients. Here's how we support your business:</p>
+        <div class="mastercase-why-grid">
+            <div class="mastercase-why-tile">
+                <div class="mastercase-why-tile-icon" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 8v8m0 24v-8M8 24h8m24 0h-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="6" stroke="currentColor" stroke-width="2"/><path d="M24 14l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4z" fill="currentColor" opacity="0.6"/></svg>
+                </div>
+                <h3>Products With Vibrational Energy</h3>
+                <p>Our Love Paks, infused with rose quartz, offer both practical and spiritual benefits, connecting emotionally with consumers.</p>
+            </div>
+            <div class="mastercase-why-tile">
+                <div class="mastercase-why-tile-icon" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2"/><path d="M24 12c-2 4-4 8-4 12s2 8 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="4" fill="currentColor"/></svg>
+                </div>
+                <h3>Attract New Segments</h3>
+                <p>Wellness-focused products appeal to consumers who value mindfulness, energy healing, and sustainability.</p>
+            </div>
+            <div class="mastercase-why-tile">
+                <div class="mastercase-why-tile-icon" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 32h24v4H12z" stroke="currentColor" stroke-width="2"/><path d="M16 24h16v4H16z" stroke="currentColor" stroke-width="2"/><path d="M20 16h8v4h-8z" stroke="currentColor" stroke-width="2"/><path d="M18 32v-8h4l2-8h4l2 8h4v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <h3>Stand Out in a Crowded Market</h3>
+                <p>Our unique, quantum energy-infused products differentiate you in a competitive market.</p>
+            </div>
+            <div class="mastercase-why-tile">
+                <div class="mastercase-why-tile-icon" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="20" r="8" stroke="currentColor" stroke-width="2"/><path d="M14 36c0-6 4-10 10-10s10 4 10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="12" r="3" fill="currentColor" opacity="0.6"/></svg>
+                </div>
+                <h3>Stay Ahead of Wellness Trends</h3>
+                <p>Love Paks are a product of ancient wisdom &amp; modern science, ensuring your offerings stay innovative.</p>
+            </div>
+            <div class="mastercase-why-tile mastercase-why-tile-highlight">
+                <div class="mastercase-why-tile-icon" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4v8m0 32v-8M4 24h8m32 0h-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="10" stroke="currentColor" stroke-width="2"/><path d="M24 14v10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <h3>Generate $1500+ per month in recurring revenue</h3>
+                <p>From the $3k shelf blueprint: build predictable monthly revenue with wholesale margins. 100 students buying monthly can deliver $1500+ in profit.</p>
+            </div>
+            <div class="mastercase-why-tile mastercase-why-tile-highlight">
+                <div class="mastercase-why-tile-icon" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 36V12h8l8 12 8-12h8v24h-8V24l-8 12-8-12v12H8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <h3>Scale to $3k+ monthly profit</h3>
+                <p>200 students buying monthly = $3000+ per month profit. Our wholesale program is designed to scale with your location and community.</p>
+            </div>
+        </div>
+        <p class="mastercase-why-cta-text">Ready to apply? <a href="/pages/wholesale-register" class="mastercase-why-cta-link">Complete the application form</a> to get started.</p>
+    </div>
+</section>
+
+<!-- Monthly profit examples (3 tiles: $750 / $1500 / $3000) -->
+<section class="mastercase-profit-section">
+    <div class="container">
+        <h2 class="mastercase-profit-heading">Generate $1500+ per month in recurring revenue</h2>
+        <p class="mastercase-profit-sub">Monthly profit examples based on student purchases</p>
+        <div class="mastercase-profit-grid">
+            <div class="mastercase-profit-tile">
+                <span class="mastercase-profit-amount">$750</span>
+                <p class="mastercase-profit-desc">50 students buy monthly</p>
+                <span class="mastercase-profit-label">per month profit</span>
+            </div>
+            <div class="mastercase-profit-tile mastercase-profit-tile-featured">
+                <span class="mastercase-profit-amount">$1500</span>
+                <p class="mastercase-profit-desc">100 students buy monthly</p>
+                <span class="mastercase-profit-label">per month profit</span>
+            </div>
+            <div class="mastercase-profit-tile">
+                <span class="mastercase-profit-amount">$3000</span>
+                <p class="mastercase-profit-desc">200 students buy monthly</p>
+                <span class="mastercase-profit-label">per month profit</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Product Packages (Wholesale - lógica original) -->
 <section class="packages-section">
     <div class="container">
         <div class="packages-grid">
-            <!-- Master Case -->
             <div class="package-card horizontal-layout" data-package="starter">
-                <!-- Product Images Showcase -->
                 <div class="product-showcase">
                     <div class="showcase-images horizontal-layout">
                         <div class="product-image-wrapper">
@@ -46,16 +140,19 @@
 
                 <div class="package-content">
                     <div class="package-header">
-                        <h3 class="package-name">Master Case</h3>
-                        <div class="package-price">
-                            <span class="price-amount">$229</span>
-                            <span class="price-label">wholesale price</span>
+                        <h3 class="package-name">Wholesale</h3>
+                        <div class="package-price-invite" aria-hidden="true">
+                            <span class="package-price-invite-icon" aria-hidden="true">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </span>
+                            <p class="package-price-invite-text">Wholesale pricing is confidential</p>
+                            <p class="package-price-invite-sub">Apply below to view pricing and add to cart</p>
                         </div>
                     </div>
 
                     <div class="package-body">
                         <div class="package-description">
-                            <p>Each Master Case contains 10 pouches. Each pouch contains 39 Love Paks. Total: 390 Love Paks per Master Case.</p>
+                            <p>Each Wholesale contains 10 pouches. Each pouch contains 39 Love Paks. Total: 390 Love Paks per Wholesale.</p>
                         </div>
                         <div class="package-summary">
                             <div class="summary-item">
@@ -74,10 +171,6 @@
                     </div>
 
                     <div class="package-footer">
-                        {% comment %} 
-                          Buscar producto "Master Case" por handle o usar variant ID
-                          Reemplazar con el variant ID real del producto en Shopify
-                        {% endcomment %}
                         {% assign master_case_product = all_products['master-case'] %}
                         {% if master_case_product %}
                             <button class="btn-primary btn-large add-to-cart-btn"
@@ -118,7 +211,7 @@
                     </svg>
                 </button>
                 <div class="faq-answer">
-                    <p>The minimum order quantity for wholesale partnership is one Master Case (10 units).</p>
+                    <p>The minimum order quantity for wholesale partnership is one Wholesale (10 units).</p>
                 </div>
             </div>
 
@@ -178,7 +271,7 @@
                     </svg>
                 </button>
                 <div class="faq-answer">
-                    <p>The Master Case Monthly is designed for recurring orders, but there's no strict monthly commitment. You can order as needed based on your inventory requirements.</p>
+                    <p>The Wholesale Monthly is designed for recurring orders, but there's no strict monthly commitment. You can order as needed based on your inventory requirements.</p>
                 </div>
             </div>
         </div>

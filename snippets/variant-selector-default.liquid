@@ -1,28 +1,39 @@
 {% comment %}
   Default Variant Selector (for other options)
-  Hidden if option is "Title" with only "Default Title" values
+  Never renders "Title" option - should be filtered in template
 {% endcomment %}
 
-{% comment %} Don't render if this is Title option with Default Title only {% endcomment %}
-{% unless option.name == 'Title' and option.values.size == 1 and option.values.first == 'Default Title' %}
-  <div class="variant-selector default-selector">
-    <label class="variant-label" for="option-{{ option.position }}">
-      {{ option.name }}:
-    </label>
-    
-    <select 
-      id="option-{{ option.position }}"
-      class="variant-select"
-      data-option-name="{{ option.name }}"
-      data-option-position="{{ option.position }}">
-      {% for value in option.values %}
-        {% unless value == 'Default Title' and option.name == 'Title' %}
-          <option value="{{ value }}" {% if product.selected_or_first_available_variant.options[option.position] == value %}selected{% endif %}>
-            {{ value }}
-          </option>
-        {% endunless %}
-      {% endfor %}
-    </select>
-  </div>
+{% comment %} Double check: Don't render if this is Title option {% endcomment %}
+{% unless option.name == 'Title' or option.name == 'title' or option.name == 'TITLE' %}
+  {% comment %} Also check if all values are "Default Title" {% endcomment %}
+  {% assign has_valid_values = false %}
+  {% for value in option.values %}
+    {% unless value == 'Default Title' or value == 'default title' or value == 'DEFAULT TITLE' %}
+      {% assign has_valid_values = true %}
+      {% break %}
+    {% endunless %}
+  {% endfor %}
+  
+  {% if has_valid_values %}
+    <div class="variant-selector default-selector">
+      <label class="variant-label" for="option-{{ option.position }}">
+        {{ option.name }}:
+      </label>
+      
+      <select 
+        id="option-{{ option.position }}"
+        class="variant-select"
+        data-option-name="{{ option.name }}"
+        data-option-position="{{ option.position }}">
+        {% for value in option.values %}
+          {% unless value == 'Default Title' or value == 'default title' or value == 'DEFAULT TITLE' %}
+            <option value="{{ value }}" {% if product.selected_or_first_available_variant.options[option.position] == value %}selected{% endif %}>
+              {{ value }}
+            </option>
+          {% endunless %}
+        {% endfor %}
+      </select>
+    </div>
+  {% endif %}
 {% endunless %}
 

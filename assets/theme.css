@@ -2040,6 +2040,16 @@ p {
     font-style: italic;
 }
 
+.featured-testimonial-fda {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(236, 0, 140, 0.15);
+    font-size: 12px;
+    color: var(--text-gray);
+    font-style: italic;
+    line-height: 1.5;
+}
+
 @media (max-width: 768px) {
     .featured-testimonial-content {
         padding: 32px 24px;
@@ -3019,6 +3029,16 @@ p {
 
 .subscription-icon {
     font-size: 18px;
+}
+
+/* Appstle integration notice (product page) */
+.product-appstle-notice {
+    margin-top: 12px;
+    margin-bottom: 4px;
+}
+.appstle-notice-text {
+    font-size: 12px;
+    color: var(--text-muted, #6b7280);
 }
 
 /* Quantity Selector */
