@@ -2322,6 +2322,15 @@ p {
     color: white;
 }
 
+.footer-appstle-manage a {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 15px;
+    transition: color var(--transition-fast);
+}
+.footer-appstle-manage a:hover {
+    color: white;
+}
+
 .footer-bottom {
     padding-top: 40px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
