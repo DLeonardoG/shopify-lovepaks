@@ -1,11 +1,41 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-product",
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "seal_subscriptions_subscription_widget_iY9bJ6": {
+          "type": "shopify://apps/seal-subscriptions/blocks/subscription-widget/13b25004-a140-4ab7-b5fe-29918f759699",
+          "settings": {
+            "product": "{{product}}"
+          }
+        },
+        "appstle_subscription_appstle_subscription_product_page_widget_qFdYUj": {
+          "type": "shopify://apps/appstle-subscription/blocks/appstle-subscription-product-page-widget/fe257d39-6f88-4f35-ab08-bd437e3aa94e",
+          "settings": {}
+        },
+        "appstle_bundles_appstle_combo_bundle_ezDj86": {
+          "type": "shopify://apps/appstle-bundles/blocks/appstle-combo-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "seal_subscriptions_subscription_widget_iY9bJ6",
+        "appstle_subscription_appstle_subscription_product_page_widget_qFdYUj",
+        "appstle_bundles_appstle_combo_bundle_ezDj86"
+      ],
       "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
