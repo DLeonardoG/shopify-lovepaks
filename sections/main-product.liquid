@@ -76,7 +76,9 @@
             {% endfor %}
           {% endif %}
 
-          {% comment %} App blocks (Appstle Bundles / Subscriptions) - add in Theme Editor {% endcomment %}
+          {% comment %} Appstle Subscriptions / Bundles: widget se inyecta aquí por el script de la app (App embed). Placeholder para que el script encuentre el contenedor. {% endcomment %}
+          <div id="appstle-subscription-widget" class="product-app-blocks" aria-label="Subscription options"></div>
+          {% comment %} App blocks (Theme Editor) por si añades el bloque de Appstle manualmente {% endcomment %}
           <div class="product-app-blocks">
             {% for block in section.blocks %}
               {% if block.type == '@app' %}
