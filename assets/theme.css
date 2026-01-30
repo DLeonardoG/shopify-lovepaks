@@ -3202,6 +3202,15 @@ p {
     color: var(--text-muted, #6b7280);
 }
 
+/* App blocks container (Appstle Bundles / Subscriptions) */
+.product-app-blocks {
+    margin: 20px 0 24px;
+    min-height: 1px;
+}
+.product-app-block {
+    width: 100%;
+}
+
 /* Quantity Selector */
 .quantity-selector {
     margin-bottom: 24px;

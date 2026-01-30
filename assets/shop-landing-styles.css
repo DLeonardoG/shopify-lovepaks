@@ -47,9 +47,10 @@
 }
 
 /* Packages Section */
+/* Product packages / CTA - warm brand close, invite to apply */
 .packages-section {
-    padding: 100px 0;
-    background: #FFF5F9;
+    padding: 80px 24px 100px;
+    background: linear-gradient(180deg, #FFFBF9 0%, #FFF5F9 40%, #FFF9FB 100%);
     position: relative;
 }
 
@@ -683,9 +684,9 @@
    MASTERCASE PARTNERSHIP LANDING (Become a Partner)
    ============================================ */
 
-/* Join The Wellness Revolution! */
+/* Join The Wellness Revolution! - Warm welcome, brand pink tint */
 .mastercase-wellness-hero {
-    background: #fff;
+    background: linear-gradient(180deg, #FFFBF9 0%, #FFF9FB 50%, #FFF5F9 100%);
     padding: 48px 24px 56px;
     position: relative;
     overflow: hidden;
@@ -697,8 +698,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 180px;
-    background: linear-gradient(180deg, transparent 0%, rgba(236, 0, 140, 0.06) 30%, rgba(114, 47, 55, 0.08) 100%);
+    height: 200px;
+    background: linear-gradient(180deg, transparent 0%, rgba(236, 0, 140, 0.04) 40%, rgba(144, 24, 53, 0.06) 100%);
     pointer-events: none;
 }
 
@@ -822,10 +823,10 @@
     vertical-align: middle;
 }
 
-/* Headline tile: full width above the 4 Why Partner tiles */
+/* Headline tile: bridge from hero to content, soft brand flow */
 .mastercase-headline-section {
-    padding: 24px 0;
-    background: linear-gradient(180deg, #FFF9FB 0%, #fff 100%);
+    padding: 32px 0;
+    background: linear-gradient(180deg, #FFF5F9 0%, #FFF9FB 60%, #FFFBF9 100%);
 }
 
 .mastercase-headline-tile {
@@ -846,21 +847,21 @@
     color: #fff;
 }
 
-/* Why Partner With Us - 6 tiles */
+/* Why Partner With Us - calm content area, tiles pop on soft ground */
 .mastercase-why-section {
-    padding: 48px 0 56px;
-    background: #fff;
+    padding: 48px 24px 56px;
+    background: linear-gradient(180deg, #FFFBF9 0%, #FAF8FA 30%, #FAF8FA 100%);
 }
 
-@media (min-width: 900px) {
-    .mastercase-why-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+.mastercase-why-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .mastercase-why-tile-highlight {
     border-color: var(--burgundy);
-    background: linear-gradient(180deg, rgba(236, 0, 140, 0.03) 0%, #fff 100%);
+    background: linear-gradient(180deg, rgba(236, 0, 140, 0.04) 0%, #fff 100%);
 }
 
 .mastercase-why-tile-highlight .mastercase-why-tile-icon {
@@ -890,49 +891,57 @@
     line-height: 1.55;
     color: var(--text-dark, #1a1a1a);
     text-align: center;
-    max-width: 720px;
+    max-width: 900px;
     margin: 0 auto 40px;
 }
 
 .mastercase-why-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 24px;
-    max-width: 1000px;
     margin: 0 auto 32px;
 }
 
-@media (max-width: 640px) {
+@media (min-width: 601px) {
     .mastercase-why-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .mastercase-why-grid {
+        gap: 20px;
     }
 }
 
 .mastercase-why-tile {
     background: #fff;
-    border: 2px solid var(--primary-pink);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 2px solid rgba(236, 0, 140, 0.3);
     border-radius: var(--radius-lg, 12px);
-    padding: 28px;
+    padding: 28px 24px;
     text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
 .mastercase-why-tile:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 24px rgba(236, 0, 140, 0.12);
+    border-color: var(--primary-pink);
 }
 
 .mastercase-why-tile-icon {
     color: var(--primary-pink);
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .mastercase-why-tile-icon svg {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
 }
 
 .mastercase-why-tile h3 {
@@ -967,10 +976,10 @@
     text-decoration: none;
 }
 
-/* Monthly profit examples section (3 tiles: $750 / $1500 / $3000) */
+/* Monthly profit examples - numbers/revenue, soft highlight */
 .mastercase-profit-section {
-    padding: 48px 0 56px;
-    background: linear-gradient(180deg, #FFF9FB 0%, #fff 100%);
+    padding: 48px 24px 56px;
+    background: linear-gradient(180deg, #FFF9FB 0%, #FFF5F9 50%, #FFFBF9 100%);
 }
 
 .mastercase-profit-heading {
@@ -1005,7 +1014,8 @@
 
 .mastercase-profit-tile {
     background: #fff;
-    border: 2px solid rgba(236, 0, 140, 0.2);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 2px solid rgba(236, 0, 140, 0.22);
     border-radius: var(--radius-lg, 12px);
     padding: 28px 24px;
     text-align: center;
