@@ -50,14 +50,15 @@
       <p style="text-align: center; margin: 0 auto 12px; max-width: 720px;">
         Complete the registration form below. After submission, our team will review your application.
       </p>
-      {% unless customer %}
-        <p style="text-align: center; margin: 0 auto 24px; max-width: 560px; font-size: 0.95rem;">
-          Already applied? <a href="{{ routes.account_login_url }}">Log in</a> to check if you're approved or pending.
-        </p>
-      {% endunless %}
 
       <!-- Sami embed (Samita) -->
       <div class="samitaWS-registrationForm" data-id="MTEwOTY="></div>
+
+      {% unless customer %}
+        <p style="text-align: center; margin: 32px auto 0; max-width: 560px; font-size: 0.95rem;">
+          Already applied? <a href="{{ routes.account_login_url }}?return_to={{ request.path | url_encode }}">Log in</a> to check if you're approved or pending.
+        </p>
+      {% endunless %}
     {% endif %}
   </div>
 </section>

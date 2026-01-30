@@ -1984,6 +1984,35 @@ p {
     position: relative;
 }
 
+.featured-testimonial-quote {
+    margin: 0;
+    padding: 0 0 0 32px;
+}
+
+.featured-testimonial-quote::before {
+    content: '"';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    font-size: clamp(72px, 12vw, 120px);
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1;
+    color: rgba(236, 0, 140, 0.2);
+    font-weight: 400;
+}
+
+.featured-testimonial-quote::after {
+    content: '"';
+    position: absolute;
+    bottom: 40px;
+    right: 0;
+    font-size: clamp(72px, 12vw, 120px);
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 0.6;
+    color: rgba(236, 0, 140, 0.2);
+    font-weight: 400;
+}
+
 .featured-testimonial-text {
     margin-bottom: 0;
     padding-bottom: 60px;
@@ -2038,16 +2067,6 @@ p {
     font-size: 14px;
     color: var(--text-gray);
     font-style: italic;
-}
-
-.featured-testimonial-fda {
-    margin-top: 24px;
-    padding-top: 24px;
-    border-top: 1px solid rgba(236, 0, 140, 0.15);
-    font-size: 12px;
-    color: var(--text-gray);
-    font-style: italic;
-    line-height: 1.5;
 }
 
 @media (max-width: 768px) {

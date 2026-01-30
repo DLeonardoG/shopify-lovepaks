@@ -4,6 +4,7 @@
   Assign template: page.wholesale-page
 
   Approved = wholesale_approved, wholesale-partner, or partner (not pending).
+  Wholesale demo: 10 pouches, price from Shopify product (master-case).
 {% endcomment %}
 
 {% assign is_approved = false %}
@@ -13,6 +14,15 @@
   {% elsif customer.tags contains 'wholesale_approved' or customer.tags contains 'wholesale-partner' or customer.tags contains 'partner' %}
     {% assign is_approved = true %}
   {% endif %}
+{% endif %}
+
+{% assign wholesale_product = all_products['master-case'] %}
+{% if wholesale_product != blank %}
+  {% assign wholesale_price = wholesale_product.selected_or_first_available_variant.price %}
+  {% assign wholesale_title = wholesale_product.title %}
+{% else %}
+  {% assign wholesale_price = 22900 %}
+  {% assign wholesale_title = 'Wholesale' %}
 {% endif %}
 
 <section style="padding: 72px 0;">
@@ -28,6 +38,27 @@
           <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
         </div>
       </div>
+
+      <!-- Wholesale offer demo: 10 pouches, price from Shopify -->
+      <div style="background: #fff; border: 2px solid rgba(236, 0, 140, 0.2); border-radius: 12px; padding: 28px 32px; margin-bottom: 32px;">
+        <h2 style="margin: 0 0 20px; font-size: 1.25rem; color: var(--text-dark, #1a1a1a);">Wholesale offer</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center; max-width: 560px; margin: 0 auto;">
+          <div>
+            <span style="display: block; font-size: 1.5rem; font-weight: 700; color: var(--primary-pink, #ec008c);">10</span>
+            <span style="font-size: 0.9rem; color: var(--text-gray, #555);">pouches per wholesale</span>
+          </div>
+          <div>
+            <span style="display: block; font-size: 1.5rem; font-weight: 700; color: var(--text-dark, #1a1a1a);">{{ wholesale_price | money }}</span>
+            <span style="font-size: 0.9rem; color: var(--text-gray, #555);">wholesale price</span>
+          </div>
+          <div>
+            <span style="display: block; font-size: 0.95rem; font-weight: 600; color: var(--text-dark, #1a1a1a);">39 Love Paks per pouch</span>
+            <span style="font-size: 0.9rem; color: var(--text-gray, #555);">390 total Love Paks</span>
+          </div>
+        </div>
+        <p style="margin: 16px 0 0; font-size: 0.9rem; color: var(--text-gray, #555);">Minimum order: 1 Wholesale (10 units). Price from Shopify.</p>
+      </div>
+
       <!-- Samita quick order (visible only for approved wholesale accounts) -->
       <div class="samitaWS-quickOrderForm" data-id="bmV3"></div>
     {% else %}
