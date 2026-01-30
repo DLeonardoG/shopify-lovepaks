@@ -2,29 +2,62 @@
   Wholesale Registration Page (Sami embed)
   Create a Shopify Page with handle: wholesale-register
   Assign template: page.wholesale-register
+
+  Checks:
+  - Approved: wholesale_approved, wholesale-partner, or partner → show "Continue" (no form).
+  - Pending: partner-pending-approval → "Already applied, under review" (no form).
+  - Else: show registration form. If not logged in, suggest logging in to check status.
 {% endcomment %}
 
+{% assign is_approved = false %}
+{% assign is_pending = false %}
+{% if customer %}
+  {% if customer.tags contains 'partner-pending-approval' %}
+    {% assign is_pending = true %}
+  {% elsif customer.tags contains 'wholesale_approved' or customer.tags contains 'wholesale-partner' %}
+    {% assign is_approved = true %}
+  {% elsif customer.tags contains 'partner' %}
+    {% assign is_approved = true %}
+  {% endif %}
+{% endif %}
+
 <section class="wholesale-register-section" style="padding: 72px 0;">
-  <div class="container" style="max-width: 900px;">
-    {% if customer and customer.tags contains 'wholesale_approved' %}
-      <h1 style="text-align:center; margin-bottom: 16px;">You're approved for Wholesale</h1>
-      <p style="text-align:center; margin: 0 auto 24px; max-width: 720px;">
-        Your account is already approved. You can continue to the wholesale page.
-      </p>
-      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-        <a class="btn-primary btn-large" href="/pages/wholesale-page">Continue</a>
-        <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
+  <div class="container" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+    {% if is_approved %}
+      <div style="background: #f8f6f4; border: 1px solid #e8e4e0; border-radius: 12px; padding: 40px 32px; text-align: center;">
+        <h1 style="margin: 0 0 16px; font-size: 1.75rem;">You're approved for Wholesale</h1>
+        <p style="margin: 0 auto 24px; max-width: 560px; line-height: 1.5;">
+          Your account is already approved. You can continue to the wholesale page.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a class="btn-primary btn-large" href="/pages/wholesale-page">Continue to Wholesale</a>
+          <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
+        </div>
+      </div>
+    {% elsif is_pending %}
+      <div style="background: #f8f6f4; border: 1px solid #e8e4e0; border-radius: 12px; padding: 40px 32px; text-align: center;">
+        <h1 style="margin: 0 0 16px; font-size: 1.75rem;">Application under review</h1>
+        <p style="margin: 0 auto 24px; max-width: 560px; line-height: 1.5;">
+          You've already applied. Our team is reviewing your application. We'll be in touch soon.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
+          <a class="btn-secondary btn-large" href="/pages/mastercase">Wholesale Program</a>
+        </div>
       </div>
     {% else %}
-      <h1 style="text-align:center; margin-bottom: 16px;">Wholesale Registration</h1>
-      <p style="text-align:center; margin: 0 auto 12px; max-width: 720px;">
+      <h1 style="text-align: center; margin-bottom: 16px;">Wholesale Registration</h1>
+      <p style="text-align: center; margin: 0 auto 12px; max-width: 720px;">
         Complete the registration form below. After submission, our team will review your application.
       </p>
+      {% unless customer %}
+        <p style="text-align: center; margin: 0 auto 24px; max-width: 560px; font-size: 0.95rem;">
+          Already applied? <a href="{{ routes.account_login_url }}">Log in</a> to check if you're approved or pending.
+        </p>
+      {% endunless %}
 
       <!-- Sami embed (Samita) -->
       <div class="samitaWS-registrationForm" data-id="MTEwOTY="></div>
     {% endif %}
   </div>
 </section>
-
-

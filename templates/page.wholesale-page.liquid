@@ -2,36 +2,47 @@
   Wholesale Landing Page (for approved accounts)
   Create a Shopify Page with handle: wholesale-page
   Assign template: page.wholesale-page
+
+  Approved = wholesale_approved, wholesale-partner, or partner (not pending).
 {% endcomment %}
 
+{% assign is_approved = false %}
+{% if customer %}
+  {% if customer.tags contains 'partner-pending-approval' %}
+    {% comment %} Pending: not approved for orders yet {% endcomment %}
+  {% elsif customer.tags contains 'wholesale_approved' or customer.tags contains 'wholesale-partner' or customer.tags contains 'partner' %}
+    {% assign is_approved = true %}
+  {% endif %}
+{% endif %}
+
 <section style="padding: 72px 0;">
-  <div class="container" style="max-width: 900px;">
-    {% if customer and customer.tags contains 'wholesale_approved' %}
-      <h1 style="text-align:center; margin-bottom: 16px;">Wholesale Page</h1>
-      <p style="text-align:center; margin: 0 auto 24px; max-width: 720px;">
-        You're approved. Below you can place wholesale orders directly.
-      </p>
-
-      <!-- Samita quick order (visible only for approved wholesale accounts) -->
-      <div class='samitaWS-quickOrderForm' data-id='bmV3'></div>
-
-      <div style="margin-top: 32px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-        <a class="btn-secondary btn-large" href="/pages/mastercase">View Wholesale Program</a>
-        <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
+  <div class="container" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+    {% if is_approved %}
+      <div style="background: #f8f6f4; border: 1px solid #e8e4e0; border-radius: 12px; padding: 40px 32px; margin-bottom: 32px; text-align: center;">
+        <h1 style="margin: 0 0 16px; font-size: 1.75rem;">Wholesale Page</h1>
+        <p style="margin: 0 auto 24px; max-width: 560px; line-height: 1.5;">
+          You're approved. Below you can place wholesale orders directly.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a class="btn-secondary btn-large" href="/pages/mastercase">View Wholesale Program</a>
+          <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
+        </div>
       </div>
+      <!-- Samita quick order (visible only for approved wholesale accounts) -->
+      <div class="samitaWS-quickOrderForm" data-id="bmV3"></div>
     {% else %}
-      <h1 style="text-align:center; margin-bottom: 16px;">Wholesale Access Required</h1>
-      <p style="text-align:center; margin: 0 auto 24px; max-width: 720px;">
-        You must be logged in and approved for wholesale access.
-      </p>
-      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-        <a class="btn-primary btn-large" href="/pages/wholesale-register">Go to Registration</a>
-        {% unless customer %}
-          <a class="btn-secondary btn-large" href="{{ routes.account_login_url }}">Log in</a>
-        {% endunless %}
+      <div style="background: #f8f6f4; border: 1px solid #e8e4e0; border-radius: 12px; padding: 40px 32px; text-align: center;">
+        <h1 style="margin: 0 0 16px; font-size: 1.75rem;">Wholesale Access Required</h1>
+        <p style="margin: 0 auto 24px; max-width: 560px; line-height: 1.5;">
+          You must be logged in and approved for wholesale access.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a class="btn-primary btn-large" href="/pages/wholesale-register">Go to Registration</a>
+          {% unless customer %}
+            <a class="btn-secondary btn-large" href="{{ routes.account_login_url }}">Log in</a>
+          {% endunless %}
+        </div>
       </div>
     {% endif %}
   </div>
 </section>
-
-
