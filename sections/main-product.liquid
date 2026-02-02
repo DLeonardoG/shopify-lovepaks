@@ -141,21 +141,34 @@
             </details>
           {% endif %}
         </div>
+      </div>
+    </div>
 
-        {% comment %} Unit products: mismo listado que página de inicio (tag "unit", mismas exclusiones) {% endcomment %}
-        {% assign products_collection = collections.all %}
-        {% if collections.featured and collections.featured.products.size > 0 %}
-          {% assign products_collection = collections.featured %}
-        {% endif %}
-        {% assign unit_count = 0 %}
-        {% for rec_product in products_collection.products %}
-          {% if rec_product.tags contains 'unit' and rec_product.id != product.id %}
-            {% unless rec_product.handle == 'master-case' or rec_product.tags contains 'wholesale' or rec_product.tags contains 'master-case' %}
-              {% assign unit_count = unit_count | plus: 1 %}
-              {% if unit_count == 1 %}
-        <div class="product-unit-recommendations">
-          <div class="product-unit-recommendations-grid">
-              {% endif %}
+    {% comment %} Unit products: sección aparte debajo de todo (mismo listado que página de inicio) {% endcomment %}
+    {% assign products_collection = collections.all %}
+    {% if collections.featured and collections.featured.products.size > 0 %}
+      {% assign products_collection = collections.featured %}
+    {% endif %}
+    {% assign unit_count = 0 %}
+    {% for rec_product in products_collection.products %}
+      {% if rec_product.tags contains 'unit' and rec_product.id != product.id %}
+        {% unless rec_product.handle == 'master-case' or rec_product.tags contains 'wholesale' or rec_product.tags contains 'master-case' %}
+          {% assign unit_count = unit_count | plus: 1 %}
+        {% endunless %}
+      {% endif %}
+    {% endfor %}
+    {% if unit_count > 0 %}
+    <section class="product-page-unit-section" aria-label="You may also like">
+      <div class="container">
+        <div class="product-page-unit-section-header">
+          <h2 class="section-title">You may also like</h2>
+        </div>
+        <div class="product-unit-recommendations-grid">
+          {% assign unit_shown = 0 %}
+          {% for rec_product in products_collection.products %}
+            {% if rec_product.tags contains 'unit' and rec_product.id != product.id %}
+              {% unless rec_product.handle == 'master-case' or rec_product.tags contains 'wholesale' or rec_product.tags contains 'master-case' %}
+                {% assign unit_shown = unit_shown | plus: 1 %}
                 <div class="product-card product-unit-card">
                   <a href="{{ rec_product.url }}" class="product-card-link">
                     <div class="product-image-wrapper">
@@ -200,12 +213,10 @@
               {% endunless %}
             {% endif %}
           {% endfor %}
-          {% if unit_count > 0 %}
-          </div>
         </div>
-          {% endif %}
       </div>
-    </div>
+    </section>
+    {% endif %}
 
     {% comment %}
       Product subsections (FAQ, benefits, etc.) must be added in the product template
@@ -239,21 +250,24 @@
 {{ 'product-page.js' | asset_url | script_tag }}
 
 <style>
-/* Unit recommendations: mismo aspecto que sección products en página de inicio */
-.product-unit-recommendations { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--light-gray, #eee); }
-.product-unit-recommendations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-.product-unit-recommendations .product-card { margin-top: 0; }
-.product-unit-recommendations .product-card-link { text-decoration: none; color: inherit; display: flex; flex-direction: column; flex: 1; }
-.product-unit-recommendations .product-image-wrapper { position: relative; width: 100%; height: 300px; overflow: hidden; background: var(--light-gray); }
-.product-unit-recommendations .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-.product-unit-recommendations .product-card:hover .product-image { transform: scale(1.05); }
-.product-unit-recommendations .product-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--light-gray); color: var(--text-gray); font-size: 14px; }
-.product-unit-recommendations .product-sale-badge { position: absolute; top: 12px; right: 12px; background: var(--accent-red, #c00); color: white; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase; z-index: 2; }
-.product-unit-recommendations .product-compare-price { font-size: 18px; color: var(--text-gray); text-decoration: line-through; }
-.product-unit-recommendations .product-variants-count { font-size: 12px; color: var(--text-gray); margin: 0; font-style: italic; }
+/* Sección "You may also like" debajo de todo (mismo aspecto que products en inicio) */
+.product-page-unit-section { padding: clamp(50px, 8vw, 80px) 0; background: #f9f9f9; margin-top: 0; }
+.product-page-unit-section-header { text-align: center; margin-bottom: 2.5rem; }
+.product-page-unit-section .section-eyebrow { display: block; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-pink); margin-bottom: 0.5rem; }
+.product-page-unit-section .section-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; margin: 0; font-family: 'Montserrat', sans-serif; color: var(--text-dark); }
+.product-page-unit-section .product-unit-recommendations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+.product-page-unit-section .product-card { margin-top: 0; }
+.product-page-unit-section .product-card-link { text-decoration: none; color: inherit; display: flex; flex-direction: column; flex: 1; }
+.product-page-unit-section .product-image-wrapper { position: relative; width: 100%; height: 300px; overflow: hidden; background: var(--light-gray); }
+.product-page-unit-section .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+.product-page-unit-section .product-card:hover .product-image { transform: scale(1.05); }
+.product-page-unit-section .product-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--light-gray); color: var(--text-gray); font-size: 14px; }
+.product-page-unit-section .product-sale-badge { position: absolute; top: 12px; right: 12px; background: var(--accent-red, #c00); color: white; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase; z-index: 2; }
+.product-page-unit-section .product-compare-price { font-size: 18px; color: var(--text-gray); text-decoration: line-through; }
+.product-page-unit-section .product-variants-count { font-size: 12px; color: var(--text-gray); margin: 0; font-style: italic; }
 @media (max-width: 768px) {
-  .product-unit-recommendations-grid { grid-template-columns: 1fr; }
-  .product-unit-recommendations .product-image-wrapper { height: 280px; }
+  .product-page-unit-section .product-unit-recommendations-grid { grid-template-columns: 1fr; }
+  .product-page-unit-section .product-image-wrapper { height: 280px; }
 }
 </style>
 
