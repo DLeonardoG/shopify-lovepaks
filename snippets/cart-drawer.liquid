@@ -79,45 +79,33 @@
       {% endif %}
     </div>
     
-    {% if cart.item_count > 0 %}
-      <!-- Cart Footer -->
-      <div class="cart-drawer-footer">
-        <!-- Shipping Threshold -->
-        {% assign threshold = 10000 %}
-        {% assign remaining = threshold | minus: cart.total_price %}
-        
-        {% if cart.total_price < threshold %}
-          <div class="shipping-bar">
-            <p class="shipping-message">
-              Add {{ remaining | money }} for FREE shipping!
-            </p>
-            <div class="shipping-progress">
-              {% assign progress = cart.total_price | times: 100 | divided_by: threshold %}
-              <div class="shipping-progress-bar" style="width: {{ progress }}%"></div>
-            </div>
-          </div>
-        {% else %}
-          <div class="free-shipping">
-            <p>🎉 You qualify for FREE shipping!</p>
-          </div>
-        {% endif %}
-        
-        <!-- Cart Totals -->
-        <div class="cart-totals">
-          <div class="cart-subtotal">
-            <span>Subtotal:</span>
-            <span class="cart-total-price" id="cart-total">{{ cart.total_price | money }}</span>
-          </div>
-          <p class="cart-tax-note">Taxes and shipping calculated at checkout</p>
+    <!-- Cart Footer: always in DOM so JS can show/hide when cart updates (id for JS) -->
+    {% assign free_shipping_threshold = 7500 %}
+    {% assign remaining = free_shipping_threshold | minus: cart.total_price %}
+    {% assign progress = cart.total_price | times: 100 | divided_by: free_shipping_threshold %}
+    <div class="cart-drawer-footer" id="cart-drawer-footer"{% if cart.item_count == 0 %} style="display: none;"{% endif %}>
+      <!-- Shipping Threshold: FREE shipping on orders $75+ (7500 cents) -->
+      <div class="shipping-bar" id="cart-shipping-bar"{% if cart.total_price >= free_shipping_threshold %} style="display: none;"{% endif %}>
+        <p class="shipping-message" id="cart-shipping-message">Add {{ remaining | money }} for FREE shipping!</p>
+        <div class="shipping-progress">
+          <div class="shipping-progress-bar" id="cart-shipping-progress-bar" style="width: {{ progress }}%"></div>
         </div>
-        
-        <!-- Checkout Button -->
-        <button type="button" class="cart-checkout-btn" id="cart-checkout-btn">Checkout</button>
-        
-        <!-- Continue Shopping -->
-        <a href="/collections/all" class="continue-shopping">Continue Shopping</a>
       </div>
-    {% endif %}
+      <div class="free-shipping" id="cart-free-shipping-msg"{% if cart.total_price < free_shipping_threshold %} style="display: none;"{% endif %}>
+        <p>🎉 You qualify for FREE shipping!</p>
+      </div>
+      
+      <div class="cart-totals">
+        <div class="cart-subtotal">
+          <span>Subtotal:</span>
+          <span class="cart-total-price" id="cart-total">{{ cart.total_price | money }}</span>
+        </div>
+        <p class="cart-tax-note">Taxes and shipping calculated at checkout</p>
+      </div>
+      
+      <button type="button" class="cart-checkout-btn" id="cart-checkout-btn">Checkout</button>
+      <a href="/collections/all" class="continue-shopping">Continue Shopping</a>
+    </div>
   </div>
 </div>
 

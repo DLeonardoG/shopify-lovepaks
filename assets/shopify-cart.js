@@ -197,6 +197,7 @@ async function updateCartUI() {
         }
         
         // Update cart drawer body (new enhanced drawer)
+        const cartDrawerFooter = document.getElementById('cart-drawer-footer');
         if (cartDrawerBody) {
             if (cart.items.length === 0) {
                 cartDrawerBody.innerHTML = `
@@ -206,8 +207,18 @@ async function updateCartUI() {
                         <a href="/collections/all" class="cta-btn">START SHOPPING</a>
                     </div>
                 `;
+                if (cartDrawerFooter) cartDrawerFooter.style.display = 'none';
             } else {
-                const cartItemsHTML = cart.items.map((item, index) => `
+                if (cartDrawerFooter) cartDrawerFooter.style.display = '';
+                const FREE_SHIPPING_THRESHOLD = 7500; // $75
+                const cartItemsHTML = cart.items.map((item, index) => {
+                    const spa = item.selling_plan_allocation;
+                    const planName = spa && spa.selling_plan ? escapeHtml(spa.selling_plan.name) : '';
+                    const planPrice = spa && (typeof spa.price === 'number') ? formatMoney(spa.price) : '';
+                    const subscriptionHtml = planName
+                        ? `<p class="selling-plan cart-item-subscription"><span class="subscription-badge">Subscription</span> ${planName}</p>${planPrice ? `<p class="cart__product-meta cart-item-subscription-price">${planPrice}</p>` : ''}`
+                        : '';
+                    return `
                     <div class="cart-item" data-key="${item.key}" data-line="${index + 1}">
                         <div class="cart-item-image">
                             <img src="${item.image}" alt="${escapeHtml(item.product_title)}" loading="lazy">
@@ -215,6 +226,7 @@ async function updateCartUI() {
                         <div class="cart-item-details">
                             <h4 class="cart-item-title">${escapeHtml(item.product_title)}</h4>
                             <p class="cart-item-variant">${escapeHtml(item.variant_title)}</p>
+                            ${subscriptionHtml}
                             <div class="cart-item-price">${formatMoney(item.final_line_price)}</div>
                             <div class="cart-item-quantity">
                                 <button type="button" class="qty-btn qty-minus" data-line="${index + 1}">−</button>
@@ -224,11 +236,33 @@ async function updateCartUI() {
                             <button class="cart-item-remove" data-line="${index + 1}">Remove</button>
                         </div>
                     </div>
-                `).join('');
+                `;
+                }).join('');
                 
                 cartDrawerBody.innerHTML = `<div class="cart-items" id="cart-items">${cartItemsHTML}</div>`;
                 
-                // Re-attach event listeners
+                // Update shipping threshold: FREE shipping on orders $75+
+                const shippingBar = document.getElementById('cart-shipping-bar');
+                const shippingMessage = document.getElementById('cart-shipping-message');
+                const shippingProgressBar = document.getElementById('cart-shipping-progress-bar');
+                const freeShippingMsg = document.getElementById('cart-free-shipping-msg');
+                const totalPrice = cart.total_price;
+                if (shippingBar && freeShippingMsg) {
+                    if (totalPrice < FREE_SHIPPING_THRESHOLD) {
+                        shippingBar.style.display = '';
+                        freeShippingMsg.style.display = 'none';
+                        const remaining = FREE_SHIPPING_THRESHOLD - totalPrice;
+                        if (shippingMessage) shippingMessage.textContent = `Add ${formatMoney(remaining)} for FREE shipping!`;
+                        if (shippingProgressBar) {
+                            const progress = Math.min(100, Math.round((totalPrice * 100) / FREE_SHIPPING_THRESHOLD));
+                            shippingProgressBar.style.width = progress + '%';
+                        }
+                    } else {
+                        shippingBar.style.display = 'none';
+                        freeShippingMsg.style.display = '';
+                    }
+                }
+                
                 attachCartDrawerListeners();
             }
         }
