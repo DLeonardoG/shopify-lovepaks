@@ -195,13 +195,13 @@
     window.history.replaceState({}, '', url);
   }
 
-  // Format money (Shopify prices are in cents)
+  // Format money (Shopify prices are in cents) - show decimals, no rounding
   function formatMoney(cents) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     }).format(cents / 100);
   }
 
