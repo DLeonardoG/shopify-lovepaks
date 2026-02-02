@@ -54,12 +54,14 @@
         },
         "seal_subscriptions_subscription_widget_MnYgHk": {
           "type": "shopify://apps/seal-subscriptions/blocks/subscription-widget/13b25004-a140-4ab7-b5fe-29918f759699",
+          "disabled": true,
           "settings": {
             "product": "{{product}}"
           }
         },
         "sami_order_limits_app_block_limit_message_HGRtKQ": {
           "type": "shopify://apps/sami-order-limits/blocks/app-block-limit-message/89f388f4-7ddb-4368-8d89-3937e2145b24",
+          "disabled": true,
           "settings": {}
         },
         "appstle_subscription_appstle_subscription_product_page_widget_qFdYUj": {
