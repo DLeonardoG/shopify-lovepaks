@@ -76,17 +76,27 @@
             {% endfor %}
           {% endif %}
 
-          {% comment %} Appstle Subscriptions / Bundles: widget se inyecta aquí por el script de la app (App embed). Placeholder para que el script encuentre el contenedor. {% endcomment %}
-          <div id="appstle-subscription-widget" class="product-app-blocks" aria-label="Subscription options"></div>
-          {% comment %} App blocks (Theme Editor) por si añades el bloque de Appstle manualmente {% endcomment %}
-          <div class="product-app-blocks">
-            {% for block in section.blocks %}
-              {% if block.type == '@app' %}
-                <div class="product-app-block" {{ block.shopify_attributes }}>
-                  {% render block %}
-                </div>
-              {% endif %}
-            {% endfor %}
+          {% comment %} Purchase options: Subscribe & Save vs One time – inyectado por app (Appstle/Seal). {% endcomment %}
+          <div class="product-purchase-options" id="product-purchase-options">
+            <div id="appstle-subscription-widget" class="product-app-blocks" aria-label="Subscription options"></div>
+            <div class="product-app-blocks">
+              {% for block in section.blocks %}
+                {% if block.type == '@app' %}
+                  <div class="product-app-block" {{ block.shopify_attributes }}>
+                    {% render block %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="product-subscriber-benefits" id="product-subscriber-benefits">
+              <p class="product-subscriber-benefits-title">Subscriber benefits:</p>
+              <ul class="product-subscriber-benefits-list">
+                <li>VIP exclusive perks and early access</li>
+                <li>Always save 15%</li>
+                <li>Flexible delivery: Adjust, skip, cancel anytime</li>
+              </ul>
+              <a href="#faq" class="product-frequency-link">Which frequency is right for me?</a>
+            </div>
           </div>
 
           <div class="quantity-selector">
@@ -102,6 +112,18 @@
         </form>
 
         <a href="#faq" class="help-link">Is this right for me?</a>
+
+        {% comment %} Combos / Bundles: show products from collection (e.g. products with tag "combo") {% endcomment %}
+        {% assign combos_collection = section.settings.combo_bundles_collection %}
+        {% if combos_collection == blank %}
+          {% assign combos_collection = collections['combos'] %}
+        {% endif %}
+        {% if combos_collection == blank %}
+          {% assign combos_collection = collections['bundles'] %}
+        {% endif %}
+        {% if combos_collection != blank and combos_collection.products.size > 0 %}
+          {% render 'product-combos-block', collection: combos_collection %}
+        {% endif %}
 
         <div class="product-accordions">
           {% if product.metafields.custom.ingredients %}
@@ -161,6 +183,13 @@
       "type": "@app"
     }
   ],
-  "settings": []
+  "settings": [
+    {
+      "type": "collection",
+      "id": "combo_bundles_collection",
+      "label": "Combos / Bundles collection",
+      "info": "Collection of products with tag \"combo\" (bundles). Create an automatic collection with condition: Product tag equals combo. If empty, theme tries collections \"combos\" or \"bundles\"."
+    }
+  ]
 }
 {% endschema %}

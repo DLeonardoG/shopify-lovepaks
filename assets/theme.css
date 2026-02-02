@@ -2958,7 +2958,15 @@ p {
     text-transform: uppercase;
 }
 
-/* Size Selector */
+/* Size / Pods Selector – paquetes (69 Pods, 30 Pods, etc.) */
+.variant-label.size-label-heading {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    color: var(--text-dark);
+}
+
 .size-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -2967,36 +2975,40 @@ p {
 
 .size-button {
     flex: 1;
-    min-width: 120px;
-    padding: 16px;
-    border: 2px solid var(--light-gray);
-    border-radius: var(--radius-sm);
+    min-width: 140px;
+    padding: 18px 20px;
+    border: 2px solid var(--light-gray, #ddd);
+    border-radius: var(--radius-md, 12px);
     background: white;
     cursor: pointer;
     transition: all var(--transition-fast);
     text-align: center;
+    font-size: 16px;
 }
 
 .size-button:hover {
     border-color: var(--primary-pink);
-    transform: translateY(-2px);
+    background: var(--off-white, #fafafa);
 }
 
 .size-button.selected {
-    border-color: var(--primary-pink);
-    background: var(--off-white);
+    border-color: var(--text-dark, #1a1a1a);
+    background: var(--off-white, #fafafa);
+    font-weight: 700;
 }
 
-.size-label {
+.size-button .size-label {
     display: block;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin: 0;
+    color: var(--text-dark);
 }
 
-.size-count {
+.size-button .size-count {
     display: block;
     font-size: 12px;
     color: var(--text-gray);
+    margin-top: 4px;
 }
 
 /* Default Selector */
@@ -3008,6 +3020,60 @@ p {
     font-size: 16px;
     background: white;
     cursor: pointer;
+}
+
+/* Purchase options (Subscribe & Save vs One time) + Subscriber benefits */
+.product-purchase-options {
+    margin-bottom: 24px;
+}
+
+.product-subscriber-benefits {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(236, 0, 140, 0.1);
+}
+
+.product-subscriber-benefits-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 12px;
+}
+
+.product-subscriber-benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+}
+
+.product-subscriber-benefits-list li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-gray);
+}
+
+.product-subscriber-benefits-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+}
+
+.product-frequency-link {
+    font-size: 14px;
+    color: var(--primary-pink);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.product-frequency-link:hover {
+    text-decoration: underline;
 }
 
 /* Subscription Widget (One-time vs Autoship) */
