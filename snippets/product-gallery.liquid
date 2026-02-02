@@ -1,6 +1,6 @@
 {% comment %}
-  Product Gallery with Thumbnails
-  Main image: variant image → product featured image → first product image.
+  Product Gallery - Main image always visible.
+  Variant image → product featured → first image. If none, use placeholder so "No image" never shows.
 {% endcomment %}
 
 {% assign current_variant = product.selected_or_first_available_variant %}
@@ -9,19 +9,24 @@
   {% assign main_image = product.images[0] %}
 {% endif %}
 {% assign main_image_src = main_image | image_url: width: 2000 %}
+{% if main_image_src == blank and product.images.size > 0 %}
+  {% assign main_image_src = product.images[0] | image_url: width: 2000 %}
+{% endif %}
+{% if main_image_src == blank %}
+  {% comment %} Data URI placeholder so img always has valid src - no broken image / "No image" {% endcomment %}
+  {% assign main_image_src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Crect fill='%23f5f5f5' width='800' height='800'/%3E%3C/svg%3E" %}
+{% endif %}
 {% assign main_image_alt = main_image.alt | default: product.title | escape %}
 
 <div class="product-gallery-container">
-  <!-- Main Image -->
   <div class="product-gallery-main">
-    {% if main_image_src != blank %}
     <img 
       id="product-main-image"
       src="{{ main_image_src }}"
       alt="{{ main_image_alt }}"
       class="product-main-image"
-      loading="eager">
-    {% endif %}
+      loading="eager"
+      decoding="async">
     {% if current_variant.compare_at_price > current_variant.price %}
       <span class="sale-badge">Sale</span>
     {% endif %}

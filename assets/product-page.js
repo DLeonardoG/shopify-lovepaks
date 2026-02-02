@@ -139,12 +139,14 @@
 
   }
 
-  // Update main product image
+  // Update main product image - always set a valid URL so "No image" never shows
   function updateImage(variant) {
     const mainImage = document.getElementById('product-main-image');
-    if (mainImage && variant.image) {
-      mainImage.src = variant.image;
-      mainImage.alt = variant.title || 'Product image';
+    if (!mainImage) return;
+    const imageUrl = (variant && variant.image) || product.variants.find(v => v.image)?.image || product.first_image || (product.variants[0] && product.variants[0].image);
+    if (imageUrl) {
+      mainImage.src = imageUrl;
+      mainImage.alt = (variant && variant.title) || 'Product image';
     }
   }
 
@@ -724,7 +726,17 @@
       initAddToCart();
       initGallery();
       
-      // Update variant on page load if URL has variant parameter
+      // Force main image on first load so it never stays empty / "No image"
+      const mainImg = document.getElementById('product-main-image');
+      if (mainImg && (!mainImg.src || mainImg.src === '' || mainImg.src === window.location.href)) {
+        const url = (state.currentVariant && state.currentVariant.image) || product.first_image || (product.variants[0] && product.variants[0].image);
+        if (url) mainImg.src = url;
+      }
+      if (state.currentVariant) {
+        updateVariant();
+      }
+      
+      // If URL has ?variant=, align state and update again
       const urlParams = new URLSearchParams(window.location.search);
       const variantId = urlParams.get('variant');
       if (variantId) {
