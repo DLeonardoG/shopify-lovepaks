@@ -256,39 +256,42 @@
     });
   }
 
-  // Handle quantity controls
+  // Handle quantity controls: one delegated listener on form so only one handler runs per click
   function initQuantityControls() {
-    const qtyInput = document.getElementById('quantity');
-    const qtyMinus = document.querySelector('.qty-minus');
-    const qtyPlus = document.querySelector('.qty-plus');
-    
-    if (qtyMinus) {
-      qtyMinus.addEventListener('click', () => {
-        const current = parseInt(qtyInput.value) || 1;
-        if (current > 1) {
-          qtyInput.value = current - 1;
-          state.quantity = qtyInput.value;
-        }
-      });
+    const form = document.getElementById('product-form');
+    if (!form) return;
+    const qtyInput = form.querySelector('#quantity') || document.getElementById('quantity');
+    if (!qtyInput) return;
+
+    function updateQuantity(delta) {
+      const current = parseInt(qtyInput.value, 10) || 1;
+      const next = Math.max(1, current + delta);
+      qtyInput.value = next;
+      state.quantity = next;
     }
-    
-    if (qtyPlus) {
-      qtyPlus.addEventListener('click', () => {
-        const current = parseInt(qtyInput.value) || 1;
-        qtyInput.value = current + 1;
-        state.quantity = qtyInput.value;
-      });
-    }
-    
-    if (qtyInput) {
-      qtyInput.addEventListener('change', function() {
-        const value = parseInt(this.value) || 1;
-        if (value < 1) {
-          this.value = 1;
-        }
-        state.quantity = this.value;
-      });
-    }
+
+    form.addEventListener('click', function(e) {
+      const plus = e.target.closest('.qty-plus');
+      const minus = e.target.closest('.qty-minus');
+      if (plus && plus.closest('#product-form')) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        updateQuantity(1);
+      } else if (minus && minus.closest('#product-form')) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        updateQuantity(-1);
+      }
+    }, true);
+
+    qtyInput.addEventListener('change', function() {
+      const value = parseInt(this.value, 10) || 1;
+      const clamped = Math.max(1, value);
+      if (this.value !== String(clamped)) this.value = clamped;
+      state.quantity = clamped;
+    });
   }
 
   // Handle subscription toggle (checkbox + details; widget nativo o inyectado por app)
