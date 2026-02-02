@@ -13,7 +13,7 @@
 
       <div class="product-info">
         <div class="product-trust-badge">
-          <p>Subscribe & save 15% + unlock more savings with bundles</p>
+          <p>Bundle and save 15%! Unlock more savings with subscriptions</p>
         </div>
 
         {% if product.metafields.reviews.rating %}
@@ -33,6 +33,12 @@
         {% assign variant_title = product.selected_or_first_available_variant.title %}
         {% if variant_title != product.title and variant_title != 'Default Title' %}
           <p class="variant-description" id="variant-description">{{ variant_title }}</p>
+        {% endif %}
+
+        {% if product.description != blank %}
+          <div class="product-description">
+            {{ product.description }}
+          </div>
         {% endif %}
 
         {% render 'product-price', product: product %}
@@ -118,8 +124,9 @@
                 <p class="product-subscriber-benefits-title">Subscriber benefits:</p>
                 <ul class="product-subscriber-benefits-list">
                   <li>VIP exclusive perks and early access</li>
-                  <li>Save 15%</li>
+                  <li>Save 20%</li>
                   <li>Flexible delivery: Adjust, skip, cancel anytime</li>
+                  <li>Free shipping on orders over $75</li>
                 </ul>
               {% endif %}
             </div>
@@ -262,6 +269,19 @@
 {{ 'product-page.js' | asset_url | script_tag }}
 
 <style>
+/* Descripción del producto en product-info */
+.product-info .product-description {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-gray, #555);
+    margin: 0 0 20px;
+}
+.product-info .product-description p { margin: 0 0 10px; }
+.product-info .product-description p:last-child { margin-bottom: 0; }
+.product-info .product-description ul,
+.product-info .product-description ol { margin: 0 0 10px; padding-left: 20px; }
+.product-info .product-description li { margin-bottom: 4px; }
+
 /* Sección "You may also like" debajo de todo (mismo aspecto que products en inicio) */
 .product-page-unit-section { padding: clamp(50px, 8vw, 80px) 0; background: #f9f9f9; margin-top: 0; }
 .product-page-unit-section-header { text-align: center; margin-bottom: 2.5rem; }
