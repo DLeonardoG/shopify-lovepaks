@@ -1,16 +1,16 @@
 {% comment %}
-  Wholesale Landing Page (for approved accounts)
-  Create a Shopify Page with handle: wholesale-page
-  Assign template: page.wholesale-page
-
-  Approved = wholesale_approved, wholesale-partner, or partner (not pending).
-  Wholesale demo: 10 pouches, price from Shopify product (master-case).
+  Wholesale Page (for approved partners only)
+  Handle: wholesale-page — Assign this template in Shopify Admin.
+  Shows the Wholesale product with real price from Shopify (master-case).
+  Approved tags: wholesale_approved, wholesale-partner, partner.
+  Scripts: shopify-cart.js + wholesale.js (loaded via theme.liquid).
+  Styles: shop-landing-styles.css (loaded via theme.liquid).
 {% endcomment %}
 
 {% assign is_approved = false %}
 {% if customer %}
   {% if customer.tags contains 'partner-pending-approval' %}
-    {% comment %} Pending: not approved for orders yet {% endcomment %}
+    {% comment %} Pending: do not show ordering {% endcomment %}
   {% elsif customer.tags contains 'wholesale_approved' or customer.tags contains 'wholesale-partner' or customer.tags contains 'partner' %}
     {% assign is_approved = true %}
   {% endif %}
@@ -18,62 +18,133 @@
 
 {% assign wholesale_product = all_products['master-case'] %}
 {% if wholesale_product != blank %}
-  {% assign wholesale_price = wholesale_product.selected_or_first_available_variant.price %}
+  {% assign wholesale_variant = wholesale_product.selected_or_first_available_variant %}
+  {% assign wholesale_price = wholesale_variant.price %}
   {% assign wholesale_title = wholesale_product.title %}
 {% else %}
   {% assign wholesale_price = 22900 %}
   {% assign wholesale_title = 'Wholesale' %}
+  {% assign wholesale_variant = null %}
 {% endif %}
 
-<section style="padding: 72px 0;">
-  <div class="container" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
-    {% if is_approved %}
-      <div style="background: #f8f6f4; border: 1px solid #e8e4e0; border-radius: 12px; padding: 40px 32px; margin-bottom: 32px; text-align: center;">
-        <h1 style="margin: 0 0 16px; font-size: 1.75rem;">Wholesale Page</h1>
-        <p style="margin: 0 auto 24px; max-width: 560px; line-height: 1.5;">
-          You're approved. Below you can place wholesale orders directly.
-        </p>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-          <a class="btn-secondary btn-large" href="/pages/mastercase">View Wholesale Program</a>
-          <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
+{% if is_approved %}
+  {% comment %} Styles loaded by theme.liquid for page handle wholesale-page {% endcomment %}
+
+  <!-- Hero -->
+  <section class="shop-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">Wholesale — Partner Orders</h1>
+        <p class="hero-subtitle">You're approved. Order below at your wholesale price. Price is pulled from Shopify and always up to date.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product card: same layout as wholesale/mastercase, price from Shopify -->
+  <section class="packages-section">
+    <div class="container">
+      <div class="packages-grid">
+        <div class="package-card horizontal-layout" data-package="starter">
+          <div class="product-showcase">
+            <div class="showcase-images horizontal-layout">
+              <div class="product-image-wrapper">
+                <img src="https://lovepaks.com/cdn/shop/files/packaging-normal.jpg?v=1768273734&width=800"
+                     alt="Citrus Blossom Laundry Paks"
+                     class="product-img"
+                     loading="lazy">
+                <div class="product-label">Citrus Blossom</div>
+              </div>
+              <div class="product-image-wrapper">
+                <img src="https://lovepaks.com/cdn/shop/files/packaging-piel-sensibles.jpg?v=1768273765&width=800"
+                     alt="Dye & Scent Free Paks"
+                     class="product-img"
+                     loading="lazy">
+                <div class="product-label">Dye & Scent Free</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="package-content">
+            <div class="package-header">
+              <h3 class="package-name">{{ wholesale_title }}</h3>
+              <div class="package-price">
+                <span class="price-amount">{{ wholesale_price | money }}</span>
+                <span class="price-label">wholesale price</span>
+              </div>
+            </div>
+
+            <div class="package-body">
+              <div class="package-description">
+                <p>Each Wholesale contains 10 pouches. Each pouch contains 39 Love Paks. Total: 390 Love Paks per Wholesale.</p>
+              </div>
+              <div class="package-summary">
+                <div class="summary-item">
+                  <span class="summary-label">Quantity:</span>
+                  <span class="summary-value">10 units</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Packs per pouch:</span>
+                  <span class="summary-value">39 packs</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Total packs:</span>
+                  <span class="summary-value">390 packs</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="package-footer">
+              {% if wholesale_variant %}
+                <button type="button"
+                        class="btn-primary btn-large add-to-cart-btn"
+                        data-package="starter"
+                        data-name="{{ wholesale_title }}"
+                        data-variant-id="{{ wholesale_variant.id }}">
+                  Add to Cart
+                </button>
+              {% else %}
+                <p class="package-price-invite-text" style="margin:0;">Product "master-case" not found in Shopify. Add it in Admin → Products.</p>
+              {% endif %}
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- Wholesale offer demo: 10 pouches, price from Shopify -->
-      <div style="background: #fff; border: 2px solid rgba(236, 0, 140, 0.2); border-radius: 12px; padding: 28px 32px; margin-bottom: 32px;">
-        <h2 style="margin: 0 0 20px; font-size: 1.25rem; color: var(--text-dark, #1a1a1a);">Wholesale offer</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center; max-width: 560px; margin: 0 auto;">
-          <div>
-            <span style="display: block; font-size: 1.5rem; font-weight: 700; color: var(--primary-pink, #ec008c);">10</span>
-            <span style="font-size: 0.9rem; color: var(--text-gray, #555);">pouches per wholesale</span>
-          </div>
-          <div>
-            <span style="display: block; font-size: 1.5rem; font-weight: 700; color: var(--text-dark, #1a1a1a);">{{ wholesale_price | money }}</span>
-            <span style="font-size: 0.9rem; color: var(--text-gray, #555);">wholesale price</span>
-          </div>
-          <div>
-            <span style="display: block; font-size: 0.95rem; font-weight: 600; color: var(--text-dark, #1a1a1a);">39 Love Paks per pouch</span>
-            <span style="font-size: 0.9rem; color: var(--text-gray, #555);">390 total Love Paks</span>
-          </div>
-        </div>
-        <p style="margin: 16px 0 0; font-size: 0.9rem; color: var(--text-gray, #555);">Minimum order: 1 Wholesale (10 units). Price from Shopify.</p>
-      </div>
-
-      <!-- Samita quick order (visible only for approved wholesale accounts) -->
+  <!-- Samita quick order (optional) -->
+  <section class="packages-section" style="padding-top: 0;">
+    <div class="container" style="max-width: 900px;">
+      <h2 class="section-title" style="margin-bottom: 20px;">Quick order (Samita)</h2>
       <div class="samitaWS-quickOrderForm" data-id="bmV3"></div>
-    {% else %}
+    </div>
+  </section>
+
+  <!-- Links -->
+  <section style="padding: 24px 0 48px;">
+    <div class="container" style="text-align: center;">
+      <a class="btn-secondary btn-large" href="/pages/mastercase">View Wholesale Program</a>
+      <a class="btn-secondary btn-large" href="{{ routes.account_url }}" style="margin-left: 12px;">My Account</a>
+    </div>
+  </section>
+
+{% else %}
+  {% comment %} Not approved: require registration / login {% endcomment %}
+  <section class="wholesale-register-section" style="padding: 72px 0;">
+    <div class="container" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
       <div style="background: #f8f6f4; border: 1px solid #e8e4e0; border-radius: 12px; padding: 40px 32px; text-align: center;">
         <h1 style="margin: 0 0 16px; font-size: 1.75rem;">Wholesale Access Required</h1>
         <p style="margin: 0 auto 24px; max-width: 560px; line-height: 1.5;">
-          You must be logged in and approved for wholesale access.
+          You must be logged in and approved for wholesale to see pricing and add to cart.
         </p>
         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-          <a class="btn-primary btn-large" href="/pages/wholesale-register">Go to Registration</a>
+          <a class="btn-primary btn-large" href="/pages/wholesale-register">Apply for Wholesale</a>
           {% unless customer %}
-            <a class="btn-secondary btn-large" href="{{ routes.account_login_url }}">Log in</a>
+            <a class="btn-secondary btn-large" href="{{ routes.account_login_url }}?return_to={{ request.path | url_encode }}">Log in</a>
           {% endunless %}
+          <a class="btn-secondary btn-large" href="/pages/mastercase">Wholesale Program</a>
         </div>
       </div>
-    {% endif %}
-  </div>
-</section>
+    </div>
+  </section>
+{% endif %}

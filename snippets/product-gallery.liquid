@@ -1,19 +1,28 @@
 {% comment %}
   Product Gallery with Thumbnails
-  Similar to trycreate.co gallery
+  Main image: variant image → product featured image → first product image.
 {% endcomment %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign main_image = current_variant.featured_image | default: product.featured_image %}
+{% if main_image == blank and product.images.size > 0 %}
+  {% assign main_image = product.images[0] %}
+{% endif %}
+{% assign main_image_src = main_image | image_url: width: 2000 %}
+{% assign main_image_alt = main_image.alt | default: product.title | escape %}
 
 <div class="product-gallery-container">
   <!-- Main Image -->
   <div class="product-gallery-main">
+    {% if main_image_src != blank %}
     <img 
       id="product-main-image"
-      src="{% if product.selected_or_first_available_variant.featured_image %}{{ product.selected_or_first_available_variant.featured_image | image_url: width: 2000 }}{% else %}{{ product.featured_image | image_url: width: 2000 }}{% endif %}" 
-      alt="{{ product.featured_image.alt | default: product.title | escape }}"
+      src="{{ main_image_src }}"
+      alt="{{ main_image_alt }}"
       class="product-main-image"
       loading="eager">
-    
-    {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+    {% endif %}
+    {% if current_variant.compare_at_price > current_variant.price %}
       <span class="sale-badge">Sale</span>
     {% endif %}
   </div>

@@ -45,6 +45,8 @@
         {{ 'contact-styles.css' | asset_url | stylesheet_tag }}
     {% elsif template.name == 'page' and page.handle == 'catalog' %}
         {{ 'catalog-styles.css' | asset_url | stylesheet_tag }}
+    {% elsif template.name == 'page' and page.handle == 'wholesale-page' %}
+        {{ 'shop-landing-styles.css' | asset_url | stylesheet_tag }}
     {% endif %}
     
     <!-- Shopify required scripts -->
@@ -95,6 +97,9 @@
         {{ 'upsell.js' | asset_url | script_tag }}
     {% elsif template.name == 'page' and page.handle == 'payment-confirmation' %}
         {{ 'payment-confirmation.js' | asset_url | script_tag }}
+    {% elsif template.name == 'page' and page.handle == 'wholesale-page' %}
+        {{ 'shopify-cart.js' | asset_url | script_tag }}
+        {{ 'wholesale.js' | asset_url | script_tag }}
     {% endif %}
     
     <!-- Cart drawer (if needed) -->

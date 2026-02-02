@@ -120,13 +120,12 @@
       </div>
     </div>
 
-    <div class="product-sections">
-      {% section 'product-faq' %}
-      {% if product.metafields.custom.benefits %}{% section 'product-benefits' %}{% endif %}
-      {% if product.metafields.custom.myths %}{% section 'product-myths' %}{% endif %}
-      {% if product.metafields.custom.experts %}{% section 'product-experts' %}{% endif %}
-      {% if product.metafields.custom.comparison %}{% section 'product-comparison' %}{% endif %}
-      {% if product.metafields.custom.lifestyle_images %}{% section 'product-lifestyle' %}{% endif %}
+    {% comment %}
+      Product subsections (FAQ, benefits, etc.) must be added in the product template
+      (Theme Editor → Product page), not here. Shopify does not allow {% section %} inside a section.
+    {% endcomment %}
+    <div class="product-sections" id="product-sections">
+      {% comment %} Optional: render FAQ and other content via snippets if you create them. {% endcomment %}
     </div>
   </div>
 </div>
