@@ -14,34 +14,42 @@
       "blocks": {
         "appstle_bundles_appstle_volume_discount_bundle_ikDat9": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-volume-discount-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "disabled": true,
           "settings": {}
         },
         "appstle_bundles_appstle_discounted_pricing_bundle_QW8MFB": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-discounted-pricing-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "disabled": true,
           "settings": {}
         },
         "appstle_bundles_appstle_bundle_product_page_build_a_box_iA3gd9": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-bundle-product-page-build-a-box/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "disabled": true,
           "settings": {}
         },
         "appstle_bundles_appstle_combo_bundle_NgmikQ": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-combo-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "disabled": true,
           "settings": {}
         },
         "appstle_bundles_appstle_classic_bundle_aMJtYJ": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-classic-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "disabled": true,
           "settings": {}
         },
         "appstle_bundles_appstle_volume_discount_bundle_Ftp8bU": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-volume-discount-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "disabled": true,
           "settings": {}
         },
         "appstle_bundles_appstle_classic_bundle_cVziwa": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-classic-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "disabled": true,
           "settings": {}
         },
         "appstle_bundles_appstle_buy_x_get_y_bundle_wjbXi3": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-buy-x-get-y-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "disabled": true,
           "settings": {}
         },
         "seal_subscriptions_subscription_widget_MnYgHk": {
@@ -72,7 +80,9 @@
         "sami_order_limits_app_block_limit_message_HGRtKQ",
         "appstle_subscription_appstle_subscription_product_page_widget_qFdYUj"
       ],
-      "settings": {}
+      "settings": {
+        "combo_bundles_collection": ""
+      }
     },
     "17700418941b8f3b68": {
       "type": "apps",
