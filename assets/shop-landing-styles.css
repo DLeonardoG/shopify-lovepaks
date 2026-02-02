@@ -62,6 +62,66 @@
     margin: 0 auto;
 }
 
+/* Wholesale Page: productos más compactos y ajustados */
+.wholesale-page-products .packages-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.wholesale-page-products .package-card {
+    max-width: 100%;
+}
+
+.wholesale-page-products .product-showcase {
+    padding: 16px !important;
+}
+
+.wholesale-page-products .product-showcase img.product-img {
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.wholesale-page-products .package-content {
+    padding: 16px !important;
+}
+
+.wholesale-page-products .package-header {
+    padding: 12px 0 8px;
+}
+
+.wholesale-page-products .package-name {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.wholesale-page-products .price-amount {
+    font-size: 24px;
+}
+
+.wholesale-page-products .package-footer {
+    padding: 0;
+}
+
+.wholesale-page-products .add-to-cart-btn {
+    padding: 12px;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .wholesale-page-products .packages-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+    }
+
+    .wholesale-page-products .package-name {
+        font-size: 16px;
+    }
+
+    .wholesale-page-products .price-amount {
+        font-size: 20px;
+    }
+}
+
 /* Package Card */
 .package-card {
     background: white;

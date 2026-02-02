@@ -56,9 +56,12 @@
         {% if combos_collection == blank %}
           {% assign combos_collection = collections['all'] %}
         {% endif %}
-        {% if combos_collection != blank and combos_collection.products.size > 0 %}
-          {% render 'product-combos-block', collection: combos_collection %}
-        {% endif %}
+        {% comment %} No mostrar combos/bundles si el producto tiene tag mastercase {% endcomment %}
+        {% unless product.tags contains 'mastercase' %}
+          {% if combos_collection != blank and combos_collection.products.size > 0 %}
+            {% render 'product-combos-block', collection: combos_collection %}
+          {% endif %}
+        {% endunless %}
 
         <form action="/cart/add" method="post" enctype="multipart/form-data" id="product-form">
           <input type="hidden" name="id" id="product-variant-id" value="{{ product.selected_or_first_available_variant.id }}">
