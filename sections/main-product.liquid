@@ -107,12 +107,21 @@
               {% endfor %}
             </div>
             <div class="product-subscriber-benefits" id="product-subscriber-benefits">
-              <p class="product-subscriber-benefits-title">Subscriber benefits:</p>
-              <ul class="product-subscriber-benefits-list">
-                <li>VIP exclusive perks and early access</li>
-                <li>Save 15%</li>
-                <li>Flexible delivery: Adjust, skip, cancel anytime</li>
-              </ul>
+              {% if product.tags contains 'mastercase' %}
+                <p class="product-subscriber-benefits-title">Retail and benefits:</p>
+                <ul class="product-subscriber-benefits-list">
+                  <li>Wholesale partner pricing</li>
+                  <li>Bulk order discounts</li>
+                  <li>Dedicated partner support</li>
+                </ul>
+              {% else %}
+                <p class="product-subscriber-benefits-title">Subscriber benefits:</p>
+                <ul class="product-subscriber-benefits-list">
+                  <li>VIP exclusive perks and early access</li>
+                  <li>Save 15%</li>
+                  <li>Flexible delivery: Adjust, skip, cancel anytime</li>
+                </ul>
+              {% endif %}
             </div>
           </div>
 
