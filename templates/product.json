@@ -12,6 +12,14 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "appstle_bundles_appstle_combo_bundle_4gxf9G": {
+          "type": "shopify://apps/appstle-bundles/blocks/appstle-combo-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "settings": {}
+        },
+        "appstle_bundles_appstle_classic_bundle_cVziwa": {
+          "type": "shopify://apps/appstle-bundles/blocks/appstle-classic-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "settings": {}
+        },
         "appstle_bundles_appstle_buy_x_get_y_bundle_wjbXi3": {
           "type": "shopify://apps/appstle-bundles/blocks/appstle-buy-x-get-y-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
           "settings": {}
@@ -32,6 +40,8 @@
         }
       },
       "block_order": [
+        "appstle_bundles_appstle_combo_bundle_4gxf9G",
+        "appstle_bundles_appstle_classic_bundle_cVziwa",
         "appstle_bundles_appstle_buy_x_get_y_bundle_wjbXi3",
         "seal_subscriptions_subscription_widget_MnYgHk",
         "sami_order_limits_app_block_limit_message_HGRtKQ",
