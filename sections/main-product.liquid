@@ -16,6 +16,21 @@
           <p>Subscribe & save 15% + unlock more savings with bundles</p>
         </div>
 
+        {% comment %} Bundles / Combos: cajitas con productos tag "combo" — justo debajo del mensaje de bundles {% endcomment %}
+        {% assign combos_collection = section.settings.combo_bundles_collection %}
+        {% if combos_collection == blank %}
+          {% assign combos_collection = collections['combos'] %}
+        {% endif %}
+        {% if combos_collection == blank %}
+          {% assign combos_collection = collections['bundles'] %}
+        {% endif %}
+        {% if combos_collection == blank %}
+          {% assign combos_collection = collections['all'] %}
+        {% endif %}
+        {% if combos_collection != blank and combos_collection.products.size > 0 %}
+          {% render 'product-combos-block', collection: combos_collection %}
+        {% endif %}
+
         {% if product.metafields.reviews.rating %}
           <div class="product-reviews-summary">
             <div class="star-rating" data-rating="{{ product.metafields.reviews.rating }}">
@@ -112,18 +127,6 @@
         </form>
 
         <a href="#faq" class="help-link">Is this right for me?</a>
-
-        {% comment %} Combos / Bundles: show products from collection (e.g. products with tag "combo") {% endcomment %}
-        {% assign combos_collection = section.settings.combo_bundles_collection %}
-        {% if combos_collection == blank %}
-          {% assign combos_collection = collections['combos'] %}
-        {% endif %}
-        {% if combos_collection == blank %}
-          {% assign combos_collection = collections['bundles'] %}
-        {% endif %}
-        {% if combos_collection != blank and combos_collection.products.size > 0 %}
-          {% render 'product-combos-block', collection: combos_collection %}
-        {% endif %}
 
         <div class="product-accordions">
           {% if product.metafields.custom.ingredients %}

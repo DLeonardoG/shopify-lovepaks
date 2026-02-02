@@ -6,10 +6,10 @@
 
 {% assign combos_collection = collection | default: nil %}
 
-{% comment %} Contar solo productos con tag "combo" {% endcomment %}
+{% comment %} Contar solo productos con tag "combo" (limit 50 si es colección grande tipo "all") {% endcomment %}
 {% assign combo_products_count = 0 %}
 {% if combos_collection != blank %}
-  {% for product in combos_collection.products %}
+  {% for product in combos_collection.products limit: 50 %}
     {% if product.tags contains 'combo' %}
       {% assign combo_products_count = combo_products_count | plus: 1 %}
     {% endif %}
@@ -23,7 +23,7 @@
     <p class="product-combos-subtitle">Choose a combo — each box is a variant option</p>
     <div class="product-combos-variants">
       {% assign shown = 0 %}
-      {% for product in combos_collection.products %}
+      {% for product in combos_collection.products limit: 50 %}
         {% if product.tags contains 'combo' and shown < 8 %}
           {% assign shown = shown | plus: 1 %}
           <a href="{{ product.url }}" class="combo-variant-cajita">
