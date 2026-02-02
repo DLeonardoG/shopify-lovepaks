@@ -16,21 +16,6 @@
           <p>Subscribe & save 15% + unlock more savings with bundles</p>
         </div>
 
-        {% comment %} Bundles / Combos: cajitas con productos tag "combo" — justo debajo del mensaje de bundles {% endcomment %}
-        {% assign combos_collection = section.settings.combo_bundles_collection %}
-        {% if combos_collection == blank %}
-          {% assign combos_collection = collections['combos'] %}
-        {% endif %}
-        {% if combos_collection == blank %}
-          {% assign combos_collection = collections['bundles'] %}
-        {% endif %}
-        {% if combos_collection == blank %}
-          {% assign combos_collection = collections['all'] %}
-        {% endif %}
-        {% if combos_collection != blank and combos_collection.products.size > 0 %}
-          {% render 'product-combos-block', collection: combos_collection %}
-        {% endif %}
-
         {% if product.metafields.reviews.rating %}
           <div class="product-reviews-summary">
             <div class="star-rating" data-rating="{{ product.metafields.reviews.rating }}">
@@ -59,6 +44,21 @@
             <span class="out-of-stock">Sold Out</span>
           {% endif %}
         </div>
+
+        {% comment %} Combos / Bundles: cajitas con productos tag "combo" — debajo de stock-status {% endcomment %}
+        {% assign combos_collection = section.settings.combo_bundles_collection %}
+        {% if combos_collection == blank %}
+          {% assign combos_collection = collections['combos'] %}
+        {% endif %}
+        {% if combos_collection == blank %}
+          {% assign combos_collection = collections['bundles'] %}
+        {% endif %}
+        {% if combos_collection == blank %}
+          {% assign combos_collection = collections['all'] %}
+        {% endif %}
+        {% if combos_collection != blank and combos_collection.products.size > 0 %}
+          {% render 'product-combos-block', collection: combos_collection %}
+        {% endif %}
 
         <form action="/cart/add" method="post" enctype="multipart/form-data" id="product-form">
           <input type="hidden" name="id" id="product-variant-id" value="{{ product.selected_or_first_available_variant.id }}">
