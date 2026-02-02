@@ -483,17 +483,23 @@
           } catch (ajaxError) {
             console.error('Error adding to cart:', ajaxError);
             
-            // Show error message
+            var message = ajaxError.message || 'Error adding product to cart';
+            if (message.toLowerCase().indexOf('selling plan') !== -1) {
+              message = 'This product is subscription-only. Please choose a delivery frequency above, then add to cart.';
+              var subscriptionBlock = document.getElementById('appstle-subscription-widget') || document.getElementById('product-purchase-options');
+              if (subscriptionBlock) {
+                subscriptionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }
             if (window.showToast) {
-              window.showToast(ajaxError.message || 'Error adding product to cart', 'error');
+              window.showToast(message, 'error');
             }
             
-            // Reset button
             addToCartBtn.disabled = false;
             if (btnText) btnText.style.display = 'inline';
             if (btnLoader) btnLoader.style.display = 'none';
             
-            return; // Don't try form submit, show error instead
+            return;
           }
         } else {
           // Not in Shopify environment or function not available, skip AJAX

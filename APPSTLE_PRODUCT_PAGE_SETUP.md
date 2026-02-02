@@ -62,7 +62,19 @@ Documentación oficial de este proceso:
 
 ---
 
-## 4. Videos y recursos útiles
+## 4. Si el producto solo permite suscripción ("Variant can only be purchased with a selling plan")
+
+Si al añadir al carrito sin elegir frecuencia sale el error **"Variant can only be purchased with a selling plan"**, ese producto está configurado como **solo suscripción**. Para permitir también **compra única** (one-time):
+
+1. Entra en **Appstle Subscriptions** (desde Shopify Admin).
+2. En la configuración del producto o del plan, busca la opción que permita **"One-time purchase"** o **"Allow one-time purchase"** además de la suscripción.
+3. Actívala y guarda.
+
+Así el cliente podrá elegir: **comprar una vez** o **suscribirse**. En el tema, cuando intenten añadir sin plan, se muestra un mensaje claro y se hace scroll a la zona de suscripción para que elijan una frecuencia.
+
+---
+
+## 5. Videos y recursos útiles
 
 - **Appstle (Shopify App Store)**  
   [Subscriptions by Appstle](https://apps.shopify.com/subscriptions-by-appstle) – descripción, capturas y enlaces al soporte.
@@ -80,7 +92,7 @@ En el centro de ayuda de Appstle suele haber también videos o GIFs de instalaci
 
 ---
 
-## 5. Resumen rápido
+## 6. Resumen rápido
 
 | Qué quieres | Qué hacer |
 |-------------|-----------|
