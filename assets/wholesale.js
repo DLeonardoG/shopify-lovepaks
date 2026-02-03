@@ -37,9 +37,12 @@ function showToast(message, type = 'success') {
 /**
  * Add package to cart using Shopify Cart API
  * variantId: ID of the variant for THIS product (from the clicked button)
+ * packageName: display name for toast
+ * price: optional
  * productUrl: optional URL to redirect if add fails (product page)
+ * afterAddRedirectUrl: URL to redirect after successful add (default: /cart)
  */
-async function addToCart(variantId, packageName, price, productUrl) {
+async function addToCart(variantId, packageName, price, productUrl, afterAddRedirectUrl) {
     try {
         // Ensure variant ID is numeric (Shopify API expects number)
         const variantIdNum = typeof variantId === 'string' ? parseInt(variantId, 10) : variantId;
@@ -60,9 +63,10 @@ async function addToCart(variantId, packageName, price, productUrl) {
                 await window.updateCartUI();
             }
             
-            // Redirect to upsell page after short delay
+            // Redirect to cart (logical next step) or custom URL after short delay
+            const redirectUrl = afterAddRedirectUrl || '/cart';
             setTimeout(() => {
-                window.location.href = '/pages/upsell';
+                window.location.href = redirectUrl;
             }, 1000);
         } else {
             // Fallback: Use direct fetch to Shopify Cart API
@@ -96,9 +100,10 @@ async function addToCart(variantId, packageName, price, productUrl) {
                 await window.updateCartUI();
             }
             
-            // Redirect to upsell page after short delay
+            // Redirect to cart (logical next step) or custom URL after short delay
+            const redirectUrl = afterAddRedirectUrl || '/cart';
             setTimeout(() => {
-                window.location.href = '/pages/upsell';
+                window.location.href = redirectUrl;
             }, 1000);
         }
     } catch (error) {
@@ -137,6 +142,7 @@ function initEventListeners() {
             const packageName = this.getAttribute('data-name');
             const price = this.getAttribute('data-price');
             const productUrl = this.getAttribute('data-product-url');
+            const afterAddUrl = this.getAttribute('data-after-add-url') || '/cart';
             
             // Validate variant ID
             if (!variantId || variantId === 'REPLACE_WITH_VARIANT_ID') {
@@ -153,7 +159,7 @@ function initEventListeners() {
 
             try {
                 // Add to cart using Shopify API (pass numeric variant ID for this specific product)
-                await addToCart(variantId, packageName, price, productUrl);
+                await addToCart(variantId, packageName, price, productUrl, afterAddUrl);
             } catch (error) {
                 // Reset button on error
                 this.classList.remove('loading');
