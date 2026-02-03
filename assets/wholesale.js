@@ -142,7 +142,7 @@ function initEventListeners() {
             const packageName = this.getAttribute('data-name');
             const price = this.getAttribute('data-price');
             const productUrl = this.getAttribute('data-product-url');
-            const afterAddUrl = this.getAttribute('data-after-add-url') || '/cart';
+            const afterAddUrl = this.getAttribute('data-after-add-url') || productUrl || '/cart';
             
             // Validate variant ID
             if (!variantId || variantId === 'REPLACE_WITH_VARIANT_ID') {
