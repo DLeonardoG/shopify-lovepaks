@@ -182,16 +182,16 @@
     {% endfor %}
     {% if unit_count > 0 %}
     <section class="product-page-unit-section" aria-label="You may also like">
-      <div class="container">
+      <div class="product-page-unit-inner">
         <div class="product-page-unit-section-header">
-          <h2 class="section-title">You may also like</h2>
+          <h2 class="section-title">{{ section.settings.unit_section_title | default: 'You may also like' }}</h2>
         </div>
         <div class="product-unit-carousel-wrap">
           <button type="button" class="product-unit-carousel-btn product-unit-carousel-prev" aria-label="Previous products">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
           <button type="button" class="product-unit-carousel-btn product-unit-carousel-next" aria-label="Next products">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
           </button>
           <div class="product-unit-carousel" id="product-unit-carousel">
             <div class="product-unit-recommendations-grid" role="list">
@@ -207,6 +207,14 @@
             {% endif %}
             {% if show_in_carousel %}
                 {% assign unit_shown = unit_shown | plus: 1 %}
+                {% assign first_variant = rec_product.selected_or_first_available_variant %}
+                {% assign variant_tag = '' %}
+                {% if rec_product.options_with_values.size > 0 and rec_product.options_with_values[0].values.size > 0 %}
+                  {% assign variant_tag = rec_product.options_with_values[0].values[0] %}
+                {% endif %}
+                {% if variant_tag == blank %}
+                  {% assign variant_tag = rec_product.type | default: 'Product' %}
+                {% endif %}
                 <div class="product-card product-unit-card">
                   <a href="{{ rec_product.url }}" class="product-card-link">
                     <div class="product-image-wrapper">
@@ -215,33 +223,27 @@
                       {% else %}
                         <div class="product-image-placeholder"><span>No Image</span></div>
                       {% endif %}
-                      {% if rec_product.compare_at_price > rec_product.price %}
-                        <span class="product-sale-badge">Sale</span>
-                      {% endif %}
                     </div>
                     <div class="product-content">
-                      <div class="product-content-top">
-                        {% if rec_product.tags contains 'most-popular' or rec_product.tags contains 'popular' %}
-                          <span class="product-badge">Popular</span>
-                        {% elsif rec_product.tags contains 'sensitive' or rec_product.tags contains 'sensitive-skin' %}
-                          <span class="product-badge">Sensitive</span>
-                        {% elsif rec_product.tags contains 'new' %}
-                          <span class="product-badge">New</span>
-                        {% endif %}
-                        <h3 class="product-name">{{ rec_product.title }}</h3>
-                      </div>
-                      <div class="product-content-bottom">
-                        <span class="product-price">{{ rec_product.price | money }}</span>
-                        {% if rec_product.compare_at_price > rec_product.price %}
-                          <span class="product-compare-price">{{ rec_product.compare_at_price | money }}</span>
-                        {% endif %}
-                        {% if rec_product.variants.size > 1 %}
-                          <span class="product-variants-count">{{ rec_product.variants.size }} options</span>
-                        {% endif %}
-                      </div>
+                      {% if variant_tag != blank %}
+                        <span class="product-variant-tag">{{ variant_tag | upcase }}</span>
+                      {% endif %}
+                      <h3 class="product-name">{{ rec_product.title }}</h3>
+                      <span class="product-price">{{ rec_product.price | money }}</span>
+                      {% if rec_product.selling_plan_groups.size > 0 %}
+                        <p class="product-subscribe-note">Subscribe and Save 15%</p>
+                      {% endif %}
                     </div>
                   </a>
-                  <a href="{{ rec_product.url }}" class="product-cta">Shop Now</a>
+                  {% if first_variant.available %}
+                  <button type="button" class="product-unit-add-btn" data-variant-id="{{ first_variant.id }}" data-product-url="{{ rec_product.url }}" aria-label="Add {{ rec_product.title }} to cart">
+                    Add to Cart
+                  </button>
+                {% else %}
+                  <a href="{{ rec_product.url }}" class="product-unit-add-btn product-unit-add-btn--soldout" style="text-decoration:none;text-align:center;display:block;">
+                    Sold Out
+                  </a>
+                {% endif %}
                 </div>
             {% endif %}
           {% endfor %}
@@ -297,14 +299,42 @@
 .product-info .product-description ol { margin: 0 0 10px; padding-left: 20px; }
 .product-info .product-description li { margin-bottom: 4px; }
 
-/* Sección "You may also like" a todo el ancho */
-.product-page-unit-section { padding: clamp(50px, 8vw, 80px) 0; background: #f9f9f9; margin-top: 0; width: 100%; }
-.product-page-unit-section .container { max-width: none; width: 100%; padding-left: clamp(20px, 4vw, 60px); padding-right: clamp(20px, 4vw, 60px); }
-.product-page-unit-section-header { text-align: center; margin-bottom: 2.5rem; }
-.product-page-unit-section .section-eyebrow { display: block; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-pink); margin-bottom: 0.5rem; }
-.product-page-unit-section .section-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; margin: 0; font-family: 'Montserrat', sans-serif; color: var(--text-dark); }
-/* Carrusel "You may also like" a todo el ancho del contenedor */
-.product-page-unit-carousel-wrap { position: relative; margin: 0 calc(-1 * clamp(20px, 4vw, 60px)); padding: 0 clamp(20px, 4vw, 60px); }
+/* Sección "You may also like" - Full width corner to corner, diseño Premium Add-ons */
+.product-page-unit-section {
+  padding: clamp(50px, 8vw, 80px) 0;
+  background: #fff;
+  margin-top: 0;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+}
+.product-page-unit-inner {
+  width: 100%;
+  padding-left: clamp(20px, 4vw, 60px);
+  padding-right: clamp(20px, 4vw, 60px);
+}
+.product-page-unit-section-header {
+  margin-bottom: 2rem;
+}
+.product-page-unit-section .section-title {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 800;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+/* Carrusel full width */
+.product-page-unit-carousel-wrap {
+  position: relative;
+  margin: 0 calc(-1 * clamp(20px, 4vw, 60px));
+  padding: 0 clamp(44px, 5vw, 60px);
+}
 .product-page-unit-carousel { overflow: hidden; }
 .product-page-unit-section .product-unit-recommendations-grid {
   display: flex;
@@ -316,15 +346,21 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 4px 0 16px;
+  padding: 4px 0 20px;
 }
 .product-page-unit-section .product-unit-recommendations-grid::-webkit-scrollbar { display: none; }
 .product-page-unit-section .product-unit-card {
-  flex: 0 0 min(280px, 85vw);
+  flex: 0 0 min(260px, 85vw);
   min-width: 0;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
+/* Flechas negras rectangulares */
 .product-unit-carousel-btn {
   position: absolute;
   top: 50%;
@@ -332,96 +368,130 @@
   z-index: 3;
   width: 44px;
   height: 44px;
-  border-radius: 50%;
   border: none;
-  background: #fff;
-  color: var(--text-dark);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  background: #000;
+  color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+  transition: background 0.2s, opacity 0.2s;
 }
-.product-unit-carousel-btn:hover { background: #f5f5f5; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-.product-unit-carousel-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+.product-unit-carousel-btn:hover { background: #333; }
+.product-unit-carousel-btn:disabled { opacity: 0.25; cursor: not-allowed; pointer-events: none; }
 .product-unit-carousel-prev { left: 0; }
 .product-unit-carousel-next { right: 0; }
-.product-page-unit-section .product-card { margin-top: 0; }
-/* Sin translateY en hover para no perder espacio arriba en el carrusel */
-.product-page-unit-section .product-card:hover { transform: none; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-.product-page-unit-section .product-card-link { text-decoration: none; color: inherit; display: flex; flex-direction: column; flex: 1; }
-.product-page-unit-section .product-image-wrapper { position: relative; width: 100%; height: 300px; overflow: hidden; background: var(--light-gray); }
-.product-page-unit-section .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-.product-page-unit-section .product-card:hover .product-image { transform: scale(1.05); }
-.product-page-unit-section .product-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--light-gray); color: var(--text-gray); font-size: 14px; }
-.product-page-unit-section .product-sale-badge { position: absolute; top: 12px; right: 12px; background: var(--accent-red, #c00); color: white; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase; z-index: 2; }
-/* Contenido compacto de la tarjeta */
-.product-page-unit-section .product-content {
-  padding: 14px 16px 16px;
+/* Tarjeta de producto - diseño Premium Add-ons */
+.product-page-unit-section .product-card {
+  margin-top: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  flex: 1;
+}
+.product-page-unit-section .product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.product-page-unit-section .product-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #fff;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.product-page-unit-section .product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+.product-page-unit-section .product-card:hover .product-image { transform: scale(1.03); }
+.product-page-unit-section .product-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  color: #999;
+  font-size: 14px;
+}
+/* Contenido - tag naranja, nombre, precio, subscribe */
+.product-page-unit-section .product-content {
+  padding: 16px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   flex: 1;
   min-height: 0;
 }
-.product-page-unit-section .product-content-top {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.product-page-unit-section .product-content .product-badge {
-  padding: 4px 10px;
-  font-size: 9px;
-  letter-spacing: 0.04em;
-  margin-bottom: 0;
-  align-self: flex-start;
+.product-page-unit-section .product-variant-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--chakra-orange, #F26522);
+  color: #fff;
+  width: fit-content;
+  margin-bottom: 4px;
 }
 .product-page-unit-section .product-content .product-name {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
   line-height: 1.3;
-  color: var(--text-dark);
-}
-.product-page-unit-section .product-content-bottom {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 10px;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  color: #000;
 }
 .product-page-unit-section .product-content .product-price {
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--primary-pink);
+  color: #000;
 }
-.product-page-unit-section .product-compare-price {
-  font-size: 0.875rem;
-  color: var(--text-gray);
-  text-decoration: line-through;
-}
-.product-page-unit-section .product-variants-count {
-  font-size: 0.75rem;
-  color: var(--text-gray);
+.product-page-unit-section .product-subscribe-note {
+  font-size: 12px;
+  color: #888;
   margin: 0;
-  padding: 2px 8px;
-  background: rgba(0,0,0,0.05);
-  border-radius: 999px;
   font-weight: 500;
 }
-/* Ocultar contenido inyectado por apps (Selling Plans / suscripciones) en las tarjetas del carrusel */
-.product-page-unit-section .product-content [class*="selling-plan"],
-.product-page-unit-section .product-content .selling-plan-select,
-.product-page-unit-section .product-content [id*="selling-plan"] { display: none !important; }
+/* Botón Add to Cart negro */
+.product-unit-add-btn {
+  margin: 0 18px 18px;
+  padding: 14px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+.product-unit-add-btn:hover { background: #333; }
+.product-unit-add-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.product-unit-add-btn--soldout {
+  background: #ccc !important;
+  color: #666 !important;
+  cursor: default;
+  pointer-events: auto;
+}
 @media (max-width: 768px) {
-  .product-page-unit-section .product-image-wrapper { height: 280px; }
-  .product-page-unit-section .product-content { padding: 12px 14px 14px; }
-  .product-unit-carousel-btn { width: 38px; height: 38px; }
-  .product-unit-carousel-prev { left: 8px; }
-  .product-unit-carousel-next { right: 8px; }
+  .product-page-unit-section .product-image-wrapper { padding: 12px; }
+  .product-page-unit-section .product-content { padding: 14px 16px 10px; }
+  .product-unit-carousel-btn { width: 40px; height: 40px; }
+  .product-unit-carousel-prev { left: 4px; }
+  .product-unit-carousel-next { right: 4px; }
+  .product-unit-add-btn { margin: 0 16px 16px; padding: 12px 16px; }
 }
 </style>
 
@@ -453,6 +523,36 @@
   window.addEventListener('resize', updateButtons);
   updateButtons();
 })();
+
+(function() {
+  document.querySelectorAll('.product-unit-add-btn').forEach(function(btn) {
+    btn.addEventListener('click', async function() {
+      var variantId = this.getAttribute('data-variant-id');
+      var productUrl = this.getAttribute('data-product-url');
+      if (!variantId) return;
+      this.disabled = true;
+      this.textContent = 'Adding...';
+      try {
+        if (typeof window.addToCartShopify === 'function') {
+          await window.addToCartShopify(parseInt(variantId, 10), 1);
+          if (typeof window.openCartDrawer === 'function') window.openCartDrawer();
+        } else {
+          var r = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: variantId, quantity: 1 })
+          });
+          var data = await r.json();
+          if (data.status && document.querySelector('.cart-drawer')) {
+            document.querySelector('.cart-drawer')?.classList.add('open');
+          }
+        }
+      } catch (e) { console.warn(e); }
+      this.disabled = false;
+      this.textContent = 'Add to Cart';
+    });
+  });
+})();
 </script>
 
 {% schema %}
@@ -471,6 +571,12 @@
       "id": "combo_bundles_collection",
       "label": "Combos / Bundles collection",
       "info": "Collection of products with tag \"combo\" (bundles). Create an automatic collection with condition: Product tag equals combo. If empty, theme tries collections \"combos\" or \"bundles\"."
+    },
+    {
+      "type": "text",
+      "id": "unit_section_title",
+      "label": "You may also like - Section title",
+      "default": "You may also like"
     }
   ]
 }
