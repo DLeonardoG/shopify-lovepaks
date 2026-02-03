@@ -180,6 +180,8 @@
         {% endunless %}
       {% endif %}
     {% endfor %}
+    {% comment %} No mostrar "You may also like" si el producto tiene tag mastercase {% endcomment %}
+    {% unless product.tags contains 'mastercase' %}
     {% if unit_count > 0 %}
     <section class="product-page-unit-section" aria-label="You may also like">
       <div class="product-page-unit-inner">
@@ -243,6 +245,7 @@
       </div>
     </section>
     {% endif %}
+    {% endunless %}
 
     {% comment %}
       Product subsections (FAQ, benefits, etc.) must be added in the product template
