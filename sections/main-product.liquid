@@ -163,14 +163,18 @@
       </div>
     </div>
 
-    {% comment %} Unit products: sección aparte debajo de todo (mismo listado que página de inicio) {% endcomment %}
+    {% comment %} Unit + Combo products: productos con tag "unit" o "combo" (excl. master-case/wholesale) {% endcomment %}
     {% assign products_collection = collections.all %}
     {% if collections.featured and collections.featured.products.size > 0 %}
       {% assign products_collection = collections.featured %}
     {% endif %}
     {% assign unit_count = 0 %}
     {% for rec_product in products_collection.products %}
-      {% if rec_product.tags contains 'unit' and rec_product.id != product.id %}
+      {% assign has_unit_or_combo = false %}
+      {% if rec_product.tags contains 'unit' or rec_product.tags contains 'combo' %}
+        {% assign has_unit_or_combo = true %}
+      {% endif %}
+      {% if has_unit_or_combo and rec_product.id != product.id %}
         {% unless rec_product.handle == 'master-case' or rec_product.tags contains 'wholesale' or rec_product.tags contains 'master-case' %}
           {% assign unit_count = unit_count | plus: 1 %}
         {% endunless %}
@@ -193,8 +197,15 @@
             <div class="product-unit-recommendations-grid" role="list">
           {% assign unit_shown = 0 %}
           {% for rec_product in products_collection.products %}
-            {% if rec_product.tags contains 'unit' and rec_product.id != product.id %}
-              {% unless rec_product.handle == 'master-case' or rec_product.tags contains 'wholesale' or rec_product.tags contains 'master-case' %}
+            {% assign show_in_carousel = false %}
+            {% if rec_product.tags contains 'unit' or rec_product.tags contains 'combo' %}
+              {% if rec_product.id != product.id %}
+                {% unless rec_product.handle == 'master-case' or rec_product.tags contains 'wholesale' or rec_product.tags contains 'master-case' %}
+                  {% assign show_in_carousel = true %}
+                {% endunless %}
+              {% endif %}
+            {% endif %}
+            {% if show_in_carousel %}
                 {% assign unit_shown = unit_shown | plus: 1 %}
                 <div class="product-card product-unit-card">
                   <a href="{{ rec_product.url }}" class="product-card-link">
@@ -232,7 +243,6 @@
                   </a>
                   <a href="{{ rec_product.url }}" class="product-cta">Shop Now</a>
                 </div>
-              {% endunless %}
             {% endif %}
           {% endfor %}
             </div>
