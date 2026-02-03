@@ -36,13 +36,21 @@ function showToast(message, type = 'success') {
 
 /**
  * Add package to cart using Shopify Cart API
+ * variantId: ID of the variant for THIS product (from the clicked button)
+ * productUrl: optional URL to redirect if add fails (product page)
  */
-async function addToCart(variantId, packageName, price) {
+async function addToCart(variantId, packageName, price, productUrl) {
     try {
+        // Ensure variant ID is numeric (Shopify API expects number)
+        const variantIdNum = typeof variantId === 'string' ? parseInt(variantId, 10) : variantId;
+        if (!variantIdNum || isNaN(variantIdNum)) {
+            throw new Error('Invalid variant ID');
+        }
+
         // Check if addToCartShopify is available (from shopify-cart.js)
         if (typeof window.addToCartShopify === 'function') {
-            // Use Shopify Cart API
-            await window.addToCartShopify(variantId, 1);
+            // Use Shopify Cart API with this product's variant ID
+            await window.addToCartShopify(variantIdNum, 1);
             
             // Show success message
             showToast(`${packageName} added to cart!`, 'success');
@@ -67,7 +75,7 @@ async function addToCart(variantId, packageName, price) {
                 credentials: 'same-origin',
                 body: JSON.stringify({
                     items: [{
-                        id: variantId,
+                        id: variantIdNum,
                         quantity: 1
                     }]
                 })
@@ -123,9 +131,12 @@ function initEventListeners() {
                 return;
             }
             
-            const variantId = this.getAttribute('data-variant-id');
+            // Read variant/product data from the clicked button (ensures correct product per card)
+            const variantIdRaw = this.getAttribute('data-variant-id');
+            const variantId = variantIdRaw ? String(variantIdRaw).trim() : '';
             const packageName = this.getAttribute('data-name');
             const price = this.getAttribute('data-price');
+            const productUrl = this.getAttribute('data-product-url');
             
             // Validate variant ID
             if (!variantId || variantId === 'REPLACE_WITH_VARIANT_ID') {
@@ -141,8 +152,8 @@ function initEventListeners() {
             this.disabled = true;
 
             try {
-                // Add to cart using Shopify API
-                await addToCart(variantId, packageName, price);
+                // Add to cart using Shopify API (pass numeric variant ID for this specific product)
+                await addToCart(variantId, packageName, price, productUrl);
             } catch (error) {
                 // Reset button on error
                 this.classList.remove('loading');
