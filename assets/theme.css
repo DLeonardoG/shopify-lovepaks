@@ -1566,6 +1566,19 @@ p {
     text-align: center;
 }
 
+.test-results-disclaimer {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-gray);
+    margin-top: 32px;
+    padding: 16px 24px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: var(--radius-md);
+    border-left: 3px solid rgba(236, 0, 140, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
 
 .wellness-benefit-card {
     background: white;
@@ -2046,6 +2059,18 @@ p {
     font-weight: 500;
 }
 
+.featured-testimonial-disclaimer {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-gray);
+    margin-top: 24px;
+    margin-bottom: 56px;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: var(--radius-md);
+    border-left: 3px solid rgba(236, 0, 140, 0.3);
+}
+
 .featured-testimonial-author {
     position: absolute;
     bottom: 48px;
@@ -2098,6 +2123,10 @@ p {
     .featured-testimonial-highlight {
         font-size: 16px;
         padding: 20px;
+    }
+    
+    .featured-testimonial-disclaimer {
+        margin-bottom: 0;
     }
 }
 
