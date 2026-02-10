@@ -86,7 +86,7 @@
                         <label for="ambassador-social">Social Media Handle</label>
                         <input type="text" 
                                id="ambassador-social" 
-                               name="contact[body]" 
+                               name="contact[tags]" 
                                placeholder="@yourhandle">
                     </div>
                 </div>
@@ -96,7 +96,8 @@
                     <textarea id="ambassador-message" 
                               name="contact[body]" 
                               rows="6" 
-                              required>{% if form.body %}{{ form.body }}{% endif %}</textarea>
+                              required
+                              placeholder="Share your story, your passion for wellness, and why you'd be a great ambassador for Love Paks...">{% if form.body %}{{ form.body }}{% endif %}</textarea>
                 </div>
 
                 <input type="hidden" name="contact[subject]" value="Ambassador Application">
