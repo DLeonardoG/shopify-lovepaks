@@ -6,22 +6,30 @@
 <div class="ambassador-page-container">
     <!-- Hero Banner Section -->
     <section class="ambassador-hero">
-        <div class="ambassador-hero-content">
-            <div class="ambassador-hero-text">
-                <h1 class="ambassador-title">BECOME AN AMBASSADOR</h1>
-                <p class="ambassador-description">
-                    We're looking for individuals who share our ethos of transformation and excitement. Submit your application and let's grow together!
-                </p>
-                <a href="#application" class="ambassador-cta-btn">JOIN NOW</a>
-            </div>
-            <div class="ambassador-hero-image">
-                <div class="ambassador-image-wrapper">
-                    <img src="{{ 'embasador' | file_img_url: 'master' }}" 
-                         alt="Become an Ambassador" 
-                         class="ambassador-hero-img"
-                         loading="eager"
-                         width="600"
-                         height="500">
+        <div class="container">
+            <div class="ambassador-hero-content">
+                <div class="ambassador-hero-text">
+                    <h1 class="ambassador-title">BECOME AN AMBASSADOR</h1>
+                    <p class="ambassador-description">
+                        We're looking for individuals who share our ethos of transformation and excitement. Submit your application and let's grow together!
+                    </p>
+                    <a href="#application" class="ambassador-cta-btn">JOIN NOW</a>
+                </div>
+                <div class="ambassador-hero-image">
+                    <div class="ambassador-image-wrapper">
+                        {% comment %} 
+                          IMPORTANT: Make sure the file "embasador" (with extension .jpg, .png, etc.) 
+                          is uploaded to Shopify Files (Settings > Files)
+                          The file name should match exactly what's in Shopify Files
+                        {% endcomment %}
+                        <img src="{{ 'embasador.PNG' | file_img_url: 'master' }}" 
+                             alt="Become an Ambassador" 
+                             class="ambassador-hero-img"
+                             loading="eager"
+                             width="600"
+                             height="500"
+                             onerror="console.log('Image not found. Trying alternatives...'); this.src='{{ 'embasador.png' | file_img_url: 'master' }}';">
+                    </div>
                 </div>
             </div>
         </div>
@@ -185,7 +193,6 @@
 .ambassador-hero-content {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 clamp(20px, 4vw, 60px);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
