@@ -1,6 +1,7 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
+
       <div class="footer-brand">
         {% if settings.logo != blank %}
           <a href="{{ routes.root_url }}">
@@ -28,17 +29,12 @@
       <div class="footer-section">
         <h4 class="footer-section-title">Company</h4>
         <div class="footer-links">
-          <!-- Home link fixed -->
-          <a href="{{ routes.root_url }}" class="footer-link">Home page</a>
-
-          <!-- How It Works fixed (uses page handle) -->
+          <a href="{{ routes.root_url }}" class="footer-link">Home</a>
           <a href="{{ pages['how-it-works'].url }}" class="footer-link">How It Works</a>
-
           <a href="/pages/contact" class="footer-link">Contact</a>
 
           <div class="footer-contact-info">
             <a href="mailto:support@lovepaks.com" class="footer-email">support@lovepaks.com</a>
-
             <div class="footer-social-icons">
               <a href="https://www.instagram.com/lovelaundrypaks?igsh=MWJwNnR3N2wzb2FlNQ==" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Instagram">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -71,15 +67,25 @@
           <a href="/pages/shipping-policy" class="footer-link">Shipping Policy</a>
           <a href="/pages/return-refund-policy" class="footer-link">Return & Refund Policy</a>
 
-          <!-- Hide these ONLY on Home (index) -->
-          {%- unless template.name == 'index' -%}
+          {%- assign show_partner_agreements = false -%}
+
+          {%- if request.path == '/pages/mastercase' -%}
+            {%- assign show_partner_agreements = true -%}
+          {%- elsif request.path == '/pages/wholesale-register' -%}
+            {%- assign show_partner_agreements = true -%}
+          {%- elsif request.path contains 'partner' and request.path contains 'login' -%}
+            {%- assign show_partner_agreements = true -%}
+          {%- endif -%}
+
+          {%- if show_partner_agreements -%}
             <a href="/pages/supply-agreement" class="footer-link">Supply Agreement</a>
-            <a href="/pages/ecommerce-agreement" class="footer-link">E-commerce Agreement</a>
-          {%- endunless -%}
+            <a href="/pages/ecommerce-agreement" class="footer-link">E-Commerce Agreement</a>
+          {%- endif -%}
 
           <div id="appstle-subscription-manage-subscription-button-placeholder" class="footer-appstle-manage"></div>
         </div>
       </div>
+
     </div>
 
     <div class="footer-bottom">
@@ -88,7 +94,6 @@
   </div>
 </footer>
 
-<!-- Back to Top Button -->
 <button class="back-to-top" id="back-to-top" aria-label="Back to top">
   ↑
 </button>
