@@ -1,12 +1,5 @@
 {% comment %}
   Wholesale Registration Page (Sami embed)
-  Create a Shopify Page with handle: wholesale-register
-  Assign template: page.wholesale-register
-
-  Checks:
-  - Approved: wholesale_approved, wholesale-partner, or partner → show "Continue" (no form).
-  - Pending: partner-pending-approval → "Already applied, under review" (no form).
-  - Else: show registration form. If not logged in, suggest logging in to check status.
 {% endcomment %}
 
 {% assign is_approved = false %}
@@ -23,7 +16,21 @@
 
 <section class="wholesale-register-section" style="padding: 72px 0;">
   <div class="container" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+
+    <style>
+      .wholesale-register-section a.partner-link {
+        color: #ff4fa3;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+      .wholesale-register-section a.partner-link:hover {
+        color: #ff1f8f;
+        text-decoration: underline;
+      }
+    </style>
+
     {% if is_approved %}
+
       <div style="background: #f8f6f4; border: 1px solid #e8e4e0; border-radius: 12px; padding: 40px 32px; text-align: center;">
         <h1 style="margin: 0 0 16px; font-size: 1.75rem;">You're approved for Wholesale</h1>
         <p style="margin: 0 auto 24px; max-width: 560px; line-height: 1.5;">
@@ -34,7 +41,9 @@
           <a class="btn-secondary btn-large" href="{{ routes.account_url }}">View Account</a>
         </div>
       </div>
+
     {% elsif is_pending %}
+
       <div style="background: #f8f6f4; border: 1px solid #e8e4e0; border-radius: 12px; padding: 40px 32px; text-align: center;">
         <h1 style="margin: 0 0 16px; font-size: 1.75rem;">Application under review</h1>
         <p style="margin: 0 auto 24px; max-width: 560px; line-height: 1.5;">
@@ -45,14 +54,24 @@
           <a class="btn-secondary btn-large" href="/pages/mastercase">Wholesale Program</a>
         </div>
       </div>
+
     {% else %}
+
       <h1 style="text-align: center; margin-bottom: 16px;">Wholesale Registration</h1>
+
       <p style="text-align: center; margin: 0 auto 12px; max-width: 720px;">
         Complete the registration form below. After submission, our team will review your application.
       </p>
 
       <p style="text-align: center; margin: 0 auto 24px; max-width: 720px; font-size: 0.95rem;">
-        Please review our partner agreements: <a href="/pages/supply-agreement">Supply Agreement</a> · <a href="/pages/ecommerce-agreement">E-commerce & Online Sales Agreement</a>
+        Please review our partner agreements:
+        <a href="/pages/supply-agreement" class="partner-link">
+          Supply Agreement
+        </a>
+        ·
+        <a href="/pages/ecommerce-agreement" class="partner-link">
+          E-commerce & Online Sales Agreement
+        </a>
       </p>
 
       <!-- Sami embed (Samita) -->
@@ -60,9 +79,15 @@
 
       {% unless customer %}
         <p style="text-align: center; margin: 32px auto 0; max-width: 560px; font-size: 0.95rem;">
-          Already applied? <a href="{{ routes.account_login_url }}?return_to={{ request.path | url_encode }}">Log in</a> to check if you're approved or pending.
+          Already applied?
+          <a href="{{ routes.account_login_url }}?return_to={{ request.path | url_encode }}">
+            Log in
+          </a>
+          to check if you're approved or pending.
         </p>
       {% endunless %}
+
     {% endif %}
+
   </div>
 </section>
