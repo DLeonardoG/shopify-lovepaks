@@ -95,17 +95,17 @@
         <p>🎉 You qualify for FREE shipping!</p>
       </div>
       {% comment %}
-  Lovebrands - Foundation Preference (Pre-checkout)
+  Lovebrands - Organization Preference (Pre-checkout)
   Saves as cart attributes (order attributes)
 {% endcomment %}
 
 <div class="lb-foundation-box" data-lb-foundation-box>
-  <h3 class="lb-foundation-title">Foundation preference</h3>
+  <h3 class="lb-foundation-title">Giving preference</h3>
   <p class="lb-foundation-subtitle">
-    Would you like a percentage of your purchase to go directly to your favorite foundation?
+    Would you like a percentage of your purchase to go directly to your favorite foundation, charity, or school?
   </p>
 
-  <div class="lb-foundation-options" role="radiogroup" aria-label="Foundation preference">
+  <div class="lb-foundation-options" role="radiogroup" aria-label="Giving preference">
     <label class="lb-radio">
       <input type="radio" name="lb_donation_interest" value="Yes">
       <span>Yes</span>
@@ -118,13 +118,13 @@
   </div>
 
   <div class="lb-foundation-input-wrap" data-lb-foundation-input style="display:none;">
-    <label class="lb-label" for="lbFoundationName">Foundation name</label>
-    <input id="lbFoundationName" class="lb-input" type="text" placeholder="Type the foundation name" maxlength="120" />
+    <label class="lb-label" for="lbFoundationName">Foundation, charity, or school name</label>
+    <input id="lbFoundationName" class="lb-input" type="text" placeholder="Type the organization name" maxlength="120" />
 
-    <label class="lb-label" for="lbFoundationUrl">Foundation website URL</label>
-    <input id="lbFoundationUrl" class="lb-input" type="url" placeholder="https://foundation.org" inputmode="url" />
+    <label class="lb-label" for="lbFoundationUrl">Organization website URL</label>
+    <input id="lbFoundationUrl" class="lb-input" type="url" placeholder="https://organization.org" inputmode="url" />
 
-    <p class="lb-help">We’ll include this in your order details.</p>
+    <p class="lb-help">We’ll include this information in your order details.</p>
   </div>
 
   <p class="lb-status" data-lb-status aria-live="polite"></p>
@@ -173,13 +173,12 @@
     const normalizeUrl = (raw) => {
       const v = (raw || '').trim();
       if(!v) return '';
-      // If user types "example.org" without scheme, assume https
       if(!/^https?:\/\//i.test(v)) return 'https://' + v;
       return v;
     };
 
     const isValidUrl = (v) => {
-      if(!v) return true; // allow empty until they type
+      if(!v) return true;
       try { new URL(v); return true; } catch(e) { return false; }
     };
 
@@ -205,8 +204,8 @@
       try{
         await updateCartAttributes({
           "Donation interest": "Yes",
-          "Foundation name": name,
-          "Foundation website": url
+          "Organization name": name,
+          "Organization website": url
         });
         setStatus("Saved.");
       }catch(e){
@@ -218,8 +217,8 @@
       try{
         await updateCartAttributes({
           "Donation interest": "No",
-          "Foundation name": "",
-          "Foundation website": ""
+          "Organization name": "",
+          "Organization website": ""
         });
         setStatus("Saved.");
       }catch(e){
