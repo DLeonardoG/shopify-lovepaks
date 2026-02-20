@@ -94,111 +94,7 @@
       <div class="free-shipping" id="cart-free-shipping-msg"{% if cart.total_price < free_shipping_threshold %} style="display: none;"{% endif %}>
         <p>🎉 You qualify for FREE shipping!</p>
       </div>
-      
-      <div class="cart-totals">
-        <div class="cart-subtotal">
-          <span>Subtotal:</span>
-          <span class="cart-total-price" id="cart-total">{{ cart.total_price | money }}</span>
-        </div>
-        <p class="cart-tax-note">Taxes and shipping calculated at checkout</p>
-      </div>
-      
-      <button type="button" class="cart-checkout-btn" id="cart-checkout-btn">Checkout</button>
-      <a href="/collections/all" class="continue-shopping">Continue Shopping</a>
-    </div>
-  </div>
-</div>
-
-<script>
-// Cart Drawer Functions
-function openCartDrawer() {
-  const drawer = document.getElementById('cart-drawer');
-  if (drawer) {
-    drawer.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    // Update cart UI when opening
-    if (window.updateCartUI) {
-      window.updateCartUI();
-    }
-  }
-}
-
-function closeCartDrawer() {
-  const drawer = document.getElementById('cart-drawer');
-  if (drawer) {
-    drawer.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-}
-
-// Make functions globally available
-window.openCartDrawer = openCartDrawer;
-window.closeCartDrawer = closeCartDrawer;
-
-// Initialize cart drawer
-document.addEventListener('DOMContentLoaded', function() {
-  const closeBtn = document.getElementById('cart-drawer-close');
-  const overlay = document.getElementById('cart-drawer-overlay');
-  
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeCartDrawer);
-  }
-  
-  if (overlay) {
-    overlay.addEventListener('click', closeCartDrawer);
-  }
-  
-  // Handle quantity changes in cart drawer
-  document.querySelectorAll('.cart-item .qty-btn').forEach(btn => {
-    btn.addEventListener('click', async function() {
-      const line = parseInt(this.dataset.line);
-      const isPlus = this.classList.contains('qty-plus');
-      const qtyInput = this.parentElement.querySelector('.qty-input');
-      const currentQty = parseInt(qtyInput.value) || 1;
-      const newQty = isPlus ? currentQty + 1 : Math.max(1, currentQty - 1);
-      
-      if (window.updateCartQuantity) {
-        // Get item key from cart item
-        const cartItem = this.closest('.cart-item');
-        const itemKey = cartItem.dataset.key;
-        
-        await window.updateCartQuantity(itemKey, newQty);
-        await window.updateCartUI();
-      }
-    });
-  });
-  
-  // Handle remove item
-  document.querySelectorAll('.cart-item-remove').forEach(btn => {
-    btn.addEventListener('click', async function() {
-      const cartItem = this.closest('.cart-item');
-      const itemKey = cartItem.dataset.key;
-      
-      if (window.removeCartItem) {
-        await window.removeCartItem(itemKey);
-        await window.updateCartUI();
-      }
-    });
-  });
-  
-  // Handle checkout button
-  const checkoutBtn = document.getElementById('cart-checkout-btn');
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', async function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      if (window.handleCheckout) {
-        await window.handleCheckout();
-      } else {
-        // Fallback: direct redirect
-        window.location.href = '/checkout';
-      }
-    });
-  }
-});
-</script>
-{% comment %}
+      {% comment %}
   Lovebrands - Donation Preference (Pre-checkout)
   Saves as cart attributes (order attributes)
 {% endcomment %}
@@ -349,3 +245,108 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   })();
 </script>
+      
+      <div class="cart-totals">
+        <div class="cart-subtotal">
+          <span>Subtotal:</span>
+          <span class="cart-total-price" id="cart-total">{{ cart.total_price | money }}</span>
+        </div>
+        <p class="cart-tax-note">Taxes and shipping calculated at checkout</p>
+      </div>
+      
+      <button type="button" class="cart-checkout-btn" id="cart-checkout-btn">Checkout</button>
+      <a href="/collections/all" class="continue-shopping">Continue Shopping</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// Cart Drawer Functions
+function openCartDrawer() {
+  const drawer = document.getElementById('cart-drawer');
+  if (drawer) {
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Update cart UI when opening
+    if (window.updateCartUI) {
+      window.updateCartUI();
+    }
+  }
+}
+
+function closeCartDrawer() {
+  const drawer = document.getElementById('cart-drawer');
+  if (drawer) {
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+// Make functions globally available
+window.openCartDrawer = openCartDrawer;
+window.closeCartDrawer = closeCartDrawer;
+
+// Initialize cart drawer
+document.addEventListener('DOMContentLoaded', function() {
+  const closeBtn = document.getElementById('cart-drawer-close');
+  const overlay = document.getElementById('cart-drawer-overlay');
+  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeCartDrawer);
+  }
+  
+  if (overlay) {
+    overlay.addEventListener('click', closeCartDrawer);
+  }
+  
+  // Handle quantity changes in cart drawer
+  document.querySelectorAll('.cart-item .qty-btn').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const line = parseInt(this.dataset.line);
+      const isPlus = this.classList.contains('qty-plus');
+      const qtyInput = this.parentElement.querySelector('.qty-input');
+      const currentQty = parseInt(qtyInput.value) || 1;
+      const newQty = isPlus ? currentQty + 1 : Math.max(1, currentQty - 1);
+      
+      if (window.updateCartQuantity) {
+        // Get item key from cart item
+        const cartItem = this.closest('.cart-item');
+        const itemKey = cartItem.dataset.key;
+        
+        await window.updateCartQuantity(itemKey, newQty);
+        await window.updateCartUI();
+      }
+    });
+  });
+  
+  // Handle remove item
+  document.querySelectorAll('.cart-item-remove').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const cartItem = this.closest('.cart-item');
+      const itemKey = cartItem.dataset.key;
+      
+      if (window.removeCartItem) {
+        await window.removeCartItem(itemKey);
+        await window.updateCartUI();
+      }
+    });
+  });
+  
+  // Handle checkout button
+  const checkoutBtn = document.getElementById('cart-checkout-btn');
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', async function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (window.handleCheckout) {
+        await window.handleCheckout();
+      } else {
+        // Fallback: direct redirect
+        window.location.href = '/checkout';
+      }
+    });
+  }
+});
+</script>
+
