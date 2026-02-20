@@ -95,7 +95,7 @@
         <p>🎉 You qualify for FREE shipping!</p>
       </div>
       {% comment %}
-  Lovebrands - Donation Preference (Pre-checkout)
+  Lovebrands - Foundation Preference (Pre-checkout)
   Saves as cart attributes (order attributes)
 {% endcomment %}
 
@@ -120,6 +120,10 @@
   <div class="lb-foundation-input-wrap" data-lb-foundation-input style="display:none;">
     <label class="lb-label" for="lbFoundationName">Foundation name</label>
     <input id="lbFoundationName" class="lb-input" type="text" placeholder="Type the foundation name" maxlength="120" />
+
+    <label class="lb-label" for="lbFoundationUrl">Foundation website URL</label>
+    <input id="lbFoundationUrl" class="lb-input" type="url" placeholder="https://foundation.org" inputmode="url" />
+
     <p class="lb-help">We’ll include this in your order details.</p>
   </div>
 
@@ -160,10 +164,25 @@
 
     const radios = box.querySelectorAll('input[name="lb_donation_interest"]');
     const inputWrap = box.querySelector('[data-lb-foundation-input]');
-    const input = box.querySelector('#lbFoundationName');
+    const nameInput = box.querySelector('#lbFoundationName');
+    const urlInput = box.querySelector('#lbFoundationUrl');
     const status = box.querySelector('[data-lb-status]');
 
-    // Helpers
+    const setStatus = (msg) => { if(status) status.textContent = msg || ''; };
+
+    const normalizeUrl = (raw) => {
+      const v = (raw || '').trim();
+      if(!v) return '';
+      // If user types "example.org" without scheme, assume https
+      if(!/^https?:\/\//i.test(v)) return 'https://' + v;
+      return v;
+    };
+
+    const isValidUrl = (v) => {
+      if(!v) return true; // allow empty until they type
+      try { new URL(v); return true; } catch(e) { return false; }
+    };
+
     const updateCartAttributes = async (attrs) => {
       const res = await fetch('/cart/update.js', {
         method: 'POST',
@@ -174,75 +193,73 @@
       return res.json();
     };
 
-    const setStatus = (msg) => { if(status) status.textContent = msg || ''; };
+    const saveYes = async () => {
+      const name = (nameInput.value || '').trim();
+      const url = normalizeUrl(urlInput.value);
 
-    // Prefill existing cart attributes (best-effort)
-    // Some themes expose cart via window.ShopifyAnalytics/meta; not reliable.
-    // We'll just save on change/blur to ensure it persists.
-    radios.forEach(r => {
-      r.addEventListener('change', async () => {
-        const val = r.value;
-
-        if(val === 'Yes'){
-          inputWrap.style.display = '';
-          input.focus();
-          // Save interest immediately
-          try{
-            await updateCartAttributes({
-              "Donation interest": "Yes"
-            });
-            setStatus("Saved.");
-          }catch(e){ setStatus("Couldn't save. Please try again."); }
-        }else{
-          inputWrap.style.display = 'none';
-          input.value = '';
-          // Save interest + clear foundation name
-          try{
-            await updateCartAttributes({
-              "Donation interest": "No",
-              "Foundation name": ""
-            });
-            setStatus("Saved.");
-          }catch(e){ setStatus("Couldn't save. Please try again."); }
-        }
-      });
-    });
-
-    // Save foundation name when user stops typing (debounce)
-    let t;
-    input.addEventListener('input', () => {
-      clearTimeout(t);
-      t = setTimeout(async () => {
-        const name = (input.value || '').trim();
-        if(!name) return;
-
-        try{
-          await updateCartAttributes({
-            "Donation interest": "Yes",
-            "Foundation name": name
-          });
-          setStatus("Saved.");
-        }catch(e){
-          setStatus("Couldn't save. Please try again.");
-        }
-      }, 450);
-    });
-
-    // Also save on blur (extra safety)
-    input.addEventListener('blur', async () => {
-      const name = (input.value || '').trim();
-      if(!name) return;
+      if(url && !isValidUrl(url)){
+        setStatus("Please enter a valid website URL.");
+        return;
+      }
 
       try{
         await updateCartAttributes({
           "Donation interest": "Yes",
-          "Foundation name": name
+          "Foundation name": name,
+          "Foundation website": url
         });
         setStatus("Saved.");
       }catch(e){
         setStatus("Couldn't save. Please try again.");
       }
+    };
+
+    const clearAll = async () => {
+      try{
+        await updateCartAttributes({
+          "Donation interest": "No",
+          "Foundation name": "",
+          "Foundation website": ""
+        });
+        setStatus("Saved.");
+      }catch(e){
+        setStatus("Couldn't save. Please try again.");
+      }
+    };
+
+    radios.forEach(r => {
+      r.addEventListener('change', async () => {
+        if(r.value === 'Yes'){
+          inputWrap.style.display = '';
+          nameInput.focus();
+          try{
+            await updateCartAttributes({ "Donation interest": "Yes" });
+            setStatus("Saved.");
+          }catch(e){
+            setStatus("Couldn't save. Please try again.");
+          }
+        } else {
+          inputWrap.style.display = 'none';
+          nameInput.value = '';
+          urlInput.value = '';
+          await clearAll();
+        }
+      });
     });
+
+    // Debounced save while typing
+    let t;
+    const debouncedSave = () => {
+      clearTimeout(t);
+      t = setTimeout(saveYes, 450);
+    };
+
+    nameInput.addEventListener('input', debouncedSave);
+    urlInput.addEventListener('input', debouncedSave);
+
+    // Save on blur (extra safety)
+    nameInput.addEventListener('blur', saveYes);
+    urlInput.addEventListener('blur', saveYes);
   })();
 </script>
       
