@@ -198,4 +198,154 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+{% comment %}
+  Lovebrands - Donation Preference (Pre-checkout)
+  Saves as cart attributes (order attributes)
+{% endcomment %}
 
+<div class="lb-foundation-box" data-lb-foundation-box>
+  <h3 class="lb-foundation-title">Foundation preference</h3>
+  <p class="lb-foundation-subtitle">
+    Would you like a percentage of your purchase to go directly to your favorite foundation?
+  </p>
+
+  <div class="lb-foundation-options" role="radiogroup" aria-label="Foundation preference">
+    <label class="lb-radio">
+      <input type="radio" name="lb_donation_interest" value="Yes">
+      <span>Yes</span>
+    </label>
+
+    <label class="lb-radio">
+      <input type="radio" name="lb_donation_interest" value="No">
+      <span>No</span>
+    </label>
+  </div>
+
+  <div class="lb-foundation-input-wrap" data-lb-foundation-input style="display:none;">
+    <label class="lb-label" for="lbFoundationName">Foundation name</label>
+    <input id="lbFoundationName" class="lb-input" type="text" placeholder="Type the foundation name" maxlength="120" />
+    <p class="lb-help">We’ll include this in your order details.</p>
+  </div>
+
+  <p class="lb-status" data-lb-status aria-live="polite"></p>
+</div>
+
+<style>
+  .lb-foundation-box{
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 14px;
+    padding: 18px;
+    margin: 18px 0;
+    background: #fff;
+  }
+  .lb-foundation-title{ margin:0 0 6px; font-size: 16px; }
+  .lb-foundation-subtitle{ margin:0 0 12px; font-size: 13px; opacity:.85; line-height:1.35; }
+
+  .lb-foundation-options{ display:flex; gap: 14px; align-items:center; margin: 6px 0 10px; }
+  .lb-radio{ display:flex; gap:8px; align-items:center; cursor:pointer; user-select:none; font-size: 13px; }
+  .lb-radio input{ transform: translateY(1px); }
+
+  .lb-label{ display:block; font-size: 12px; opacity:.8; margin: 10px 0 6px; }
+  .lb-input{
+    width: 100%;
+    border: 1px solid rgba(0,0,0,.16);
+    border-radius: 12px;
+    padding: 12px 12px;
+    outline: none;
+  }
+  .lb-help{ margin: 8px 0 0; font-size: 11px; opacity: .7; }
+  .lb-status{ margin: 10px 0 0; font-size: 12px; opacity: .75; }
+</style>
+
+<script>
+  (function(){
+    const box = document.querySelector('[data-lb-foundation-box]');
+    if(!box) return;
+
+    const radios = box.querySelectorAll('input[name="lb_donation_interest"]');
+    const inputWrap = box.querySelector('[data-lb-foundation-input]');
+    const input = box.querySelector('#lbFoundationName');
+    const status = box.querySelector('[data-lb-status]');
+
+    // Helpers
+    const updateCartAttributes = async (attrs) => {
+      const res = await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ attributes: attrs })
+      });
+      if(!res.ok) throw new Error('Cart update failed');
+      return res.json();
+    };
+
+    const setStatus = (msg) => { if(status) status.textContent = msg || ''; };
+
+    // Prefill existing cart attributes (best-effort)
+    // Some themes expose cart via window.ShopifyAnalytics/meta; not reliable.
+    // We'll just save on change/blur to ensure it persists.
+    radios.forEach(r => {
+      r.addEventListener('change', async () => {
+        const val = r.value;
+
+        if(val === 'Yes'){
+          inputWrap.style.display = '';
+          input.focus();
+          // Save interest immediately
+          try{
+            await updateCartAttributes({
+              "Donation interest": "Yes"
+            });
+            setStatus("Saved.");
+          }catch(e){ setStatus("Couldn't save. Please try again."); }
+        }else{
+          inputWrap.style.display = 'none';
+          input.value = '';
+          // Save interest + clear foundation name
+          try{
+            await updateCartAttributes({
+              "Donation interest": "No",
+              "Foundation name": ""
+            });
+            setStatus("Saved.");
+          }catch(e){ setStatus("Couldn't save. Please try again."); }
+        }
+      });
+    });
+
+    // Save foundation name when user stops typing (debounce)
+    let t;
+    input.addEventListener('input', () => {
+      clearTimeout(t);
+      t = setTimeout(async () => {
+        const name = (input.value || '').trim();
+        if(!name) return;
+
+        try{
+          await updateCartAttributes({
+            "Donation interest": "Yes",
+            "Foundation name": name
+          });
+          setStatus("Saved.");
+        }catch(e){
+          setStatus("Couldn't save. Please try again.");
+        }
+      }, 450);
+    });
+
+    // Also save on blur (extra safety)
+    input.addEventListener('blur', async () => {
+      const name = (input.value || '').trim();
+      if(!name) return;
+
+      try{
+        await updateCartAttributes({
+          "Donation interest": "Yes",
+          "Foundation name": name
+        });
+        setStatus("Saved.");
+      }catch(e){
+        setStatus("Couldn't save. Please try again.");
+      }
+    });
+  })();
+</script>
